@@ -14,13 +14,18 @@ class TwitterAPI(object):
 
     # Get the User object for twitter...
     def get_user(self,user_name):
-        user = self.api.get_user(user_name)
-        return user
+        try:
+            user = self.api.get_user(user_name)
+            return user
+        except:
+            print("[Error] no such twitter name {}".format(user_name))
+            return None
 
 
 if __name__ == "__main__":
     user = TwitterAPI().get_user("isan_rivkin")
-    print(user.screen_name)
-    print(user.followers_count)
-    for friend in user.friends():
-        print(friend.screen_name)
+    if user is not None:
+        print(user.screen_name)
+        print(user.followers_count)
+        for friend in user.friends():
+            print(friend.screen_name)
