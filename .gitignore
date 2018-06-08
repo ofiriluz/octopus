@@ -3,6 +3,8 @@ dist
 
 # sensetive keys access points file 
 
+src/access_points/auth_keys.py
+
 #visual studio code 
 
 .vscode/*
