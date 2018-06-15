@@ -4,9 +4,10 @@ import re
 SUPPORTED_TYPES = {'int': int, 'string': str, 'bool': bool}
 
 class TaskDefinition:
-    def __init__(self, task_definition_id, task_execution_script, task_extra_params, task_output_pipe):
+    def __init__(self, task_definition_id, task_execution_script, task_shell_executor, task_extra_params, task_output_pipe):
         self.__task_definition_id = task_definition_id
         self.__task_execution_script = task_execution_script
+        self.__task_shell_executor = task_shell_executor
         self.__task_extra_params = task_extra_params
         self.__task_output_pipe = self.__parse_output_pipe(task_output_pipe)
         if not self.__task_output_pipe:
@@ -85,6 +86,9 @@ class TaskDefinition:
 
     def get_task_execution_script(self):
         return self.__task_execution_script
+
+    def get_task_shell_executor(self):
+        return self.__task_shell_executor
 
     def get_task_extra_params_dict(self):
         return self.__task_extra_params

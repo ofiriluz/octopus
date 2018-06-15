@@ -79,7 +79,8 @@ class TaskExecutor:
 
         if os.path.exists(task_execution_script):
             # Prepare the process params with the first being the script to run
-            script_params = [self.__task_definition.get_task_execution_script()] + self.__task['task_execution_params']
+            script_params = [self.__task_definition.get_task_shell_executor(), 
+                            self.__task_definition.get_task_execution_script()] + self.__task['task_execution_params']
 
             # Create the sub process 
             # Lock until the process gets into wait state to avoid collision with stop the execution

@@ -10,6 +10,7 @@ REQUIRED_TASK_DEFINITION_KEYS = ['task_defintion_id', 'task_execution_script', '
 DEFAULT_MAX_RUNNING_TASKS = 5
 DEFAULT_POOL_TIMEOUT = 10
 DEFAULT_LOG_PATH = 'C:\\tmplogs'
+DEFAULT_SLEEP_PERIOD = 5
 
 class TaskManager:
     def __init__(self, 
@@ -58,6 +59,9 @@ class TaskManager:
 
     def __is_task_pool_full(self):
         return len(self.__task_executors) == self.__max_running_tasks
+    
+    def __has_more_tasks(self):
+        return len(self.__tasks_queue) > 0
 
     def __pop_next_task(self):
         # Lock the tasks mutex
@@ -97,15 +101,16 @@ class TaskManager:
             if self.__is_task_pool_full():
                 self.__tasks_pool_event.wait(timeout=self.__pool_timeout)
 
-            # Get the next task to deploy
-            task = self.__pop_next_task()
-            if task:
-                # Get the task definition of this task
-                task_def = self.__retrieve_task_definition(task['task_definition_id'])
-                if task_def:
-                    self.__logger.debug('Adding task {} to the pool'.format(task['task_id']))
-                    # Execute the task
-                    self.__execute_task(task, task_def)
+            if self.__has_more_tasks():
+                # Get the next task to deploy
+                task = self.__pop_next_task()
+                if task:
+                    # Get the task definition of this task
+                    task_def = self.__retrieve_task_definition(task['task_definition_id'])
+                    if task_def:
+                        self.__logger.debug('Adding task {} to the pool'.format(task['task_id']))
+                        # Execute the task
+                        self.__execute_task(task, task_def)
             # Sleep to not overrun the task manager
             time.sleep(0.1)
                 
@@ -256,4 +261,12 @@ class TaskManager:
         self.__cleaner_thread.join()
         self.__cleaner_thread = None
 
-
+    def wait_for_all_tasks_to_end(sleep_period=DEFAULT_SLEEP_PERIOD):
+        # Pooling until the task manager has no more tasks
+        # This can be endless, if the task manager keeps receiving tasks
+        try:
+            while self.__has_more_tasks():
+                time.sleep(sleep_period)
+        except:
+            return False
+        return True

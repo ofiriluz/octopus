@@ -1,0 +1,31 @@
+{
+    "task_definitions": 
+    [
+        {
+            "task_defintion_id": "PythonScriptA",
+            "task_execution_script": "D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_script_a.py",
+            "task_shell_executor": "python",
+            "task_extra_params": 
+            [
+                {
+                    "name": "input_string",
+                    "type": "string"
+                }
+            ],
+            "task_output_pipe": "console[start={{input_string}}]"
+        },
+        {
+            "task_defintion_id": "BashScriptB",
+            "task_execution_script": "D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_script_b.sh",
+            "task_shell_executor": "bash",
+            "task_extra_params": 
+            [
+                {
+                    "name": "output_path",
+                    "type": "string"
+                }
+            ],
+            "task_output_pipe": "file[path={{output_path}}]"
+        }
+    ]
+}
