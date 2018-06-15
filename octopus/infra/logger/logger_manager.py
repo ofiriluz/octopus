@@ -1,5 +1,5 @@
 import datetime
-import logger
+from .logger import Logger
 
 class LoggerManager:
     def __init__(self, logger_folder_path, is_console_allowed=True):
@@ -18,11 +18,11 @@ class LoggerManager:
         log_path = self.__get_log_path(logger_name)
 
         # Create, save and return the logger
-        logger = logger.Logger(logger_name, log_level, log_path)
-        logger.__open_logger()
-        self.__loggers[logger_name] = logger
+        logger_obj = Logger(logger_name, log_level, log_path)
+        logger_obj.__open_logger()
+        self.__loggers[logger_name] = logger_obj
 
-        return logger
+        return logger_obj
 
     def close_logger(self, logger_name):
         # Check if logger exists, and clean it

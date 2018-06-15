@@ -17,7 +17,7 @@
         {
             "task_defintion_id": "BashScriptB",
             "task_execution_script": "D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_script_b.sh",
-            "task_shell_executor": "bash",
+            "task_shell_executor": "C:\\Program Files\\Git\\git-bash.exe",
             "task_extra_params": 
             [
                 {

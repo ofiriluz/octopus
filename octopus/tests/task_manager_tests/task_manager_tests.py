@@ -1,4 +1,4 @@
-from task_manager import TaskMnager
+from octopus.task_manager import TaskManager
 
 def python_script_callback(result):
     print('Python Script Result')
@@ -10,7 +10,7 @@ def bash_script_callback(result):
 
 if __name__ == '__main__':
     # Create the task manager with defaults
-    task_manager = TaskMnager()
+    task_manager = TaskManager()
 
     # Set the task manager definitions
     task_manager.set_task_definition_config('D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_test_definitions.json')

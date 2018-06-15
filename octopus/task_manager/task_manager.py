@@ -1,7 +1,7 @@
 from threading import Lock, Event, Thread
-from task_definition import TaskDefinition
-from task_executor import TaskExecutor
-from infra.logger.logger_manager import LoggerManager
+from .task_definition import TaskDefinition
+from .task_executor import TaskExecutor
+from octopus.infra.logger import LoggerManager, Logger
 import time
 import json
 import uuid
@@ -261,7 +261,7 @@ class TaskManager:
         self.__cleaner_thread.join()
         self.__cleaner_thread = None
 
-    def wait_for_all_tasks_to_end(sleep_period=DEFAULT_SLEEP_PERIOD):
+    def wait_for_all_tasks_to_end(self, sleep_period=DEFAULT_SLEEP_PERIOD):
         # Pooling until the task manager has no more tasks
         # This can be endless, if the task manager keeps receiving tasks
         try:

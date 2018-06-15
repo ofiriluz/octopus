@@ -1,8 +1,12 @@
-Tasks:
-1. Ofir - Develop infra task_manager
-2. Isan - Develop access_points for facebook, twitter and reddit
-2.1 Twitter status - given an existing twitter user name return all profile + tweets - DONE
-    TODO:: free search (for when not knowing the exact twitter name
-3. Both - Merge work with interfaces
+Octopus
+=======
 
-
+Ongoing Tasks:
+- ### Ofir ###
+    - **task_manager** - Done development, testing
+    - **infra.logger** - Done development
+- ### Isan ###
+    - **twitter access_point** - given an existing twitter user   name return all profile + tweets - DONE 
+    **TODO** - free search (for when not knowing the exact twitter name
+- ### Both ###
+    - Merge isan's access points with the task manager and write a definition file for the access points
