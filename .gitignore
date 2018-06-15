@@ -6,7 +6,7 @@ dist
 src/access_points/auth_keys.py
 
 #visual studio code 
-
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
