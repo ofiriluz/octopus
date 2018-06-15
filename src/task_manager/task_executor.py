@@ -1,4 +1,4 @@
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 import os
 import subprocess
 
@@ -7,6 +7,7 @@ class TaskExecutor:
         self.__task = task
         self.__task_definition = task_definition
         self.__task_execution_thread = None
+        self.__task_execution_mutex = Lock()
         self.__is_running = False
         self.__logger = logger
         self.__execution_process = None
@@ -49,7 +50,18 @@ class TaskExecutor:
         return log
 
     def __get_file_piped_result(self):
-        pass
+        # Check if the given file path exists
+        output_pipe = self.__task_definition.get_output_pipe()
+
+        # Check if the parsed path is in the pipe params
+        if 'path' in output_pipe['pipe_params'].keys():
+            path = output_pipe['pipe_params']['path']
+            # Check if the path exists
+            if os.path.exists(path):
+                # Open the path file and read it and send it back to the user
+                f = open(path, 'r')
+                return f.readlines()
+        return None
 
     def __get_piped_result(self):
         output_pipe = self.__task_definition.get_output_pipe()
@@ -70,6 +82,10 @@ class TaskExecutor:
             script_params = [self.__task_definition.get_task_execution_script()] + self.__task['task_execution_params']
 
             # Create the sub process 
+            # Lock until the process gets into wait state to avoid collision with stop the execution
+            self.__task_execution_mutex.acquire()
+
+            self.__logger.info('Executing task process {}'.format(self.__task['task_id']))
             self.__execution_process = subprocess.Popen(script_params, 
                                                         shell=True,
                                                         stdout=subprocess.PIPE,
@@ -79,6 +95,7 @@ class TaskExecutor:
             stream_event = Event()
 
             # Start log monitoring thread for stdout and stderr
+            self.__logger.info('Starting log threads for task {}'.format(self.__task['task_id']))
             stdout_thread = Thread(self.__execution_log_stream_thread, 
                                     (self.__execution_process.stdout.readline, self.__stdout_log_callback, stream_event,))
             stdout_thread.start()
@@ -86,6 +103,9 @@ class TaskExecutor:
             stderr_thread = Thread(self.__execution_log_stream_thread, 
                                     (self.__execution_process.stderr.readline, self.__stderr_log_callback, stream_event,))
             stderr_thread.start()
+
+            # Unlock the mutex
+            self.__task_execution_mutex.release()
 
             # Wait for the process to end
             self.__execution_process.wait()
@@ -95,12 +115,14 @@ class TaskExecutor:
             stdout_thread.join()
             stderr_thread.join()
 
-            # Get the final output
-            result = self.__get_piped_result()
+            if self.__is_running:
+                # Get the final output
+                self.__logger.info('Retrieving task result for task {}'.format(self.__task['task_id']))
+                result = self.__get_piped_result()
 
-            # Callback with the result of the process
-            if self.__task['task_callback'] and callable(self.__task['task_callback'): 
-                self.__task['task_callback'](result)
+                # Callback with the result of the process
+                if self.__task['task_callback'] and callable(self.__task['task_callback']): 
+                    self.__task['task_callback'](result)
 
             # Cleanup
             self.__is_running = False
@@ -111,6 +133,8 @@ class TaskExecutor:
         if self.__is_running:
             return False
 
+        self.__is_running = True
+
         # Create and run the execution thread
         self.__task_execution_thread = Thread(self.__execution_thread)
         self.__task_execution_thread.start()
@@ -119,8 +143,11 @@ class TaskExecutor:
         if not self.__is_running:
             return False
 
+        self.__is_running = False
+
         # Stop the execution and wait
-        # TODO
+        self.__execution_process.kill()
+        self.__task_execution_thread.join()
 
     def is_running(self):
         return self.__is_running

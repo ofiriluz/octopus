@@ -1,6 +1,7 @@
 from threading import Lock, Event, Thread
 from task_definition import TaskDefinition
 from task_executor import TaskExecutor
+from infra.logger.logger_manager import LoggerManager
 import time
 import json
 import uuid
@@ -8,9 +9,13 @@ import uuid
 REQUIRED_TASK_DEFINITION_KEYS = ['task_defintion_id', 'task_execution_script', 'task_params', 'task_output_pipe']
 DEFAULT_MAX_RUNNING_TASKS = 5
 DEFAULT_POOL_TIMEOUT = 10
+DEFAULT_LOG_PATH = 'C:\\tmplogs'
 
 class TaskManager:
-    def __init__(self, max_running_tasks=DEFAULT_MAX_RUNNING_TASKS, pool_timeout=DEFAULT_POOL_TIMEOUT):
+    def __init__(self, 
+                max_running_tasks=DEFAULT_MAX_RUNNING_TASKS, 
+                pool_timeout=DEFAULT_POOL_TIMEOUT,
+                log_path=DEFAULT_LOG_PATH):
         self.__tasks_queue = []
         self.__task_executors = []
         self.__tasks_mutex = Lock() 
@@ -22,6 +27,8 @@ class TaskManager:
         self.__pool_timeout = pool_timeout
         self.__tasks_thread = None
         self.__cleaner_thread = None
+        self.__logger_manager = LoggerManager(log_path)
+        self.__logger = self.__logger_manager.open_logger('TaskManager')
 
     def __init_task_manager(self):
         # Reset all the lists
@@ -31,8 +38,11 @@ class TaskManager:
         self.__tasks_thread = self.__cleaner_thread = None
 
     def __execute_task(self, task, task_defintion):
+        # Create a logger for the executor
+        executor_logger = self.__logger_manager.open_logger(task['task_id'])
+
         # Create the task executor
-        task_executor = TaskExecutor(task, task_defintion)
+        task_executor = TaskExecutor(task, task_defintion, executor_logger)
 
         # Check if its ready to be executed
         if task_executor.is_ready_to_execute():
@@ -65,6 +75,8 @@ class TaskManager:
         return None
 
     def __tasks_cleaner_thread(self):
+        self.__logger.info('Task cleaner thread started.')
+        # Run untill the manager is stopped
         while self.__is_task_manager_running:
             indices_to_remove = []
             # Check if any task is done
@@ -78,6 +90,7 @@ class TaskManager:
             time.sleep(1)
                     
     def __tasks_runner_thread(self):
+        self.__logger.info('Task runner thread started.')
         # Run untill the manager is stopped
         while self.__is_task_manager_running:
             # If the pool is full, wait for a trigger, with timeout incase a task has failed
@@ -90,6 +103,7 @@ class TaskManager:
                 # Get the task definition of this task
                 task_def = self.__retrieve_task_definition(task['task_definition_id'])
                 if task_def:
+                    self.__logger.debug('Adding task {} to the pool'.format(task['task_id']))
                     # Execute the task
                     self.__execute_task(task, task_def)
             # Sleep to not overrun the task manager
@@ -101,15 +115,17 @@ class TaskManager:
             # Get the task definition
             task_def = self.__retrieve_task_definition(task_definition_id)
             # Assert that execution params are specificly a list 
-            if type(task_execution_params_list) is in [list, tuple]:
+            if task_def is not None and type(task_execution_params_list) is list:
                 # Create and add the task
                 # Generate a task id
                 task_id = str(uuid.uuid4())
+
+                self.__logger.info('Adding task with id {}'.format(task_id))
                 # Create the task dict
                 task = {
                     "task_id": task_id,
                     "task_definition_id": task_definition_id,
-                    "task_execution_params": task_execution_params,
+                    "task_execution_params": task_execution_params_list,
                     "task_extra_params": task_extra_params,
                     "task_callback": task_callback
                 }
@@ -126,9 +142,10 @@ class TaskManager:
         with self.__tasks_mutex:
             # Timeout exception 
             try:
-                for index, task_executor in enumerate(self.__task_executors):
+                for task_executor in self.__task_executors:
                     # Find the executor
                     if task_executor.get_task()['task_id'] == task_id:
+                        self.__logger.info('Stopping task execution {}'.format(task_id))
                         # Notify to stop execution and wait for it to end
                         task_executor.stop_execution()
                         task_executor.join(timeout)
@@ -142,6 +159,7 @@ class TaskManager:
             # Move until the task is found, executed tasks can only be stopped
             for index, task in enumerate(self.__tasks_queue):        
                 if task['task_id'] == task_id:
+                    self.__logger.info('Removing task {}'.format(task['task_id']))
                     # Delete the task and finish
                     del self.__tasks_queue[index]
                     return True
@@ -156,6 +174,7 @@ class TaskManager:
                 if task['task_id'] == task_id:
                     # Promote the task ahead if possible
                     if index > 0:
+                        self.__logger.info('Promoting task {}'.format(task['task_id']))
                         self.__tasks_queue[index], self.__tasks_queue[index-1] = self.__tasks_queue[index-1], self.__tasks_queue[index]
                         return True
         return False
@@ -168,6 +187,7 @@ class TaskManager:
                 if task['task_id'] == task_id:
                     # Demote the task ahead if possible
                     if index < len(self.__tasks_queue) - 1:
+                        self.__logger.info('Demoting task {}'.format(task['task_id']))
                         self.__tasks_queue[index], self.__tasks_queue[index+1] = self.__tasks_queue[index+1], self.__tasks_queue[index]
                         return True
         return False
@@ -178,6 +198,8 @@ class TaskManager:
             return False
         # Clean the old task definitions
         self.__task_definitions = []
+
+        self.__logger.info('Updating task manager task definitions from path {}'.format(config_path))
 
         # Load a task JSON config from a given path
         # Read the json file
@@ -201,11 +223,13 @@ class TaskManager:
             return False
 
         # Re init the task manager before starting
+        self.__logger.info('Starting task manager')
         self.__init_task_manager()
 
         self.__is_task_manager_running = True
 
         # Start the tasks thread
+        self.__logger.info('Running task manager threads')
         self.__tasks_thread = Thread(self.__tasks_runner_thread)
         self.__tasks_thread.start()
 
@@ -219,8 +243,11 @@ class TaskManager:
         if not self.__is_task_manager_running:
             return False
 
+        self.__logger.info('Stopping task manager')
+
         self.__is_task_manager_running = False
 
+        self.__logger.info('Destroying task manager threads')
         # Wait for the tasks thread to end
         self.__tasks_thread.join()
         self.__tasks_thread = None
