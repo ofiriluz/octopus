@@ -4,28 +4,14 @@
         {
             "task_defintion_id": "A",
             "task_execution_script": "",
-            "task_extra_params": 
-            [
-                {
-                    "name": "X",
-                    "type": "int",
-                    "required": true
-                }
-            ],
-            "task_output_pipe": "console[json]"
+            "task_extra_params": [],
+            "task_output_pipe": "console[]"
         },
         {
             "task_defintion_id": "B",
             "task_execution_script": "",
-            "task_extra_params": 
-            [
-                {
-                    "name": "X",
-                    "type": "int",
-                    "required": true
-                }
-            ],
-            "task_output_pipe": "console[plain]"
+            "task_extra_params": [],
+            "task_output_pipe": "console[start=result]"
         },
         {
             "task_defintion_id": "C",
@@ -34,11 +20,10 @@
             [
                 {
                     "name": "output_path",
-                    "type": "string",
-                    "required": true
+                    "type": "string"
                 }
             ],
-            "task_output_pipe": "file[{output_path},json]"
+            "task_output_pipe": "file[path={{output_path}}]"
         }
     ]
 }

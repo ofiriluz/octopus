@@ -95,7 +95,7 @@ class TaskManager:
             # Sleep to not overrun the task manager
             time.sleep(0.1)
                 
-    def add_task(self, task_definition_id, task_execution_params_list, task_callback=None):
+    def add_task(self, task_definition_id, task_execution_params_list, task_extra_params, task_callback=None):
         # Lock the tasks mutex
         with self.__tasks_mutex:
             # Get the task definition
@@ -110,6 +110,7 @@ class TaskManager:
                     "task_id": task_id,
                     "task_definition_id": task_definition_id,
                     "task_execution_params": task_execution_params,
+                    "task_extra_params": task_extra_params,
                     "task_callback": task_callback
                 }
                 # Save the task 

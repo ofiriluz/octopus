@@ -71,17 +71,21 @@ class Logger:
         return True
 
     def debug(self, msg):
+        # Only write log by log level
         if self.__log_level <= DEBUG:
             self.__write_log(msg, LEVEL_TO_STRING_DICT[DEBUG])
 
     def info(self, msg):
+        # Only write log by log level
         if self.__log_level <= INFO:
             self.__write_log(msg, LEVEL_TO_STRING_DICT[INFO])
 
     def warn(self, msg):
+        # Only write log by log level
         if self.__log_level <= WARN:
             self.__write_log(msg, LEVEL_TO_STRING_DICT[WARN])
 
     def error(self, msg):
+        # Only write log by log level
         if self.__log_level <= ERROR:
             self.__write_log(msg, LEVEL_TO_STRING_DICT[ERROR])
