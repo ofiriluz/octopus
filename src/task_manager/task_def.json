@@ -1,0 +1,44 @@
+{
+    "task_definitions": 
+    [
+        {
+            "task_defintion_id": "A",
+            "task_execution_script": "",
+            "task_extra_params": 
+            [
+                {
+                    "name": "X",
+                    "type": "int",
+                    "required": true
+                }
+            ],
+            "task_output_pipe": "console[json]"
+        },
+        {
+            "task_defintion_id": "B",
+            "task_execution_script": "",
+            "task_extra_params": 
+            [
+                {
+                    "name": "X",
+                    "type": "int",
+                    "required": true
+                }
+            ],
+            "task_output_pipe": "console[plain]"
+        },
+        {
+            "task_defintion_id": "C",
+            "task_execution_script": "",
+            "task_extra_params": 
+            [
+                {
+                    "name": "output_path",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "task_output_pipe": "file[{output_path},json]"
+        }
+    ]
+}
