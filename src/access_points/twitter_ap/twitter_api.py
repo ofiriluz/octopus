@@ -61,6 +61,9 @@ class TwitterAPI(object):
             return time_line
         except:
             return None
+    def show_friendship(self,source,dest):
+        friendship = self.api.show_friendship(source,dest)
+        return friendship
 
 if __name__ == "__main__":
     twitter = TwitterAPI()
@@ -70,3 +73,5 @@ if __name__ == "__main__":
     time_line = twitter.get_user_time_line("isan_rivkin")
     # build user dictionary
     print(user.to_dictionary().build_time_line(time_line).user_dict)
+    ffff = twitter.show_friendship('isan_rivkin','Guy Zyskind')
+    print(ffff)
