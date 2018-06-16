@@ -1,3 +1,8 @@
+# Temp workaround for PYTHONPATH
+import sys
+import os
+sys.path.append(os.getcwd())
+
 from octopus.task_manager import TaskManager
 
 def python_script_callback(result):
@@ -13,11 +18,11 @@ if __name__ == '__main__':
     task_manager = TaskManager()
 
     # Set the task manager definitions
-    task_manager.set_task_definition_config('D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_test_definitions.json')
+    task_manager.set_task_definition_config('D:\\Octopus\\octopus\\octopus\\\\tests\\task_manager_tests\\task_test_definitions.json')
 
     # Add some tasks before starting the manager
     task_manager.add_task('PythonScriptA', ['Something'], {'input_string': 'Something'}, python_script_callback)
-    task_manager.add_task('BashScriptB', [], {'output_path': 'D:\\Octopus\\octopus\\src\\task_manager\\tests\\tmp_file.json'}, bash_script_callback)
+    task_manager.add_task('BashScriptB', [], {'output_path': 'D:\\Octopus\\octopus\\octopus\\tests\\task_manager_tests\\tmp_file.json'}, bash_script_callback)
 
     # Start the task manager and wait for all the tasks to end
     task_manager.start_task_manager()

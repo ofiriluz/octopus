@@ -2,21 +2,21 @@
     "task_definitions": 
     [
         {
-            "task_defintion_id": "A",
+            "task_definition_id": "A",
             "task_execution_script": "",
             "task_shell_executor": "python",
             "task_extra_params": [],
             "task_output_pipe": "console[]"
         },
         {
-            "task_defintion_id": "B",
+            "task_definition_id": "B",
             "task_execution_script": "",
             "task_shell_executor": "python",
             "task_extra_params": [],
             "task_output_pipe": "console[start=result]"
         },
         {
-            "task_defintion_id": "C",
+            "task_definition_id": "C",
             "task_execution_script": "",
             "task_shell_executor": "python",
             "task_extra_params": 

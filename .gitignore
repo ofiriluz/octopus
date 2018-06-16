@@ -1,6 +1,8 @@
 build
 dist
 venv
+__pycache__
+tmp_file.json
 
 # sensetive keys access points file 
 

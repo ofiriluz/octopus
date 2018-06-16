@@ -4,7 +4,7 @@ import re
 SUPPORTED_TYPES = {'int': int, 'string': str, 'bool': bool}
 
 class TaskDefinition:
-    def __init__(self, task_definition_id, task_execution_script, task_shell_executor, task_extra_params, task_output_pipe):
+    def __init__(self, task_definition_id, task_execution_script, task_shell_executor, task_output_pipe, task_extra_params=None):
         self.__task_definition_id = task_definition_id
         self.__task_execution_script = task_execution_script
         self.__task_shell_executor = task_shell_executor
@@ -12,6 +12,7 @@ class TaskDefinition:
         self.__task_output_pipe = self.__parse_output_pipe(task_output_pipe)
         if not self.__task_output_pipe:
             raise Exception('Invalid task pipe')
+
     def __validate_type(self, value, param_type):
         # Supported types are string, int, bool
         # If doesnt exist, ignore
@@ -36,18 +37,18 @@ class TaskDefinition:
 
     def __create_output_pipe(self, task_output_pipe, extra_params):
         # Go over the params dict and replace any mustached params with the given extra params
-        for pipe_key in task_output_pipe['params'].keys():
-            pipe_value = task_output_pipe['params'][pipe_key]
+        for pipe_key in task_output_pipe['pipe_params'].keys():
+            pipe_value = task_output_pipe['pipe_params'][pipe_key]
             if self.__mustached(pipe_value):
                 # Remove the mustache
-                none_mustached_pipe_param = self.__remove_mustache(pipe_value)
+                none_mustached_pipe_value = self.__remove_mustache(pipe_value)
                 # Find and replace the fitting parameter
                 for extra_param in extra_params.keys():
-                    if extra_param == none_mustached_pipe_param:
+                    if extra_param == none_mustached_pipe_value:
                         pipe_value = extra_params[extra_param]
                         break
             # Save the param to the dict
-            task_output_pipe['params'][pipe_key] = pipe_value
+            task_output_pipe['pipe_params'][pipe_key] = pipe_value
         return task_output_pipe
 
     def __mustached(self, value):
@@ -56,18 +57,18 @@ class TaskDefinition:
 
     def __remove_mustache(self, value):
         # Remove double brackets from start and end
-        return re.sub('(^{{) | (}}$)', '', value)
+        # This is called after checking if mustached so this is safe
+        return re.search('(?<=\{\{)(.*?)(?=\}\})', value).group(0)
 
     def __parse_output_pipe(self, input_pipe):
         # Output pipe is defined as TYPE[PARAMS_COMMA_SEPERATED]
         # Split by '['
-        pipe_info = input_pipe.split('[')
+        pipe_info = input_pipe.split('[', 1)
         if len(pipe_info) > 1:
             pipe_type = pipe_info[0]
             # Cleanup the other bracket
             cleanup_bracket_index = pipe_info[1].rfind(']')
-            pipe_params = (pipe_info[:cleanup_bracket_index] + pipe_info[cleanup_bracket_index+1:])
-
+            pipe_params = pipe_info[1][:cleanup_bracket_index] + pipe_info[1][cleanup_bracket_index+1:]
             # Create the params dict
             params_dict = {}
             for pipe_param in pipe_params.split(';'):
@@ -77,7 +78,7 @@ class TaskDefinition:
             # Return the final pipe
             return {
                 'pipe': pipe_type,
-                'params': params_dict
+                'pipe_params': params_dict
             }
         return None
 

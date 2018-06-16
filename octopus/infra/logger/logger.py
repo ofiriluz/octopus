@@ -25,7 +25,7 @@ class Logger:
 
     def __write_log(self, msg, type_str):
         # First create the formatted message
-        formatted_msg = '[{}][{}][{}]: {}'.format(str(datetime.datetime.now()),
+        formatted_msg = '[{}][{}][{}]: {}\n'.format(str(datetime.datetime.now()),
                                                   self.__logger_name,
                                                   type_str,
                                                   msg)
@@ -38,7 +38,7 @@ class Logger:
             self.__logger_file.write(formatted_msg)
             self.__logger_file.flush()
 
-    def __open_logger(self):
+    def open_logger(self):
         # This is only called from the logger manager
         # Check if logger is already opened
         if self.__is_logger_opened:
@@ -56,7 +56,7 @@ class Logger:
 
         return True
 
-    def __close_logger(self):
+    def close_logger(self):
         # This is only called from the logger manager
         # Check if logger is already opened
         if not self.__is_logger_opened:

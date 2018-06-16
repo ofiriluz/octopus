@@ -2,8 +2,8 @@
     "task_definitions": 
     [
         {
-            "task_defintion_id": "PythonScriptA",
-            "task_execution_script": "D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_script_a.py",
+            "task_definition_id": "PythonScriptA",
+            "task_execution_script": "D:\\Octopus\\octopus\\octopus\\tests\\task_manager_tests\\task_script_a.py",
             "task_shell_executor": "python",
             "task_extra_params": 
             [
@@ -15,8 +15,8 @@
             "task_output_pipe": "console[start={{input_string}}]"
         },
         {
-            "task_defintion_id": "BashScriptB",
-            "task_execution_script": "D:\\Octopus\\octopus\\src\\task_manager\\tests\\task_script_b.sh",
+            "task_definition_id": "BashScriptB",
+            "task_execution_script": "D:\\Octopus\\octopus\\octopus\\tests\\task_manager_tests\\task_script_b.sh",
             "task_shell_executor": "C:\\Program Files\\Git\\git-bash.exe",
             "task_extra_params": 
             [

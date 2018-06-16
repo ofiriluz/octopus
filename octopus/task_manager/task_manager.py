@@ -1,22 +1,27 @@
 from threading import Lock, Event, Thread
 from .task_definition import TaskDefinition
 from .task_executor import TaskExecutor
-from octopus.infra.logger import LoggerManager, Logger
+from octopus.infra.logger import LoggerManager, Logger, DEBUG, INFO
 import time
 import json
+import tempfile
 import uuid
+import os
 
-REQUIRED_TASK_DEFINITION_KEYS = ['task_defintion_id', 'task_execution_script', 'task_params', 'task_output_pipe']
+REQUIRED_TASK_DEFINITION_KEYS = ['task_definition_id', 'task_execution_script', 'task_shell_executor', 'task_output_pipe']
+OPTIONAL_TASK_DEFINITION_KEYS = ['task_extra_params']
 DEFAULT_MAX_RUNNING_TASKS = 5
 DEFAULT_POOL_TIMEOUT = 10
-DEFAULT_LOG_PATH = 'C:\\tmplogs'
-DEFAULT_SLEEP_PERIOD = 5
+DEFAULT_LOG_PATH = os.path.join(tempfile.gettempdir(), 'tmplogs')
+DEFAULT_SLEEP_PERIOD = 3
+DEFAULT_LOG_LEVEL = INFO
 
 class TaskManager:
     def __init__(self, 
                 max_running_tasks=DEFAULT_MAX_RUNNING_TASKS, 
                 pool_timeout=DEFAULT_POOL_TIMEOUT,
-                log_path=DEFAULT_LOG_PATH):
+                log_path=DEFAULT_LOG_PATH,
+                log_level=DEFAULT_LOG_LEVEL):
         self.__tasks_queue = []
         self.__task_executors = []
         self.__tasks_mutex = Lock() 
@@ -29,24 +34,26 @@ class TaskManager:
         self.__tasks_thread = None
         self.__cleaner_thread = None
         self.__logger_manager = LoggerManager(log_path)
-        self.__logger = self.__logger_manager.open_logger('TaskManager')
+        self.__logger = self.__logger_manager.open_logger('TaskManager', DEFAULT_LOG_LEVEL)
 
     def __init_task_manager(self):
-        # Reset all the lists
-        self.__tasks_queue = self.__task_executors = self.__tasks_history = []
-        self.__task_definitions = {}
+        # Reset all the needed and allowed data structures
+        self.__task_executors = self.__tasks_history = []
         # Reset the threads, shouldnt be running here
         self.__tasks_thread = self.__cleaner_thread = None
 
     def __execute_task(self, task, task_defintion):
+        self.__logger.debug('Preparing to execute task ' + task['task_id'])
+
         # Create a logger for the executor
-        executor_logger = self.__logger_manager.open_logger(task['task_id'])
+        executor_logger = self.__logger_manager.open_logger(task['task_id'], DEFAULT_LOG_LEVEL)
 
         # Create the task executor
         task_executor = TaskExecutor(task, task_defintion, executor_logger)
 
         # Check if its ready to be executed
         if task_executor.is_ready_to_execute():
+            self.__logger.debug('Starting task execution ' + task['task_id'])
             # Run it, will create a new thread inside
             task_executor.start_execution()
 
@@ -54,7 +61,6 @@ class TaskManager:
             self.__task_executors.append(task_executor)
 
             return True
-
         return False
 
     def __is_task_pool_full(self):
@@ -63,13 +69,16 @@ class TaskManager:
     def __has_more_tasks(self):
         return len(self.__tasks_queue) > 0
 
+    def __has_more_executors_running(self):
+        return len(self.__task_executors) > 0
+
     def __pop_next_task(self):
         # Lock the tasks mutex
         with self.__tasks_mutex:
             # Check if there is a task to pop
-            if len(self.__task_executors) > 0:
+            if len(self.__tasks_queue) > 0:
                 # Pop and return the task
-                return self.__task_executors.pop(0)
+                return self.__tasks_queue.pop(0)
         return None
 
     def __retrieve_task_definition(self, task_definition_id):
@@ -101,6 +110,7 @@ class TaskManager:
             if self.__is_task_pool_full():
                 self.__tasks_pool_event.wait(timeout=self.__pool_timeout)
 
+            # Check if more tasks exist in the queue
             if self.__has_more_tasks():
                 # Get the next task to deploy
                 task = self.__pop_next_task()
@@ -202,7 +212,7 @@ class TaskManager:
         if self.__is_task_manager_running:
             return False
         # Clean the old task definitions
-        self.__task_definitions = []
+        self.__task_definitions = {}
 
         self.__logger.info('Updating task manager task definitions from path {}'.format(config_path))
 
@@ -216,8 +226,8 @@ class TaskManager:
                 if all(name in task_info.keys() for name in REQUIRED_TASK_DEFINITION_KEYS):
                     # Create a Task def object
                     task_def = TaskDefinition(**task_info)
-                    self.__task_definitions[task_info["task_definition_id"]] = task_def
-                    
+                    self.__logger.info('Adding task definition ' + task_def.get_task_definition_id())
+                    self.__task_definitions[task_info["task_definition_id"]] = task_def 
         return True
 
     def is_task_manager_running(self):
@@ -235,11 +245,11 @@ class TaskManager:
 
         # Start the tasks thread
         self.__logger.info('Running task manager threads')
-        self.__tasks_thread = Thread(self.__tasks_runner_thread)
+        self.__tasks_thread = Thread(target=self.__tasks_runner_thread)
         self.__tasks_thread.start()
 
         # Start the cleaner thread
-        self.__cleaner_thread = Thread(self.__tasks_cleaner_thread)
+        self.__cleaner_thread = Thread(target=self.__tasks_cleaner_thread)
         self.__cleaner_thread.start()
 
         return True
@@ -265,7 +275,7 @@ class TaskManager:
         # Pooling until the task manager has no more tasks
         # This can be endless, if the task manager keeps receiving tasks
         try:
-            while self.__has_more_tasks():
+            while self.__has_more_tasks() or self.__has_more_executors_running():
                 time.sleep(sleep_period)
         except:
             return False

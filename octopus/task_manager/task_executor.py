@@ -33,26 +33,22 @@ class TaskExecutor:
             if not self.__is_running or thread_event.is_set():
                 return
             # Log it on the given function
-            log_func(out_line)
+            log_func(out_line.strip())
 
-    def __get_console_piped_result(self):
+    def __get_console_piped_result(self, output_pipe):
         # Create a fully textual log
         log = '\n'.join(self.__stdout_logs)
 
-        output_pipe = self.__task_definition.get_output_pipe()
         # Check if a start word was given
         if 'start' in output_pipe['pipe_params'].keys():
             # Find it from the end and split up until that
             index = log.rfind(output_pipe['pipe_params']['start'])
             if index > 0:
-                log = log[index+len(log.rfind(output_pipe['pipe_params']['start'])):]
+                log = log[index + len(output_pipe['pipe_params']['start']):].strip()
         
         return log
 
-    def __get_file_piped_result(self):
-        # Check if the given file path exists
-        output_pipe = self.__task_definition.get_output_pipe()
-
+    def __get_file_piped_result(self, output_pipe):
         # Check if the parsed path is in the pipe params
         if 'path' in output_pipe['pipe_params'].keys():
             path = output_pipe['pipe_params']['path']
@@ -60,20 +56,21 @@ class TaskExecutor:
             if os.path.exists(path):
                 # Open the path file and read it and send it back to the user
                 f = open(path, 'r')
-                return f.readlines()
+                return '\n'.join(line.strip() for line in f.readlines())
         return None
 
     def __get_piped_result(self):
-        output_pipe = self.__task_definition.get_output_pipe()
+        output_pipe = self.__task_definition.get_output_pipe(self.__task['task_extra_params'])
         # Get the output pipe type
         pipe_type = output_pipe['pipe']
         if pipe_type == 'console':
-            return self.__get_console_piped_result()
+            return self.__get_console_piped_result(output_pipe)
         elif pipe_type == 'file':
-            return self.__get_file_piped_result()
+            return self.__get_file_piped_result(output_pipe)
         return None
 
     def __execution_thread(self):
+        self.__logger.debug('Execution thread started for task ' + self.__task['task_id'])
         # Assert that the execution script exists
         task_execution_script = self.__task_definition.get_task_execution_script()
 
@@ -86,23 +83,24 @@ class TaskExecutor:
             # Lock until the process gets into wait state to avoid collision with stop the execution
             self.__task_execution_mutex.acquire()
 
-            self.__logger.info('Executing task process {}'.format(self.__task['task_id']))
+            self.__logger.debug('Executing task process {}'.format(self.__task['task_id']))
             self.__execution_process = subprocess.Popen(script_params, 
                                                         shell=True,
                                                         stdout=subprocess.PIPE,
+                                                        stderr=subprocess.PIPE,
                                                         universal_newlines=True)
 
             stdout_thread = stderr_thread = None
             stream_event = Event()
 
             # Start log monitoring thread for stdout and stderr
-            self.__logger.info('Starting log threads for task {}'.format(self.__task['task_id']))
-            stdout_thread = Thread(self.__execution_log_stream_thread, 
-                                    (self.__execution_process.stdout.readline, self.__stdout_log_callback, stream_event,))
+            self.__logger.debug('Starting log threads for task {}'.format(self.__task['task_id']))
+            stdout_thread = Thread(target=self.__execution_log_stream_thread, 
+                                    args=(self.__execution_process.stdout.readline, self.__stdout_log_callback, stream_event,))
             stdout_thread.start()
 
-            stderr_thread = Thread(self.__execution_log_stream_thread, 
-                                    (self.__execution_process.stderr.readline, self.__stderr_log_callback, stream_event,))
+            stderr_thread = Thread(target=self.__execution_log_stream_thread, 
+                                    args=(self.__execution_process.stderr.readline, self.__stderr_log_callback, stream_event,))
             stderr_thread.start()
 
             # Unlock the mutex
@@ -118,7 +116,7 @@ class TaskExecutor:
 
             if self.__is_running:
                 # Get the final output
-                self.__logger.info('Retrieving task result for task {}'.format(self.__task['task_id']))
+                self.__logger.debug('Retrieving task result for task {}'.format(self.__task['task_id']))
                 result = self.__get_piped_result()
 
                 # Callback with the result of the process
@@ -137,7 +135,7 @@ class TaskExecutor:
         self.__is_running = True
 
         # Create and run the execution thread
-        self.__task_execution_thread = Thread(self.__execution_thread)
+        self.__task_execution_thread = Thread(target=self.__execution_thread)
         self.__task_execution_thread.start()
 
     def stop_execution(self):
