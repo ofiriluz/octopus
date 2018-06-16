@@ -1,6 +1,7 @@
 from threading import Thread, Event, Lock
 import os
 import subprocess
+import datetime
 
 class TaskExecutor:
     def __init__(self, task, task_definition, logger, write_output_to_log=True):
@@ -13,6 +14,9 @@ class TaskExecutor:
         self.__execution_process = None
         self.__write_output_to_log = write_output_to_log
         self.__stdout_logs = []
+        self.__task_result = None
+        self.__task_start_time = None
+        self.__task_end_time = None
 
     def __stdout_log_callback(self, msg):
         # Save stdout to later be used
@@ -55,8 +59,8 @@ class TaskExecutor:
             # Check if the path exists
             if os.path.exists(path):
                 # Open the path file and read it and send it back to the user
-                f = open(path, 'r')
-                return '\n'.join(line.strip() for line in f.readlines())
+                with open(path, 'r') as f:
+                    return '\n'.join(line.strip() for line in f.readlines())
         return None
 
     def __get_piped_result(self):
@@ -84,6 +88,10 @@ class TaskExecutor:
             self.__task_execution_mutex.acquire()
 
             self.__logger.debug('Executing task process {}'.format(self.__task['task_id']))
+            # Save the task start time
+            self.__task_start_time = datetime.datetime.now()
+
+            # Start the task
             self.__execution_process = subprocess.Popen(script_params, 
                                                         shell=True,
                                                         stdout=subprocess.PIPE,
@@ -114,18 +122,24 @@ class TaskExecutor:
             stdout_thread.join()
             stderr_thread.join()
 
-            if self.__is_running:
-                # Get the final output
-                self.__logger.debug('Retrieving task result for task {}'.format(self.__task['task_id']))
-                result = self.__get_piped_result()
+            # Save the task end time
+            self.__task_end_time = datetime.datetime.now()
 
-                # Callback with the result of the process
-                if self.__task['task_callback'] and callable(self.__task['task_callback']): 
-                    self.__task['task_callback'](result)
+            try:
+                if self.__is_running:
+                    # Get the final output
+                    self.__logger.debug('Retrieving task result for task {}'.format(self.__task['task_id']))
+                    self.__task_result = self.__get_piped_result()
 
-            # Cleanup
-            self.__is_running = False
-            self.__execution_process = None
+                    # Callback with the result of the process
+                    if self.__task['task_callback'] and callable(self.__task['task_callback']): 
+                        self.__task['task_callback'](self.__task_result)
+            finally:
+                # Cleanup
+                self.__is_running = False
+                self.__execution_process.stdout.close()
+                self.__execution_process.stderr.close()
+                self.__execution_process = None
             
 
     def start_execution(self):
@@ -153,3 +167,12 @@ class TaskExecutor:
 
     def is_ready_to_execute(self):
         return self.__task_definition is not None and self.__task is not None and not self.__is_running
+
+    def get_task(self):
+        return self.__task
+
+    def get_task_result(self):
+        return self.__task_result
+
+    def get_task_duration(self):
+        return self.__task_end_time - self.__task_start_time

@@ -7,4 +7,4 @@ if __name__ == "__main__":
     print("Hi friend")
     time.sleep(5)
     print(sys.argv[1])
-    print('{"Test": "ABC"}')
+    print('{"Test":"ABC"}')

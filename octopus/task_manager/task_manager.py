@@ -27,7 +27,7 @@ class TaskManager:
         self.__tasks_mutex = Lock() 
         self.__tasks_pool_event = Event()
         self.__is_task_manager_running = False
-        self.__tasks_history = []
+        self.__tasks_history = {}
         self.__task_definitions = {}
         self.__max_running_tasks = max_running_tasks
         self.__pool_timeout = pool_timeout
@@ -38,9 +38,13 @@ class TaskManager:
 
     def __init_task_manager(self):
         # Reset all the needed and allowed data structures
-        self.__task_executors = self.__tasks_history = []
+        self.__task_executors = []
+        self.__tasks_history = {}
         # Reset the threads, shouldnt be running here
         self.__tasks_thread = self.__cleaner_thread = None
+        # Open the logger if not opened
+        if not self.__logger:
+            self.__logger = self.__logger_manager.open_logger('TaskManager', DEFAULT_LOG_LEVEL)
 
     def __execute_task(self, task, task_defintion):
         self.__logger.debug('Preparing to execute task ' + task['task_id'])
@@ -96,6 +100,12 @@ class TaskManager:
             for index, task_executor in enumerate(self.__task_executors):
                 if not task_executor.is_running():
                     indices_to_remove.append(index)
+                    # Save the task result in the history
+                    self.__tasks_history[task_executor.get_task()['task_id']] = {
+                        'task_id': task_executor.get_task()['task_id'],
+                        'task_result': task_executor.get_task_result(),
+                        'task_duration': task_executor.get_task_duration()
+                    }
 
             # Remove the indexes
             with self.__tasks_mutex:
@@ -123,6 +133,14 @@ class TaskManager:
                         self.__execute_task(task, task_def)
             # Sleep to not overrun the task manager
             time.sleep(0.1)
+        
+        # Close all the executors
+        for executor in self.__task_executors:
+            executor.stop_execution()
+
+        # Wait for the remaining tasks to end
+        while self.__has_more_executors_running():
+            time.sleep(0.5)
                 
     def add_task(self, task_definition_id, task_execution_params_list, task_extra_params, task_callback=None):
         # Lock the tasks mutex
@@ -238,8 +256,8 @@ class TaskManager:
             return False
 
         # Re init the task manager before starting
-        self.__logger.info('Starting task manager')
         self.__init_task_manager()
+        self.__logger.info('Starting task manager')
 
         self.__is_task_manager_running = True
 
@@ -271,6 +289,10 @@ class TaskManager:
         self.__cleaner_thread.join()
         self.__cleaner_thread = None
 
+        # Clear all the loggers from the logger manager
+        self.__logger_manager.close_all_loggers()
+        self.__logger = None
+
     def wait_for_all_tasks_to_end(self, sleep_period=DEFAULT_SLEEP_PERIOD):
         # Pooling until the task manager has no more tasks
         # This can be endless, if the task manager keeps receiving tasks
@@ -280,3 +302,13 @@ class TaskManager:
         except:
             return False
         return True
+
+    def wait_for_task_to_end(self, task_id, sleep_period=DEFAULT_SLEEP_PERIOD):
+        # Wait for task id to show up in the tasks history
+        try:
+            while not task_id in self.__tasks_history.keys():
+                time.sleep(sleep_period)
+        except:
+            return None
+        # Return the task result
+        return self.__tasks_history[task_id]

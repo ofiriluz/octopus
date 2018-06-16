@@ -36,5 +36,5 @@ class LoggerManager:
 
     def close_all_loggers(self):
         # Go over every logger and close it
-        for logger_name in self.__loggers.keys():
+        for logger_name in list(self.__loggers):
             self.close_logger(logger_name)
