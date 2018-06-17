@@ -22,7 +22,7 @@ Ongoing Tasks:
             ```json
                 {
                     "_id": "...",
-                    // Query is basiclly the full name or the url to the picture and so on
+                    /* Query is basiclly the full name or the url to the picture and so on */
                     "query": "x x", 
                      // Extra hints dict that the user gives
                     "query_hints": {},
