@@ -18,19 +18,17 @@ Ongoing Tasks:
                 - Wiki
                 - ...
             - Profiler
-            - 
+            - Example Query:
             ```json
-            Example Query:
             {
-                "_id": ...,
+                "_id": "...",
                 "query": "x x", // Query is basiclly the full name or the url to the picture and so on
                 "query_hints": {}, // Extra hints dict that the user gives
                 "query_ip": "", // IP of the user
                 "search_time": "dt", // Datetime of the search
                 "access_points": { // Dict of resulting access points, this can be added and changed, note that each AP can contain multiple results in the case of unknown
                     "twitter": ["_id"],
-                    "facebook": ["_id"],
-                    ...
+                    "facebook": ["_id"]
                 },
                 "profiler_results": ["_id", "_id",...] // Different profiler results foreign keys, may contain multiple profiler results from the access points
             } 
