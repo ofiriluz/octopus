@@ -20,18 +20,24 @@ Ongoing Tasks:
             - Profiler
             - Example Query:
             ```json
-            {
-                "_id": "...",
-                "query": "x x", // Query is basiclly the full name or the url to the picture and so on
-                "query_hints": {}, // Extra hints dict that the user gives
-                "query_ip": "", // IP of the user
-                "search_time": "dt", // Datetime of the search
-                "access_points": { // Dict of resulting access points, this can be added and changed, note that each AP can contain multiple results in the case of unknown
-                    "twitter": ["_id"],
-                    "facebook": ["_id"]
-                },
-                "profiler_results": ["_id", "_id",...] // Different profiler results foreign keys, may contain multiple profiler results from the access points
-            } 
+                {
+                    "_id": "...",
+                    // Query is basiclly the full name or the url to the picture and so on
+                    "query": "x x", 
+                     // Extra hints dict that the user gives
+                    "query_hints": {},
+                    // IP of the query sender
+                    "query_ip": "", 
+                    // Datetime of the search
+                    "search_time": "dt", 
+                    // Dict of resulting access points, this can be added and changed, note that each AP can contain multiple results in the case of unknown
+                    "access_points": { 
+                        "twitter": ["_id"],
+                        "facebook": ["_id"]
+                    },
+                    // Different profiler results foreign keys, may contain multiple profiler results from the access points
+                    "profiler_results": ["_id", "_id"] 
+                } 
             ```
             - Profiler Example is still unknown
             - AccessPoint are dependent on the access point itself and the info it supplies
