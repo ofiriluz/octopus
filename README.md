@@ -24,7 +24,7 @@ Ongoing Tasks:
                     "_id": "...",
                     // Query is basiclly the full name or the url to the picture and so on 
                     "query": "x x", 
-                     // Extra hints dict that the user gives
+                    // Extra hints dict that the user gives
                     "query_hints": {},
                     // IP of the query sender
                     "query_ip": "", 
