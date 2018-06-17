@@ -25,7 +25,7 @@ class Logger:
 
     def __write_log(self, msg, type_str):
         # First create the formatted message
-        formatted_msg = '[{}][{}][{}]: {}\n'.format(str(datetime.datetime.now()),
+        formatted_msg = '[{}][{}][{}]: {}\n'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                                   self.__logger_name,
                                                   type_str,
                                                   msg)
@@ -69,6 +69,9 @@ class Logger:
             self.__logger_file = None
 
         return True
+
+    def get_log_file_path(self):
+        return self.__logger_path
 
     def debug(self, msg):
         # Only write log by log level

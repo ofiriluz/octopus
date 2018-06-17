@@ -20,7 +20,7 @@ class LoggerManager:
         log_path = self.__get_log_path(logger_name)
 
         # Create, save and return the logger
-        logger_obj = Logger(logger_name, log_level, log_path)
+        logger_obj = Logger(logger_name, log_level, log_path, self.__is_console_allowed)
         logger_obj.open_logger()
         self.__loggers[logger_name] = logger_obj
 
