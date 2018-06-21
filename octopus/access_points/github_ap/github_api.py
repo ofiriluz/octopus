@@ -1,7 +1,7 @@
 from github import Github
 from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
-# First create a Github instance:
 
+###https://github.com/PyGithub/PyGithub
 # or using an access token
 g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
 
@@ -15,4 +15,3 @@ if __name__ == "__main__":
     users = g.search_users('isan rivkin')
     for u in users:
         print(u.login)
-        
