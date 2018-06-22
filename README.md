@@ -19,7 +19,7 @@ Ongoing Tasks:
                 - ...
             - Profile
             - 
-            ```json
+            ```js
             Example ProfileQuery:
             {
                 "_id": ...,
