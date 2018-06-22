@@ -10,17 +10,17 @@ Ongoing Tasks:
     https://www.compose.com/articles/using-graphql-with-mongodb/
     https://github.com/nmaro/graphql-mongodb-example
         - DB Structure:
-            - Query
+            - ProfileQuery
             - AccessPoint => InterfaceCollection[_id, query_id, access_point_name, access_point_path]
                 - Twitter
                 - Facebook
                 - Reddit
                 - Wiki
                 - ...
-            - Profiler
+            - Profile
             - 
             ```json
-            Example Query:
+            Example ProfileQuery:
             {
                 "_id": ...,
                 "query": "x x", // Query is basiclly the full name or the url to the picture and so on
