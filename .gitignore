@@ -5,7 +5,7 @@ __pycache__
 tmp_file.json
 
 # sensetive keys access points file 
-
+octopus/access_points/auth_keys.py
 src/access_points/auth_keys.py
 
 #visual studio code 

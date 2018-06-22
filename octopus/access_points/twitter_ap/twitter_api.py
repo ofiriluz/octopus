@@ -1,6 +1,6 @@
 import re
 import tweepy
-from src.access_points.auth_keys import TWITTER_ACCESS_TOKEN,TWITTER_TOKEN_SECRET,TWITTER_API_KEY,TWITTER_API_SECRET
+from octopus.access_points.auth_keys import TWITTER_ACCESS_TOKEN,TWITTER_TOKEN_SECRET,TWITTER_API_KEY,TWITTER_API_SECRET
 
 class TwitterUser(object):
     def __init__(self,user):
@@ -75,7 +75,9 @@ class TwitterAPI(object):
         users_dicts = [users.user_dict for user in users]
         all_bags = {}
         for dic in users_dicts:
-            bag = []
+            bag = self.to_bag_of_words(dic)
+            all_bags.append(bag)
+
             pass
     def to_bag_of_words(self,user_dic, with_time_line = False):
         bag = []
