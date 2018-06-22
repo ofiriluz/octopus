@@ -12,7 +12,7 @@ if __name__ == "__main__":
     #     print(repo.name)
 
 
-    users = g.search_users('isan rivkin')
+    users = g.search_users('yardenmol')
     for u in users:
         print(u.login)
         repos = g.get_user(u.login).get_repos()
@@ -20,13 +20,15 @@ if __name__ == "__main__":
         for repo in repos:
             count += 1
             print(repo.name)
+            # not enough it only represents 1 language for example in a nodejs project it could show only HTML
             print(repo.language)
             # the current repo owner (if its fork then the forker is the owner
             print(repo.owner.login)
             # the parent owner if it's forke then it's the the owner original
-            print(repo.owner.parent)
+            if repo.parent is not None:
+                print(repo.parent)
             # pushed at
-            print(repo.pushed_at.datetime)
+            print(repo.pushed_at)
             # watchers count
             print(repo.watchers_count)
             # is this repo  a fork ?
