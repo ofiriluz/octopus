@@ -16,13 +16,24 @@ class ProfileQuestionTests(unittest.TestCase):
         pool.close_connection_pool()
 
     def test_profile_question_access_point_add(self):
+        query = '''
+            query getOneProfileQuestion {
+                questions(last: 1) {
+                    id
+                }     
+            }
+        '''
+        # Execute the query and test if the query is valid
+        result = profile_question_schema.execute(query)
+        self.assertIsNone(result.errors)
+
         mutation = '''
             mutation profileQuestionAPAdd {
-                addAccessPoint(queryId: "5b2fe7157a715e4848c75ee3", accessPointId: "123") {
+                addAccessPoint(queryId: "%s", accessPointName: "twitter", accessPointId: "123") {
                     ok
                 }
             }
-        '''
+        ''' % (result.data['questions'][0]['id'])
 
         # Execute the query and test if the query is valid
         result = profile_question_schema.execute(mutation)
