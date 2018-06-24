@@ -3,6 +3,7 @@ dist
 venv
 __pycache__
 tmp_file.json
+database
 
 # sensetive keys access points file 
 octopus/access_points/auth_keys.py

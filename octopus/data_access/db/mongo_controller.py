@@ -10,8 +10,8 @@
     # 
 
 import pymongo
-from db_controller import BaseDBController
-from db_generator import BaseDBGenerator
+from .db_controller import BaseDBController
+from .db_generator import BaseDBGenerator
 
 
 class MongoController(BaseDBController):
@@ -36,7 +36,7 @@ class MongoController(BaseDBController):
         return True
 
     def stop_controller(self):
-        if self.is_controller_running()
+        if self.is_controller_running():
             return False
 
         # Destroy the mongo connection
@@ -50,7 +50,7 @@ class MongoController(BaseDBController):
         return self.__mongo_connection != None
     
     def get_underlying_engine(self):
-        return self.__mongo_connection
+        return self.__mongo_connection[self.__db_name]
 
 
 class MongoGenerator(BaseDBGenerator):

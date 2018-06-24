@@ -1,7 +1,9 @@
 from .db_generator import BaseDBGenerator
 from .db_controller import BaseDBController
 from threading import Lock
+import time
 
+DEFAULT_OPEN_CONNECTION_PERIOD = 0.25
 DEFAULT_MAX_CONNECTION_POOL=10
 
 # The db connection pool handles a set of controllers for DB connections
@@ -12,6 +14,13 @@ DEFAULT_MAX_CONNECTION_POOL=10
 # The database controller will be checked for base controller type (base_db_controller)
 # The pool itself is singleton for the entire program
 # The DB generator should be of type db_generator to be a safe generation
+
+# Have 0 open connections
+# When a request to generate a new controller is given the following happens:
+    # If no running controller / all running controllers in use, generate new one
+    # If there is a running controller not in use, use it
+# When the controller is returned, mark it as not used for further on
+
 
 class DBConnectionPool:
     # Class Impl
@@ -28,6 +37,33 @@ class DBConnectionPool:
         def is_pool_running(self):
             return self.__pool_running
 
+        def get_open_db_controller(self):
+            # This only tries to get an open controller unlike generate
+            if not self.is_pool_running():
+                return None
+
+            # Check if the pool is full
+            if self.is_pool_full():
+                return None
+
+            # Lock the pool
+            with self.__generator_mutex:
+                for controller in self.__running_controllers_pool:
+                    if not controller['used']:
+                        # Found a controller not in use, set used and return
+                        controller['used'] = True
+                        return controller['obj']
+            return None
+
+        def wait_for_open_db_connection(self):
+            # Tries to wait until there is an open db controller and returns it
+            while True:
+                db_controller = self.get_open_db_controller()
+                if db_controller:
+                    return db_controller
+                time.sleep(DEFAULT_OPEN_CONNECTION_PERIOD)
+            return None
+
         def generate_db_controller(self, **kwargs):
             if not self.is_pool_running():
                 return None
@@ -38,14 +74,22 @@ class DBConnectionPool:
             
             # Lock the pool
             with self.__generator_mutex:
+                # First check if there is a controller not in use
+                # If there is, return it and set it to be used
+                for controller in self.__running_controllers_pool:
+                    if not controller['used']:
+                        # Found a controller not in use, set used and return
+                        controller['used'] = True
+                        return controller['obj']
+
                 # Generate a new db controller and assert it
                 db_controller = self.__db_generator.generate_db_controller(self.__connection_info, **kwargs)
-                if not db_controller or not issubclass(db_controller, BaseDBController):
+                if not db_controller or not issubclass(type(db_controller), BaseDBController):
                     return None
 
                 # Start the DB Controller and add it to the pool
-                db_controller.start_connection()
-                self.__running_controllers_pool.append(db_controller)
+                db_controller.start_controller()
+                self.__running_controllers_pool.append({'used': True, 'obj': db_controller})
 
                 # Return the controller
                 return db_controller
@@ -56,18 +100,16 @@ class DBConnectionPool:
 
             if not db_controller:
                 return False
-
+            
             # Find the db controller on the pool, close it and remove it from the pool
             # The comparision is done by uuid of the controller
             controller_uuid = db_controller.get_controller_uuid()
             # Lock the pool, so iteration will be thread safe
             with self.__generator_mutex:
-                for index, controller in self.__running_controllers_pool:
-                    if controller.get_controller_uuid() == controller_uuid:
-                        # Found the controller, stop it and remove it from the pool
-                        controller.stop_connection()
-                        controller.cleanup_resources()
-                        del self.__running_controllers_pool[index]
+                for controller in self.__running_controllers_pool:
+                    if controller['obj'].get_controller_uuid() == controller_uuid:
+                        # Found the controller, un-use it, do not close it
+                        controller['used'] = False
                         return True
 
         def close_connection_pool(self):
@@ -80,9 +122,10 @@ class DBConnectionPool:
             self.__pool_running = False
 
             with self.__generator_mutex:
+                # Go over all the controllers and close them
                 for controller in self.__running_controllers_pool:
-                    controller.stop_connection()
-                    controller.cleanup_resources()
+                    controller['obj'].stop_controller()
+                    controller['obj'].cleanup_resources()
             self.__running_controllers_pool = []
 
             return True

@@ -1,20 +1,12 @@
 import graphene
 from octopus.data_access.types.common import ProfileAccessPoint
-
-class ProfileHintType(graphene.Enum):
-    REGEX = 1
-    HAMMING = 2
-
-class ProfileQuestionHint(graphene.InputObjectType):
-    hint_string = graphene.NonNull(graphene.String)
-    # hint_type = graphene.InputField(ProfileHintType)
-
-class ProfileQuestionHints(graphene.InputObjectType):
-    hints = graphene.List(of_type=ProfileQuestionHint)
+from octopus.data_access.db.db_connection_pool import DBConnectionPool
+import datetime
 
 class ProfileQuestion(graphene.ObjectType):
+    id = graphene.ID()
     query = graphene.String()
-    query_hints = graphene.List(of_type=ProfileQuestionHint)
+    query_hints = graphene.List(of_type=graphene.String)
     query_host = graphene.String()
     search_time = graphene.DateTime()
     access_points = graphene.List(of_type=ProfileAccessPoint)
@@ -31,17 +23,34 @@ class ProfileQuestionQuery(graphene.ObjectType):
 class InsertProfileQuestion(graphene.Mutation):
     class Arguments:
         query = graphene.String(required=True)
-        query_hints = graphene.Argument(ProfileQuestionHints)
+        query_host = graphene.String(default_value='')
+        query_hints = graphene.List(of_type=graphene.String, default_value=[])
 
     question = graphene.Field(type=ProfileQuestion)
 
-    # @staticmethod
-    def mutate(self, info, query, query_hints):
-        print('Hello')
-        print(str(info))
-        print(str(query))
-        print(str(query_hints))
-        return ProfileQuestion()
+    def mutate(self, info, query, query_host, query_hints):
+        # Get the singleton DB Connection pool
+        pool = DBConnectionPool()
+
+        # This assuems that the program already created a conneection 
+        controller = pool.wait_for_open_db_connection()
+
+        # Get the underlying mongo engine and perform the insertion
+        mongo_engine = controller.get_underlying_engine()
+        question = {
+            'query': query,
+            'query_hints': query_hints,
+            'query_host': query_host,
+            'search_time': datetime.datetime.now(),
+            'access_points': [],
+            'profiler_results': []
+        }
+
+        # Insert the doc and get the id
+        question['id'] = mongo_engine['profile-question'].insert_one(question).inserted_id
+
+        # Return it as the object described
+        return ProfileQuestion(question)
 
 class ProfileQuestionMutations(graphene.ObjectType):
     insert_profile_question = InsertProfileQuestion.Field()
