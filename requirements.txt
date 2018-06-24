@@ -1,4 +1,4 @@
 tweepy==3.6.0
 pymongo
-graphene
+graphene>=2.0
 PyGithub=1.39
