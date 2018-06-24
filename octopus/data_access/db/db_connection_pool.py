@@ -29,6 +29,8 @@ class DBConnectionPool:
             self.__max_controller_pool = DEFAULT_MAX_CONNECTION_POOL
             self.__running_controllers_pool = []
             self.__generator_mutex = Lock()
+            self.__enter_exit_mutex = Lock()
+            self.__current_entered_controller = None
             self.__pool_running = False
 
         def is_pool_full(self):
@@ -152,6 +154,16 @@ class DBConnectionPool:
 
             return True
 
+        def __enter__(self):
+            self.__enter_exit_mutex.acquire()
+            self.__current_entered_controller = self.wait_for_open_db_connection()
+            return self.__current_entered_controller
+
+        def __exit__(self, *_):
+            self.return_db_controller(self.__current_entered_controller)
+            self.__current_entered_controller = None
+            self.__enter_exit_mutex.release()
+
     # Singleton impl
     __db_pool_instance = None
     
@@ -165,3 +177,9 @@ class DBConnectionPool:
 
     def __setattr__(self, attr, value):
         return setattr(self.__db_pool_instance, attr, value)
+
+    def __enter__(self):
+        return self.__db_pool_instance.__enter__()
+
+    def __exit__(self, *_):
+        return self.__db_pool_instance.__exit__()

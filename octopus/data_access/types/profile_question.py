@@ -20,6 +20,30 @@ class ProfileQuestionQuery(graphene.ObjectType):
         pass
 
 # Mutations
+class AddAccessPoint(graphene.Mutation):
+    class Arguments:
+        query_id = graphene.ID(required=True)
+        access_point_id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, query_id, access_point_id):
+        # Get the pool singleton and use enter to generate and destroy the controller
+        pool_controller_generator = DBConnectionPool() 
+        with pool_controller_generator as controller:
+            # Get the underlying mongo engine and perform the insertion
+            mongo_engine = controller.get_underlying_engine()
+            # Perform the update
+            res = mongo_engine['profile-question'].update_one({'id': query_id}, 
+                {'$push': {'access_points': access_point_id}})
+            print(query_id)
+            print(mongo_engine['profile-question'].find_one("5b2fe7157a715e4848c75ee3"))
+            print(res.modified_count)
+            print(res.raw_result)
+            
+            return AddAccessPoint(ok=True)
+
+
 class InsertProfileQuestion(graphene.Mutation):
     class Arguments:
         query = graphene.String(required=True)
@@ -29,38 +53,37 @@ class InsertProfileQuestion(graphene.Mutation):
     question = graphene.Field(type=ProfileQuestion)
 
     def mutate(self, info, query, query_host, query_hints):
-        # Get the singleton DB Connection pool
-        pool = DBConnectionPool()
+        # Get the pool singleton and use enter to generate and destroy the controller
+        pool_controller_generator = DBConnectionPool() 
+        with pool_controller_generator as controller:
+            # Get the underlying mongo engine and perform the insertion
+            mongo_engine = controller.get_underlying_engine()
+            question = {
+                'query': query,
+                'query_hints': query_hints,
+                'query_host': query_host,
+                'search_time': datetime.datetime.now(),
+                'access_points': [],
+                'profiler_results': []
+            }
 
-        # This assuems that the program already created a conneection 
-        controller = pool.wait_for_open_db_connection()
+            # Insert the doc and get the id
+            question['id'] = mongo_engine['profile-question'].insert_one(question).inserted_id
 
-        # Get the underlying mongo engine and perform the insertion
-        mongo_engine = controller.get_underlying_engine()
-        question = {
-            'query': query,
-            'query_hints': query_hints,
-            'query_host': query_host,
-            'search_time': datetime.datetime.now(),
-            'access_points': [],
-            'profiler_results': []
-        }
+            # Remove the mongo _id for population
+            del question['_id']
 
-        # Insert the doc and get the id
-        question['id'] = mongo_engine['profile-question'].insert_one(question).inserted_id
+            # Populate profile question
+            pq = ProfileQuestion(**question)
 
-        # Return it as the object described
-        return ProfileQuestion(question)
+            # Return it as the object described
+            return InsertProfileQuestion(question=pq)
+
 
 class ProfileQuestionMutations(graphene.ObjectType):
     insert_profile_question = InsertProfileQuestion.Field()
-
-class ProfileQuestionMutator(graphene.ObjectType):
-    profile_mutations = graphene.Field(type=ProfileQuestionMutations)
-
-    def resolve_profile_mutations(self, *_):
-        return ProfileQuestionMutations()
+    add_access_point = AddAccessPoint.Field()
 
 
-profile_question_schema = graphene.Schema(query=ProfileQuestionQuery, mutation=ProfileQuestionMutator)
+profile_question_schema = graphene.Schema(query=ProfileQuestionQuery, mutation=ProfileQuestionMutations)
 

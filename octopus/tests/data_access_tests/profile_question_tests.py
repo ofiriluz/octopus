@@ -15,15 +15,29 @@ class ProfileQuestionTests(unittest.TestCase):
         pool = DBConnectionPool()
         pool.close_connection_pool()
 
-    def test_simple_profile_question_insertion(self):
+    def test_profile_question_access_point_add(self):
+        mutation = '''
+            mutation profileQuestionAPAdd {
+                addAccessPoint(queryId: "5b2fe7157a715e4848c75ee3", accessPointId: "123") {
+                    ok
+                }
+            }
+        '''
+
+        # Execute the query and test if the query is valid
+        result = profile_question_schema.execute(mutation)
+        
+        # Check if results match the given question
+        self.assertIsNone(result.errors)
+        self.assertEqual(result.data['addAccessPoint']['ok'], True)        
+
+    def test_profile_question_insertion(self):
         # Create a profile question
         mutation = '''
-            mutation test{
-                profileMutations {
-                    insertProfileQuestion(query: "Ofir Iluz", queryHints:[]) {
-                        question {
-                            query
-                        }
+            mutation profileQuestionInsertion {
+                insertProfileQuestion(query: "Ofir Iluz", queryHints:[], queryHost: "1.1.1.1") {
+                    question {
+                        query
                     }
                 }
             }
@@ -31,9 +45,10 @@ class ProfileQuestionTests(unittest.TestCase):
 
         # Execute the query and test if the query is valid
         result = profile_question_schema.execute(mutation)
-        print(str(result.errors))
+        
         # Check if results match the given question
-        self.assertEqual(result.query, "Ofir Iluz")
+        self.assertIsNone(result.errors)
+        self.assertEqual(result.data['insertProfileQuestion']['question']['query'], "Ofir Iluz")
 
 if __name__ == '__main__':
     unittest.main(exit=False)
