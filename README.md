@@ -44,6 +44,39 @@ Ongoing Tasks:
 - ### Isan ###
     - **twitter access_point** - given an existing twitter user   name return all profile + tweets - DONE [21.6.18] 
     - **github access_point** - In progress
+    The github access point should provide the following for the profiler:
+        - argparse util with the ability to give the following params:
+            - name to find in git
+            - whether to clone the repos or not
+            - max repo size (so if a repo is big, it will ignore it)
+            - meta info output path which has the following
+                - meta.json - contains information on the user level
+                    - list of repos
+                    - user information
+                    - any other special info that can be used
+                - _repo_name_.json - contains info about the specific repo
+                    - clone path (or failure if too big or didnt work)
+                    - git log / history (either seperate file or not)
+                    - is_fork
+                    - issues information
+                    - pull requests information
+                    - has_wiki
+                    - branches information
+                    - contributers information
+                    - code types (guess github only gives the primary)
+        - All of the information above will be outputted from the github api
+        - The info will be used on the github_profiler later on to provide the following:
+            - commit sizes
+            - contribution score to repos
+            - originality (forks or not and level of editing)
+            - actual code contribution level
+            - familiraity score of each repo
+            - organization score for each repo
+            - git conventions score for each repo
+            - issues handling and pull request handling score for each repo
+            - contribution to foreign repos score
+            - celeberity score
+        - All of the info will be saved to the DB
     **TODO** - free search (for when not knowing the exact twitter name
 - ### Both ###
     - Merge isan's access points with the task manager and write a definition file for the access points
