@@ -83,6 +83,29 @@ class AddAccessPoint(graphene.Mutation):
             return AddAccessPoint(ok=(res.modified_count > 0))
 
 
+class AddProfilerResults(graphene.Mutation):
+    class Arguments:
+        query_id = graphene.ID(required=True)
+        profiler_result_id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, query_id, profiler_result_id):
+        # Get the pool singleton and use enter to generate and destroy the controller
+        pool_controller_generator = DBConnectionPool() 
+        with pool_controller_generator as controller:
+            # Get the underlying mongo engine and perform the insertion
+            mongo_engine = controller.get_underlying_engine()
+
+            # Perform the update
+            res = mongo_engine['profile-question'].update_one({'_id': ObjectId(query_id)}, {
+                    '$push': {
+                        'profiler_results': profiler_result_id
+                    }
+                })
+
+            return AddProfilerResults(ok=(res.modified_count > 0))
+
 class InsertProfileQuestion(graphene.Mutation):
     class Arguments:
         query = graphene.String(required=True)
@@ -118,10 +141,46 @@ class InsertProfileQuestion(graphene.Mutation):
             # Return it as the object described
             return InsertProfileQuestion(question=pq)
 
+class RemoveProfileQuestion(graphene.Mutation):
+    class Arguments:
+        query_id = graphene.ID(required=True)
+        remove_access_points = graphene.Boolean(default_value=True)
+        remove_profiler_results = graphene.Boolean(default_value=True)
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, query_id, remove_access_points, remove_profiler_results):
+        # Get the pool singleton and use enter to generate and destroy the controller
+        pool_controller_generator = DBConnectionPool() 
+        with pool_controller_generator as controller:
+            # Get the underlying mongo engine and perform the insertion
+            mongo_engine = controller.get_underlying_engine()
+
+            # Get the query information
+            query = mongo_engine['profile-question'].find_one({'_id': ObjectId(id)})
+
+            # Iterate on access points and remove them if allowed
+            if remove_access_points:
+                for access_point in query['access_points']:
+                    # Remove the access point
+                    mongo_engine[access_point['access_point_name']].remove({'_id': ObjectId(access_point['access_point_id'])})
+
+            # Iterate on profiler results and remove them if allowed
+            if remove_profiler_results:
+                for profiler_result in query['profiler_results']:
+                    # Remove the profiler result
+                    mongo_engine['profiler-results'].remove({'_id': ObjectId(profiler_result)})
+            
+            # Erase the profile question itself
+            res = mongo_engine['profile-question'].remove({'_id': ObjectId(id)})
+
+            return RemoveProfileQuestion(ok=(res.modified_count > 0))
 
 class ProfileQuestionMutations(graphene.ObjectType):
     insert_profile_question = InsertProfileQuestion.Field()
     add_access_point = AddAccessPoint.Field()
+    add_profiler_results = AddProfilerResults.Field()
+    remove_profile_question = RemoveProfileQuestion.Field()
 
 
 profile_question_schema = graphene.Schema(query=ProfileQuestionQuery, mutation=ProfileQuestionMutations)

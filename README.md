@@ -47,14 +47,15 @@ Ongoing Tasks:
     The github access point should provide the following for the profiler:
         - argparse util with the ability to give the following params:
             - name to find in git
-            - whether to clone the repos or not
+            - whether to clone the repos or only generate metadata
             - max repo size (so if a repo is big, it will ignore it)
             - meta info output path which has the following
                 - meta.json - contains information on the user level
                     - list of repos
                     - user information
                     - any other special info that can be used
-                - _repo_name_.json - contains info about the specific repo
+                - repos/_repo_name_/repo
+                - repos/_repo_name_/meta.json - contains info about the specific repo
                     - clone path (or failure if too big or didnt work)
                     - git log / history (either seperate file or not)
                     - is_fork
