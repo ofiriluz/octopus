@@ -1,5 +1,6 @@
 import os
 import json
+import numpy
 
 class GitHubProfiler:
     def __init__(self,user_workspace_path):
@@ -52,8 +53,53 @@ class GitHubProfiler:
 
         return administrative_contribution_score
 
+    def __calculate_rolling_branch_score(self, branch):
+        #       Rolling codebase contribution:
+        #           For each commit see the percentage changed per whole project
+        #           Project it on all the commits to see the overall codebase contribution
+        
+        # For every commit, we need to check the size and code changes len before and after
+        # The rolling score is an avg percentage of all the commits of the user based on the branch size and lines edited
+
+        # [12%, 15%, 13%, ...]
+        # 20 Changes
+        # Max 400 files changeable
+        # SUM() / MAX_FILES_CHANGEABLE()
+
+        rolling_scores = []
+        for commit in branch['commits']:
+            changes = commit['changes']
+            
+            # The more changes across files, the better contribution
+            changes_perc = 0.0
+            for change in changes:
+                # Read file line amount after commit
+                lines = change['line_amount']
+                change_amount = change['change_amount']
+                actual_changes_len = lines - change_amount
+                change_perc = actual_changes_len / lines
+                changes_perc = changes_perc + change_pe
+            commit_perc_score = changes_perc / commit['post']['file_amount']
+            rolling_scores.append(commit_perc_score)
+        # Calculate the average deltas, this will give us the commitments to the branch overtime
+        # Can be plotted later on
+        drolling_scores = numpy.diff(rolling_scores)
+
+        return numpy.average(drolling_scores)
+
+    def __calculate_branch_importance(self, branch):
+        #       Branch importance to master
+        #           Find merge commits
+        #           Check stale branch commit date wise
+        
+        # Look at the master branch to try and find merge with the given branch
+        # This will give us indication on how long ago was the last real usage of this branch
+        # Another factor is to look at the last commit date compared to last master commit date
+        # This will give us an indication if the branch is important or in use 
+        pass
+
     def __calculate_branch_contribution(self, branch):
-        rolling_score = self.__calulcate_rolling_branch_score(branch)
+        rolling_score = self.__calculate_rolling_branch_score(branch)
         branch_importance_factor = self.__calculate_branch_importance(branch)
         commits_score = 0.0
         for commit in branch['commits']:
