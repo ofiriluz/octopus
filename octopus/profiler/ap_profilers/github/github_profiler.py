@@ -1,6 +1,7 @@
 import os
 import json
 import numpy
+import datetime
 
 class GitHubProfiler:
     def __init__(self,user_workspace_path):
@@ -78,7 +79,7 @@ class GitHubProfiler:
                 change_amount = change['change_amount']
                 actual_changes_len = lines - change_amount
                 change_perc = actual_changes_len / lines
-                changes_perc = changes_perc + change_pe
+                changes_perc = changes_perc + change_perc
             commit_perc_score = changes_perc / commit['post']['file_amount']
             rolling_scores.append(commit_perc_score)
         # Calculate the average deltas, this will give us the commitments to the branch overtime
@@ -87,7 +88,7 @@ class GitHubProfiler:
 
         return numpy.average(drolling_scores)
 
-    def __calculate_branch_importance(self, branch):
+    def __calculate_branch_importance(self, repo, branch, master_branch):
         #       Branch importance to master
         #           Find merge commits
         #           Check stale branch commit date wise
@@ -96,7 +97,35 @@ class GitHubProfiler:
         # This will give us indication on how long ago was the last real usage of this branch
         # Another factor is to look at the last commit date compared to last master commit date
         # This will give us an indication if the branch is important or in use 
-        pass
+
+        # First look at the branch last commit vs master last commit of the user
+        # Sorted recent to oldest
+        last_branch_cmmmit = branch['commits'][0]
+        last_master_commit = master_branch['commits'][0]
+
+        date_diff = last_branch_cmmmit['commit_time'] - last_master_commit['commit_time']
+        # Give a min max in date and convert it
+        min_date_diff = 0
+        max_date_diff = datetime.datetime.now() - repo['creation_time']
+
+        # Convert to actual factor representation
+        norm_date_diff = date_diff / (max_date_diff - min_date_diff)
+
+        # Try and find commits which are merge related on the given branch
+        # This will give us an indication of branch activity over the period
+        # The activity will be dropped down depending on the date diff, to lower the importance of this branch
+        merge_dates = []
+        for commit in master_branch['commits']:
+            if commit['is_merged'] and commit['merged_branch'] == branch['name']: 
+                # Found a merged commit from the branch, save the merge date
+                merge_dates.append(commit['commit_time'])
+        # Calculate the date diffs, and average them, this will give us average diff on master merge
+        # Which means how active the branch was within the master branch
+        merge_diffs = numpy.norm(numpy.diff(merge_dates))
+        merge_median = numpy.median(merge_diffs)
+
+        return merge_median * norm_date_diff
+
 
     def __calculate_branch_contribution(self, branch):
         rolling_score = self.__calculate_rolling_branch_score(branch)
@@ -120,7 +149,8 @@ class GitHubProfiler:
 
         # Final repo score
         repo_score = (administrative_score*self.__weights['administrative'] +
-                     branches_score*self.__weights['branches'])*(max(self.__weights['fork'], 1-is_forked))
+                     branches_score*self.__weights['branches']) *
+                     (max(self.__weights['fork'], 1-is_forked))
 
         return repo_score
 
