@@ -2,8 +2,9 @@ import os
 import json
 import numpy
 import datetime
+from octopus.profiler.ap_profilers.access_point_profiler import AccessPointProfiler
 
-class GitHubProfiler:
+class GitHubProfiler(AccessPointProfiler):
     def __init__(self,user_workspace_path):
         self.__user_workspace_path = user_workspace_path
         self.__user_metadata = None
@@ -121,15 +122,14 @@ class GitHubProfiler:
                 merge_dates.append(commit['commit_time'])
         # Calculate the date diffs, and average them, this will give us average diff on master merge
         # Which means how active the branch was within the master branch
-        merge_diffs = numpy.norm(numpy.diff(merge_dates))
+        merge_diffs = numpy.linalg.norm(numpy.diff(merge_dates))
         merge_median = numpy.median(merge_diffs)
 
         return merge_median * norm_date_diff
 
-
-    def __calculate_branch_contribution(self, branch):
+    def __calculate_branch_contribution(self, branch, repo):
         rolling_score = self.__calculate_rolling_branch_score(branch)
-        branch_importance_factor = self.__calculate_branch_importance(branch)
+        branch_importance_factor = self.__calculate_branch_importance(repo, branch, repo['master_branch'])
         commits_score = 0.0
         for commit in branch['commits']:
             commits_score = commits_score + self.__calculate_commit_contribution(commit)
@@ -142,15 +142,13 @@ class GitHubProfiler:
         is_forked = repo['fork']
         branches_score = 0.0
         for branch in repo['branches']:
-            branches_score = branches_score + self.__calculate_branch_score(branch)
+            branches_score = branches_score + self.__calculate_branch_score(branch, re[p])
 
         # Normalize score between 0 and 1
         branches_score = (1/len(repo['branches'])-0)*(branches_score-len(repo['branches']))+1
 
         # Final repo score
-        repo_score = (administrative_score*self.__weights['administrative'] +
-                     branches_score*self.__weights['branches']) *
-                     (max(self.__weights['fork'], 1-is_forked))
+        repo_score = (administrative_score*self.__weights['administrative'] + branches_score*self.__weights['branches']) * (max(self.__weights['fork'], 1-is_forked))
 
         return repo_score
 
@@ -201,3 +199,115 @@ class GitHubProfiler:
 
         # Perform simple starting scoring before moving into the repos themselves
         self.__calculate_user_scores()
+
+if __name__ == '__main__':
+    fake_ap_userdata = 
+    {
+        'user': 'ofir iluz',
+        'email': 'ofir@ofir.ofir',
+        'creation_time': '16.8.2015',
+        'repos': 
+        [
+            {
+                'repo_name': 'a',
+                'is_downloaded', True
+            },
+            {
+                'repo_name': 'b',
+                'is_downloaded': True
+            }
+        ]
+    }
+
+    fake_ap_repos = 
+    [
+        {
+            'name': 'a',
+            'is_forked': False,
+            'creation_time': '24.9.2016',
+            'pullreqs': [],
+            'issues': [],
+            'branches': 
+            [
+                {
+                    'name': 'master',
+                    'creator': 'ofir iluz',
+                    'creation_time': '24.9.2016',
+                    'commits':
+                    [
+                        {
+                            'author': 'ofir iluz',
+                            'commit_time': '25.9.2016',
+                            'commit': 'init commit',
+                            'is_merge_commit': False,
+                            'merged_branch': '',
+                            'pre_commit':
+                            {
+                                'file_amount': 0
+                            },
+                            'post_commit':
+                            {
+                                'file_amount': 3
+                            },
+                            'file_changes':
+                            [
+                                {
+                                    'file_name': 'gun.cpp',
+                                    'file_line_count': 125,
+                                    'file_changed_lines_count': 125
+                                },
+                                {
+                                    'file_name': 'gun.hpp',
+                                    'file_line_count': 51,
+                                    'file_changed_lines_count': 51
+                                },
+                                {
+                                    'file_name': 'main.cpp',
+                                    'file_line_count': 55,
+                                    'file_changed_lines_count': 55
+                                }
+                            ]
+                        },
+                        {
+                            'author': 'ofir iluz',
+                            'commit_time': '26.9.2016',
+                            'commit': 'Added ak47 gun type',
+                            'is_merge_commit': False,
+                            'merged_branch': '',
+                            'pre_commit':
+                            {
+                                'file_amount': 3
+                            },
+                            'post_commit':
+                            {
+                                'file_amount': 5
+                            },
+                            'changes':
+                            [
+                                {
+                                    'file_name': 'ak47.cpp',
+                                    'file_line_count': 32,
+                                    'file_changed_lines_count': 32
+                                },
+                                {
+                                    'file_name': 'ak47.hpp',
+                                    'file_line_count': 24,
+                                    'file_changed_lines_count': 24
+                                },
+                                {
+                                    'file_name': 'gun.cpp',
+                                    'file_line_count': 142,
+                                    'file_changed_lines_count': 31
+                                }
+                                {
+                                    'file_name': 'main.cpp',
+                                    'file_line_count': 64,
+                                    'file_changed_lines_count': 15
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]

@@ -1,0 +1,226 @@
+{
+    "name": "doom_sketch",
+    "is_forked": false,
+    "creation_time": "24.9.2016",
+    "pullreqs": [],
+    "issues": [],
+    "branches": 
+    [
+        {
+            "name": "master",
+            "creator": "ofir iluz",
+            "creation_time": "24.9.2016",
+            "commits":
+            [
+                {
+                    "author": "ofir iluz",
+                    "commit_time": "25.9.2016",
+                    "commit": "init commit",
+                    "is_merge_commit": false,
+                    "merged_branch": "",
+                    "pre_commit":
+                    {
+                        "file_amount": 0
+                    },
+                    "post_commit":
+                    {
+                        "file_amount": 3
+                    },
+                    "file_changes":
+                    [
+                        {
+                            "file_name": "gun.cpp",
+                            "file_line_count": 125,
+                            "file_changed_lines_count": 125
+                        },
+                        {
+                            "file_name": "gun.hpp",
+                            "file_line_count": 51,
+                            "file_changed_lines_count": 51
+                        },
+                        {
+                            "file_name": "main.cpp",
+                            "file_line_count": 55,
+                            "file_changed_lines_count": 55
+                        }
+                    ]
+                },
+                {
+                    "author": "ofir iluz",
+                    "commit_time": "26.9.2016",
+                    "commit": "Added ak47 gun type",
+                    "is_merge_commit": false,
+                    "merged_branch": "",
+                    "pre_commit":
+                    {
+                        "file_amount": 3
+                    },
+                    "post_commit":
+                    {
+                        "file_amount": 5
+                    },
+                    "changes":
+                    [
+                        {
+                            "file_name": "ak47.cpp",
+                            "file_line_count": 32,
+                            "file_changed_lines_count": 32
+                        },
+                        {
+                            "file_name": "ak47.hpp",
+                            "file_line_count": 24,
+                            "file_changed_lines_count": 24
+                        },
+                        {
+                            "file_name": "gun.cpp",
+                            "file_line_count": 142,
+                            "file_changed_lines_count": 31
+                        },
+                        {
+                            "file_name": "main.cpp",
+                            "file_line_count": 64,
+                            "file_changed_lines_count": 15
+                        }
+                    ]
+                },
+                {
+                    "author": "ofir iluz",
+                    "commit_time": "26.9.2016",
+                    "commit": "Merged with doomguy branch",
+                    "is_merge_commit": true,
+                    "merged_branch": "doomguy",
+                    "pre_commit":
+                    {
+                        "file_amount": 5
+                    },
+                    "post_commit":
+                    {
+                        "file_amount": 9
+                    },
+                    "changes":
+                    [
+                        {
+                            "file_name": "doomguy.cpp",
+                            "file_line_count": 153,
+                            "file_changed_lines_count": 153
+                        },
+                        {
+                            "file_name": "doomguy.hpp",
+                            "file_line_count": 52,
+                            "file_changed_lines_count": 52
+                        },
+                        {
+                            "file_name": "doomphysics.cpp",
+                            "file_line_count": 425,
+                            "file_changed_lines_count": 425
+                        },
+                        {
+                            "file_name": "doomphysics.hpp",
+                            "file_line_count": 104,
+                            "file_changed_lines_count": 104
+                        },
+                        {
+                            "file_name": "main.cpp",
+                            "file_line_count": 122,
+                            "file_changed_lines_count": 74
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "doomgguy",
+            "creator": "ofir iluz",
+            "creation_time": "13.10.2016",
+            "commits":
+            [
+                {
+                    "author": "ofir iluz",
+                    "commit_time": "13.10.2016",
+                    "commit": "init commit from master",
+                    "is_merge_commit": false,
+                    "merged_branch": "",
+                    "pre_commit":
+                    {
+                        "file_amount": 0
+                    },
+                    "post_commit":
+                    {
+                        "file_amount": 5
+                    },
+                    "file_changes":
+                    [
+                        {
+                            "file_name": "ak47.cpp",
+                            "file_line_count": 32,
+                            "file_changed_lines_count": 32
+                        },
+                        {
+                            "file_name": "ak47.hpp",
+                            "file_line_count": 24,
+                            "file_changed_lines_count": 24
+                        },
+                        {
+                            "file_name": "gun.cpp",
+                            "file_line_count": 142,
+                            "file_changed_lines_count": 142
+                        },
+                        {
+                            "file_name": "gun.hpp",
+                            "file_line_count": 51,
+                            "file_changed_lines_count": 51
+                        },
+                        {
+                            "file_name": "main.cpp",
+                            "file_line_count": 64,
+                            "file_changed_lines_count": 64
+                        }
+                    ]
+                },
+                {
+                    "author": "ofir iluz",
+                    "commit_time": "18.10.2016",
+                    "commit": "Added doomguy and physics logic",
+                    "is_merge_commit": false,
+                    "merged_branch": "",
+                    "pre_commit":
+                    {
+                        "file_amount": 5
+                    },
+                    "post_commit":
+                    {
+                        "file_amount": 9
+                    },
+                    "file_changes":
+                    [
+                        {
+                            "file_name": "doomguy.cpp",
+                            "file_line_count": 153,
+                            "file_changed_lines_count": 153
+                        },
+                        {
+                            "file_name": "doomguy.hpp",
+                            "file_line_count": 52,
+                            "file_changed_lines_count": 52
+                        },
+                        {
+                            "file_name": "doomphysics.cpp",
+                            "file_line_count": 425,
+                            "file_changed_lines_count": 425
+                        },
+                        {
+                            "file_name": "doomphysics.hpp",
+                            "file_line_count": 104,
+                            "file_changed_lines_count": 104
+                        },
+                        {
+                            "file_name": "main.cpp",
+                            "file_line_count": 122,
+                            "file_changed_lines_count": 74
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
