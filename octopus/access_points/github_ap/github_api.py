@@ -5,6 +5,14 @@ from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
 from octopus.access_points.utils.util import Util
 
 
+
+class BranchInspector(object):
+    def __init__(self,token):
+
+        self.g = Github(token
+
+    def get_all_branches_bare(self,repo):
+        pass
 class GithubAPI(object):
 
     def __init__(self,token):
@@ -48,6 +56,7 @@ class GithubAPI(object):
     def get_repos(self, user):
         return self.__build_repositories(user.get_repos())
     # get user profile metadata https://api.github.com/users/Isan-Rivkin
+    # !!! IMPORTANT !!! this function expects an existing Github name it does not perform seach
     def get_user_profile(self,username, url_profile ='https://api.github.com/users/'):
         url = url_profile + username
         response = requests.get(url)
@@ -62,7 +71,6 @@ class GithubAPI(object):
             return None
     # build user profile metadata
     def __build_user_profile(self,raw_profile):
-        print(raw_profile)
         return {
             "login": raw_profile['login'],
             "avatar_url": raw_profile['avatar_url'],
@@ -145,6 +153,26 @@ class GithubAPI(object):
                 'default_branch': repo.default_branch
             })
         return repositoroes
+    #TODO:: finish THE FULL PROCESS OF GETTING RAW DATA IS THIS FUNCTION
+    def execute_fetching_process(self,username,repo_size_limit):
+        users = self.search(username)
+        for u in users:
+
+            header = {}
+            body = {}
+            # get user profile
+            login = u.login
+            print('[+] Starting fetch process for {}'.format(login))
+            header['profile'] = self.get_user_profile(login)
+            # get user repos metadata
+            repositories = self.get_repos(u)
+            # body['repositories] golds object of metainfo about each repo
+            body['repositories'] = repositories
+            # get commits meta-data
+            for repo in repositories:
+                body['commits'] = self.get_commits_metadata(login,repo.name)
+
+
 
 
 ###https://github.com/PyGithub/PyGithub
@@ -156,9 +184,10 @@ def test1():
     # for repo in g.get_user().get_repos():
     #     print(repo.name)
 
-    users = g.search_users('isan_rivkin')
+    users = g.search_users('ofir iluz')
     for u in users:
         print(u.login)
+        return u.login
         repos = g.get_user(u.login).get_repos()
         count = 0
         for repo in repos:
@@ -185,7 +214,7 @@ def test1():
 
         print('repos #{}'.format(count))
 
-def get_all_user_repos_meta(username):
+def test_get_all_user_repos_meta(username):
     api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
     user_name = username
     users = api.search(user_name)
@@ -197,7 +226,8 @@ def get_all_user_repos_meta(username):
 def test_get_user_profile(username):
     api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
     response = api.get_user_profile(username=username)
-    print(response)
+    #print(response)
+    return response
 
 def test_get_commits_metadata(repo_name, profile_name):
     api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
@@ -207,5 +237,9 @@ def test_get_commits_metadata(repo_name, profile_name):
         print('-----------------------------')
 
 if __name__ == "__main__":
-    #test_get_user_profile('Isan-Rivkin')
-    #test_get_commits_metadata('octopus','ofiriluz')
+    name = test1()
+    profile = test_get_user_profile(name)
+    test_get_all_user_repos_meta(name)
+
+    # print(profile)
+    # commits = test_get_commits_metadata('octopus',name)
