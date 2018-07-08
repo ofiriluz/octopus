@@ -202,7 +202,7 @@
                         "branch_size": 2243
                     },
                     "file_changes":
-                    [
+                    [   
                         {
                             "file_name": "doomguy.cpp",
                             "file_line_count": 153,
