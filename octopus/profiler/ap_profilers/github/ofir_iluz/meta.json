@@ -6,7 +6,8 @@
     [
         {
             "repo_name": "doom_sketch",
-            "is_downloaded": false
+            "is_downloaded": false,
+            "repo_path": "D:\\Octopus\\octopus\\profiler\\ap_profilers\\github\\ofir_iluz\\repos\\doom_sketch"
         }
     ]
 }
