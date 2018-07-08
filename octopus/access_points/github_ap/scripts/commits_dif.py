@@ -4,6 +4,7 @@ import git
 from argparse import ArgumentParser
 import pprint
 import json
+import sys
 
 ## Module Constants
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
@@ -145,45 +146,48 @@ if __name__ == "__main__":
     '''
     # shell vars argument parsing
 
-    parser = ArgumentParser()
-    parser.add_argument("-p", "--path", dest="path_name",
-                        help="repository path (can be mirrored)", metavar="PATH")
+    try:
+        parser = ArgumentParser()
 
-    parser.add_argument("-o", "--out", dest="output_path",
-                        help="output path to save the result, default = std", metavar="PATH")
+        parser.add_argument("-p", "--path", dest="path_name",
+                            help="repository path (can be mirrored)", metavar="PATH")
 
-    parser.add_argument("-b", "--branch", dest="branch_name",
-                        help="branch name to lookup, default = master", metavar="BRANCH_NAME")
+        parser.add_argument("-o", "--out", dest="output_path",
+                            help="output path to save the result, default = std", metavar="PATH")
 
-    args = parser.parse_args()
+        parser.add_argument("-b", "--branch", dest="branch_name",
+                            help="branch name to lookup, default = master", metavar="BRANCH_NAME")
 
-    path = args.path_name
-    output = args.output_path
-    branch = args.branch_name
+        args = parser.parse_args()
 
-    # if -b was empty then default branch is master
+        path = args.path_name
+        output = args.output_path
+        branch = args.branch_name
 
-    if branch == None:
-        branch = 'master'
+        # if -b was empty then default branch is master
 
-    # if output was empty then out to std
+        if branch == None:
+            branch = 'master'
 
-    if output == None:
-        output = 'std'
+        # if output was empty then out to std
 
-    print('loading repo from branch: {} at: {} and storing to: {} '.format(branch,path,output))
+        if output == None:
+            output = 'std'
 
-    # the commits data we need
+        # the commits data we need
 
-    stats = versions(path, branch)
+        stats = versions(path, branch)
 
-    # handle output
+        # handle output
 
-    l = [s for s in stats]
-
-    if output == 'std':
-        pprint.pprint(l)
-    else:
         l = [s for s in stats]
-        with open(output, 'w') as outfile:
-            json.dump(l, outfile,indent=4,sort_keys=True)
+
+        if output == 'std':
+            pprint.pprint(l)
+        else:
+            with open(output, 'w') as outfile:
+                json.dump(l, outfile, indent=4, sort_keys=True)
+            print('loading repo from branch: {} at: {} and storing to: {} '.format(branch, path, output))
+
+    except:
+        sys.exit(1)
