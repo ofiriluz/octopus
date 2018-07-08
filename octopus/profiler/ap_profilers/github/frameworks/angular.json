@@ -1,0 +1,50 @@
+{
+    "name": "angular",
+    "framework_requirements":
+    [
+        {
+            "type": "files",
+            "operation": "exists",
+            "assertion": true,
+            "values": ["package.json", "tsconfig.json", "tslint.json"]        
+        },
+        {
+            "type": "folders",
+            "operation": "exists",
+            "assertion": false,
+            "values": ["node_modules"]
+        },
+        {
+            "type": "languages",
+            "operation": "top",
+            "assertion": true,
+            "values": ["typescript"]
+        },
+        {
+            "type": "extensions",
+            "operation": "top",
+            "assertion": true,
+            "values": [".ts"]
+        }
+    ],
+    "framework_definitions":
+    [
+        {
+            "type": "structure_rules",
+            "tree_rules": 
+            [
+                "./package.json", 
+                "./tsconfig.json", 
+                "./tslint.json",
+                "src",
+                "src/main.ts",
+                "src/tsconfig.app.json",
+                "src/app",
+                "src/app/**/*.component.html",
+                "src/app/**/*.component.ts",
+                "src/app/**/*.component.css",
+                "src/app/*.module.ts"
+            ]
+        }
+    ]
+}

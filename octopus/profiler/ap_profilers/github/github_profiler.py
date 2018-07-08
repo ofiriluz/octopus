@@ -84,9 +84,9 @@ class GitHubProfiler(AccessPointProfiler):
         return administrative_contribution_score
 
     def __calculate_rolling_branch_score(self, branch):
-        #       Rolling codebase contribution:
-        #           For each commit see the percentage changed per whole project
-        #           Project it on all the commits to see the overall codebase contribution
+        # - Rolling codebase contribution:
+        #    For each commit see the percentage changed per whole project
+        #      Project it on all the commits to see the overall codebase contribution
         
         # For every commit, we need to check the size and code changes len before and after
         # The rolling score is an avg percentage of all the commits of the user based on the branch size and lines edited
@@ -98,7 +98,6 @@ class GitHubProfiler(AccessPointProfiler):
 
         rolling_scores = []
         for commit in branch['commits']:
-            # pprint.pprint(commit)
             changes = commit['file_changes']
             
             # The more changes across files, the better contribution
@@ -107,7 +106,6 @@ class GitHubProfiler(AccessPointProfiler):
                 # Read file line amount after commit
                 lines = change['file_line_count']
                 change_amount = change['file_changed_lines_count']
-                # actual_changes_len = lines - change_amount
                 change_perc = change_amount / lines
                 changes_perc = changes_perc + change_perc
             commit_perc_score = changes_perc / commit['post_commit']['file_amount']
@@ -119,10 +117,6 @@ class GitHubProfiler(AccessPointProfiler):
         return numpy.average(drolling_scores)
 
     def __calculate_branch_importance(self, repo, branch, master_branch):
-        #       Branch importance to master
-        #           Find merge commits
-        #           Check stale branch commit date wise
-        
         # Look at the master branch to try and find merge with the given branch
         # This will give us indication on how long ago was the last real usage of this branch
         # Another factor is to look at the last commit date compared to last master commit date
@@ -159,13 +153,13 @@ class GitHubProfiler(AccessPointProfiler):
         return merge_median * norm_date_diff
 
     def __calculate_commit_contribution(self, commit, branch, repo):
-        #       - For each commit produce:
-        #           Commit Size in bytes compared to branch size
-        #               If commit size reduces the branch size, this means removal
-        #               Negative score is allowed for now
-        #           Amount of Diffs on commit (May indicate debugging)
-        #           Commit contribution score:
-        #               (Commit Size / Branch Size)*Wc1 + (DiffsLen)*Wc2 
+        # - For each commit produce:
+        #   Commit Size in bytes compared to branch size
+        #     If commit size reduces the branch size, this means removal
+        #   Negative score is allowed for now
+        #     Amount of Diffs on commit (May indicate debugging)
+        #       Commit contribution score:
+        #         (Commit Size / Branch Size)*Wc1 + (DiffsLen)*Wc2 
         commit_size = commit['post_commit']['branch_size'] - commit['pre_commit']['branch_size']
         branch_size = commit['post_commit']['branch_size']
         line_diffs = sum([file_change['file_changed_lines_count'] for file_change in commit['file_changes']])
@@ -188,7 +182,8 @@ class GitHubProfiler(AccessPointProfiler):
         # Can be normalized like this cuz max score is 1 for each commit
         commits_score = (1/len(branch['commits']))*(commits_score-len(branch['commits']))+1
         
-        return rolling_score * self.__weights['branch']['rolling'] + branch_importance_factor * self.__weights['branch']['importance'] + commits_score * self.__weights['branch']['commits']
+        return rolling_score * self.__weights['branch']['rolling'] \
+         + branch_importance_factor * self.__weights['branch']['importance'] + commits_score * self.__weights['branch']['commits']
 
     def __calculate_repo_contribution(self, repo):
         administrative_score = self.__calculate_repo_administrative_contribution(repo)
@@ -208,39 +203,13 @@ class GitHubProfiler(AccessPointProfiler):
         return repo_score
 
     def __calculate_contribution_score(self):
-        # Contribution score of a user consists of the following weighted params:
-        # - For each repo produce:
-        #   - For each branch produce:
-        #       - For each commit produce:
-        #           Commit Size in bytes compared to branch size
-        #           Amount of Diffs on commit (May indicate debugging)
-        #           New code files
-        #           Commit contribution score:
-        #               (Commit Size / Branch Size)*Wc1 + (DiffsLen)*Wc2 + (NewCodeFiles)*Wc3
-        #       Commit Score => Normalized sum of commit scores
-        #       Commits Amount for the checked user and overall commits
-        #       Rolling codebase contribution:
-        #           For each commit see the percentage changed per whole project
-        #           Project it on all the commits to see the overall codebase contribution
-        #       Branch importance to master
-        #           Find merge commits
-        #           Check stale branch commit date wise
-        #       Branch contribution score:
-        #           (Rolling Codebase Contribution)*Wb1 + (Commit Score)*Wb2 + (Branch Importance Score)*Wb3
-        #   Branch Score => Normalized sum of branch scores
-        #   Repo User administirive activity (Issues, Pull Reqs, Wiki)
-        #   Repo fork demoralization factor
-        #   Repo Score:
-        #       (Branch Score * Wr1 + Repo administrative * Wr2)*(Wr3*IsForked())
-        # Contribution score => Normalized sum of all repo scores
-        
         # Go over every repo and calculate repo score
         contribution_scores = []
         for repo in self.__user_repos_metadata:
             contribution_scores.append(self.__calculate_repo_contribution(repo))
         
+        # Normalize it
         contribution_score = numpy.linalg.norm(contribution_scores)
-        print(contribution_score)
 
         return contribution_score
 
@@ -253,6 +222,9 @@ class GitHubProfiler(AccessPointProfiler):
 
         # Perform simple contribution score, revolves around 0.0-1.0
         contribution_score = self.__calculate_contribution_score()
+
+        # For now the profiling score is only the contribution, more to come
+        return contribution_score
 
 if __name__ == '__main__':
     ofir_meta_file = 'D:\\Octopus\\octopus\\profiler\\ap_profilers\\github\\ofir_iluz'

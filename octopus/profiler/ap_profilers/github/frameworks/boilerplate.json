@@ -1,0 +1,24 @@
+{
+    "name": "boilerplate",
+    "framework_requirements":
+    [
+        {
+            "type": "files",
+            "operation": "exists",
+            "assertion": true,
+            "values": ["README.md", "LICENSE.md", "CHANGELOG.md"]        
+        }
+    ],
+    "framework_definitions":
+    [
+        {
+            "type": "structure_rules",
+            "tree_rules": 
+            [
+                "./README.md", 
+                "./LICENSE.md", 
+                "./CHANGELOG.md"
+            ]
+        }
+    ]
+}
