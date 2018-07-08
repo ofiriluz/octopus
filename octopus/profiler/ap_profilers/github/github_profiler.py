@@ -1,8 +1,8 @@
 import os
 import json
 import pprint
-from octopus.profiler.ap_profilers.access_point_profiler import AccessPointProfiler
-from octopus.profiler.ap_profilers.github.github_contribution_scorer import GithubContributionScorer
+from octopus.profiler.ap_profilers import AccessPointProfiler
+from octopus.profiler.ap_profilers.github import GithubContributionScorer, GithubFrameworkAnalyzer
 
 class GitHubProfiler(AccessPointProfiler):
     def __init__(self,user_workspace_path):
@@ -11,6 +11,7 @@ class GitHubProfiler(AccessPointProfiler):
         self.__user_repos_metadata = []
         self.__user_profiler_results = {}
         self.__contribution_scorer = GithubContributionScorer()
+        self.__framework_analyzer = GithubFrameworkAnalyzer()
 
     def __read_user_workspace(self):
         # Assert user workspace path
@@ -47,8 +48,10 @@ class GitHubProfiler(AccessPointProfiler):
         # Perform simple contribution score, revolves around 0.0-1.0
         contribution_score = self.__contribution_scorer.get_contribution_score(self.__user_metadata, self.__user_repos_metadata)
 
-        # TODO - Add framework usages analysis
-        frameworks = self.__get_project_frameworks()
+        repos_fw_scores = []
+        for repo in self.__user_repos_metadata:
+            repo_frameworks_scores = self.__framework_analyzer.analyze_repo_frameworks(repo)
+            repos_fw_scores.append(repo_frameworks_scores)
 
         # For now the profiling score is only the contribution, more to come
         return contribution_score

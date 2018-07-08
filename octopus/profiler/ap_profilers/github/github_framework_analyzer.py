@@ -35,9 +35,6 @@ class GithubFrameworkAnalyzer:
                 break
         return exists
 
-    def __get_master_branch(self, repo):
-        return next((branch for branch in repo['branches'] if branch['name'] == 'master'))
-
     def __languages_req_callback(self, repo, req):
         # Check if the repo has the given languages on the top K+3
         amount = req['operation_params']['amount']
