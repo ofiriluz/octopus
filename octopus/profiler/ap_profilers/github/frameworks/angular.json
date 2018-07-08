@@ -17,12 +17,20 @@
         {
             "type": "languages",
             "operation": "top",
+            "operation_params": 
+            {
+                "amount": 5
+            },
             "assertion": true,
             "values": ["typescript"]
         },
         {
             "type": "extensions",
             "operation": "top",
+            "operation_params": 
+            {
+                "amount": 5
+            },
             "assertion": true,
             "values": [".ts"]
         }
