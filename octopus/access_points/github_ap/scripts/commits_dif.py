@@ -22,7 +22,9 @@ def versions(path, branch='master'):
     repo = git.Repo(path)
 
     # Iterate through every commit for the given branch in the repository
+
     for commit in repo.iter_commits(branch):
+
         # Determine the parent of the commit to diff against.
         # If no parent, this is the first commit, so use empty tree.
         # Then create a mapping of path to diff for each file changed.
