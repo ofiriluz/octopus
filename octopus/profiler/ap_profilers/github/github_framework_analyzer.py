@@ -1,6 +1,7 @@
 import json
 import os
 import pprint
+import re
 
 class GithubFrameworkAnalyzer:
     def __init__(self):
@@ -10,6 +11,63 @@ class GithubFrameworkAnalyzer:
             'languages': self.__languages_req_callback,
             'extensions': self.__extensions_req_callback
         }
+
+        self.__defs_callbacks = {
+            'structure_rules': self.__structure_rules_defs_callback
+        }
+
+    def __recursive_structure_rules(self, repo, definition, curr_path, parts):
+        hits = []
+        # Check if path exists
+        if os.path.exists(curr_path):
+            hits.append((curr_path, True))
+            # Since it exists, we can move forward, make sure there are more parts
+            if len(parts) > 0:
+                # Get the next part to add to the path
+                next_part = parts.pop(0)
+                # Check if the part has wildcards
+                if '*' in next_part:
+                    # List the current path and check if any folder / file meets the given regex wildcard
+                    wildcard_next_path = os.path.join(curr_path, next_part)
+                    # Switch the wildcards with .* for regex
+                    wildcard_next_path = wildcard_next_path.replace('*', '.*')
+
+                    for file in os.listdir(curr_path):
+                        checked_path = os.path.join(curr_path, file)
+                        if re.match()
+
+                else:
+                    # Just concat the part and recursive call
+                    next_path = os.path.join(curr_path, next_part)
+                    self.__recursive_structure_rules(repo, definition, next_path, parts)
+        else:
+            hits.append((curr_path, False))
+        return hits
+
+    def __structure_rules_defs_callback(self, repo, definition):
+        # Two opts:
+        #   Full path each given tree item, and recursive on the entire file structure, check if every item has a regex in the tree items
+        #       This is hits overall
+        #   Go over every tree item, if a part has a wildcard, try and list everything in the path so far that fits the path and the wildcards
+        #       This is hits per slash
+        #       Every path addition check if that path exists, and for every wildcard fit, go inside it aswell
+
+        # Take the tree rules and score them based on hit count
+        # Note that ** are treated as all the folders recursive and * means one step
+        repo_root_path = repo['path']
+
+        # Go over each tree item
+        for tree_item in definition['tree_rules']:
+            # Divide it into path parts
+            norm_tree_path = os.path.normpath(tree_item)
+            path_parts = norm_tree_path.split(os.sep)
+
+            # Start going over the parts and create a list of paths to assert
+            hits = self.__recursive_structure_rules(repo, definition, repo_root_path, path_parts)
+            # for path_part in path_parts:
+            # Check if wildcard exists on the path part and handle it
+                
+
 
     def __files_req_callback(self, repo, req):
         repo_root_path = repo['path']
@@ -104,7 +162,8 @@ class GithubFrameworkAnalyzer:
         return frameworks
 
     def __get_repo_framework_score(self, repo, framework):
-        pass
+        # Go over the framework definition, and score each one based on the callback
+        
 
     def analyze_repo_frameworks(self, repo):
         # Get the frameworks that were found for the repo

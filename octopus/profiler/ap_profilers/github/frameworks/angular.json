@@ -41,16 +41,14 @@
             "type": "structure_rules",
             "tree_rules": 
             [
-                "./package.json", 
-                "./tsconfig.json", 
-                "./tslint.json",
-                "src",
+                "package.json", 
+                "tsconfig.json", 
+                "tslint.json",
                 "src/main.ts",
                 "src/tsconfig.app.json",
-                "src/app",
-                "src/app/**/*.component.html",
-                "src/app/**/*.component.ts",
-                "src/app/**/*.component.css",
+                "src/app/*/*.component.html",
+                "src/app/*/*.component.ts",
+                "src/app/*/*.component.css",
                 "src/app/*.module.ts"
             ]
         }
