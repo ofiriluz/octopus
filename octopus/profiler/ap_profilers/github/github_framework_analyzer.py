@@ -34,12 +34,14 @@ class GithubFrameworkAnalyzer:
 
                     for file in os.listdir(curr_path):
                         checked_path = os.path.join(curr_path, file)
-                        if re.match()
-
+                        match = re.match(wildcard_next_path, checked_path)
+                        if match:
+                            # Found a valid path, recurse it
+                            hits = hits + self.__recursive_structure_rules(rep, definition, checked_path, parts)
                 else:
                     # Just concat the part and recursive call
                     next_path = os.path.join(curr_path, next_part)
-                    self.__recursive_structure_rules(repo, definition, next_path, parts)
+                    hits = hits + self.__recursive_structure_rules(repo, definition, next_path, parts)
         else:
             hits.append((curr_path, False))
         return hits
@@ -56,18 +58,21 @@ class GithubFrameworkAnalyzer:
         # Note that ** are treated as all the folders recursive and * means one step
         repo_root_path = repo['path']
 
+        final_score = 1.0
+
         # Go over each tree item
         for tree_item in definition['tree_rules']:
             # Divide it into path parts
             norm_tree_path = os.path.normpath(tree_item)
             path_parts = norm_tree_path.split(os.sep)
 
-            # Start going over the parts and create a list of paths to assert
+            # Recursive hits
             hits = self.__recursive_structure_rules(repo, definition, repo_root_path, path_parts)
-            # for path_part in path_parts:
-            # Check if wildcard exists on the path part and handle it
-                
 
+            # Calculate score for this tree item
+            final_score = final_score * len(list(filter(lambda x: x[1] == True), hits)) / len(hits)
+            
+        return final_score
 
     def __files_req_callback(self, repo, req):
         repo_root_path = repo['path']
