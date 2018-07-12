@@ -2,8 +2,16 @@
     "name": "doom_sketch",
     "is_forked": false,
     "creation_time": "24.9.2016",
+    "path": "D:\\Octopus\\octopus\\profiler\\ap_profilers\\github\\ofir_iluz\\repos\\doom_sketch\\repo",
     "pullreqs": [],
     "issues": [],
+    "languages": 
+    [
+        {
+            "name": "C++",
+            "size": "2134"
+        }
+    ],
     "branches": 
     [
         {
@@ -31,17 +39,17 @@
                     "file_changes":
                     [
                         {
-                            "file_name": "gun.cpp",
+                            "file_name": "src/gun.cpp",
                             "file_line_count": 125,
                             "file_changed_lines_count": 125
                         },
                         {
-                            "file_name": "gun.hpp",
+                            "file_name": "include/doom_sketch/gun.hpp",
                             "file_line_count": 51,
                             "file_changed_lines_count": 51
                         },
                         {
-                            "file_name": "main.cpp",
+                            "file_name": "src/main.cpp",
                             "file_line_count": 55,
                             "file_changed_lines_count": 55
                         }
@@ -66,22 +74,22 @@
                     "file_changes":
                     [
                         {
-                            "file_name": "ak47.cpp",
+                            "file_name": "src/ak47.cpp",
                             "file_line_count": 32,
                             "file_changed_lines_count": 32
                         },
                         {
-                            "file_name": "ak47.hpp",
+                            "file_name": "include/doom_sketch/ak47.hpp",
                             "file_line_count": 24,
                             "file_changed_lines_count": 24
                         },
                         {
-                            "file_name": "gun.cpp",
+                            "file_name": "src/gun.cpp",
                             "file_line_count": 142,
                             "file_changed_lines_count": 31
                         },
                         {
-                            "file_name": "main.cpp",
+                            "file_name": "src/main.cpp",
                             "file_line_count": 64,
                             "file_changed_lines_count": 15
                         }
@@ -106,27 +114,27 @@
                     "file_changes":
                     [
                         {
-                            "file_name": "doomguy.cpp",
+                            "file_name": "src/doomguy.cpp",
                             "file_line_count": 153,
                             "file_changed_lines_count": 153
                         },
                         {
-                            "file_name": "doomguy.hpp",
+                            "file_name": "include/doom_sketch/doomguy.hpp",
                             "file_line_count": 52,
                             "file_changed_lines_count": 52
                         },
                         {
-                            "file_name": "doomphysics.cpp",
+                            "file_name": "src/doomphysics.cpp",
                             "file_line_count": 425,
                             "file_changed_lines_count": 425
                         },
                         {
-                            "file_name": "doomphysics.hpp",
+                            "file_name": "include/doom_sketch/doomphysics.hpp",
                             "file_line_count": 104,
                             "file_changed_lines_count": 104
                         },
                         {
-                            "file_name": "main.cpp",
+                            "file_name": "src/main.cpp",
                             "file_line_count": 122,
                             "file_changed_lines_count": 74
                         }
@@ -159,27 +167,27 @@
                     "file_changes":
                     [
                         {
-                            "file_name": "ak47.cpp",
+                            "file_name": "src/ak47.cpp",
                             "file_line_count": 32,
                             "file_changed_lines_count": 32
                         },
                         {
-                            "file_name": "ak47.hpp",
+                            "file_name": "include/doom_sketch/ak47.hpp",
                             "file_line_count": 24,
                             "file_changed_lines_count": 24
                         },
                         {
-                            "file_name": "gun.cpp",
+                            "file_name": "src/gun.cpp",
                             "file_line_count": 142,
                             "file_changed_lines_count": 142
                         },
                         {
-                            "file_name": "gun.hpp",
+                            "file_name": "include/doom_sketch/gun.hpp",
                             "file_line_count": 51,
                             "file_changed_lines_count": 51
                         },
                         {
-                            "file_name": "main.cpp",
+                            "file_name": "src/main.cpp",
                             "file_line_count": 64,
                             "file_changed_lines_count": 64
                         }
@@ -204,27 +212,27 @@
                     "file_changes":
                     [   
                         {
-                            "file_name": "doomguy.cpp",
+                            "file_name": "src/doomguy.cpp",
                             "file_line_count": 153,
                             "file_changed_lines_count": 153
                         },
                         {
-                            "file_name": "doomguy.hpp",
+                            "file_name": "include/doom_sketch/doomguy.hpp",
                             "file_line_count": 52,
                             "file_changed_lines_count": 52
                         },
                         {
-                            "file_name": "doomphysics.cpp",
+                            "file_name": "src/doomphysics.cpp",
                             "file_line_count": 425,
                             "file_changed_lines_count": 425
                         },
                         {
-                            "file_name": "doomphysics.hpp",
+                            "file_name": "include/doom_sketch/doomphysics.hpp",
                             "file_line_count": 104,
                             "file_changed_lines_count": 104
                         },
                         {
-                            "file_name": "main.cpp",
+                            "file_name": "src/main.cpp",
                             "file_line_count": 122,
                             "file_changed_lines_count": 74
                         }

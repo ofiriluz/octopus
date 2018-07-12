@@ -1,16 +1,16 @@
 {
-    "name": "angular",
+    "name": "cmake_cpp",
     "framework_requirements":
     [
         {
             "type": "files",
             "operation": "exists",
-            "values": ["!package.json", "!tsconfig.json", "!tslint.json"]        
+            "values": ["!CMakeLists.txt"]        
         },
         {
             "type": "folders",
             "operation": "exists",
-            "values": ["~node_modules"]
+            "values": ["!src", "!include", "?test"]
         },
         {
             "type": "languages",
@@ -19,7 +19,7 @@
             {
                 "amount": 5
             },
-            "values": ["!typescript"]
+            "values": ["!C++"]
         },
         {
             "type": "extensions",
@@ -28,7 +28,7 @@
             {
                 "amount": 5
             },
-            "values": ["!.ts"]
+            "values": ["!.cpp", "~c", "~.h" ,"~.hpp"]
         }
     ],
     "framework_definitions":
@@ -37,15 +37,10 @@
             "type": "structure_rules",
             "tree_rules": 
             [
-                "package.json", 
-                "tsconfig.json", 
-                "tslint.json",
-                "src/main.ts",
-                "src/tsconfig.app.json",
-                "src/app/*/*.component.html",
-                "src/app/*/*.component.ts",
-                "src/app/*/*.component.css",
-                "src/app/*.module.ts"
+                "CMakeLists.txt",
+                "src/*.MANY(c,cpp)",
+                "include/{repo['name']}/*.MANY(hpp,h)",
+                "cmake/*.cmake"
             ]
         }
     ]
