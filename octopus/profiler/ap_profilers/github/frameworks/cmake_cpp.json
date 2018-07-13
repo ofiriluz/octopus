@@ -19,7 +19,7 @@
             {
                 "amount": 5
             },
-            "values": ["!C++"]
+            "values": ["!C++", "~C", "~CMake"]
         },
         {
             "type": "extensions",

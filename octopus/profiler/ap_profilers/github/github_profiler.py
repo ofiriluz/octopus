@@ -4,6 +4,7 @@ import pprint
 from octopus.profiler.ap_profilers import AccessPointProfiler
 from octopus.profiler.ap_profilers.github import GithubContributionScorer, GithubFrameworkAnalyzer
 
+
 class GitHubProfiler(AccessPointProfiler):
     def __init__(self,user_workspace_path):
         self.__user_workspace_path = user_workspace_path
@@ -55,9 +56,10 @@ class GitHubProfiler(AccessPointProfiler):
             repos_fw_scores.append(repo_frameworks_scores)
 
         # For now the profiling score is only the contribution, more to come
-        return contribution_score
+        return {'contribution_score': contribution_score, 'framework_scores': repos_fw_scores}
 
 if __name__ == '__main__':
     ofir_meta_file = 'D:\\Octopus\\octopus\\profiler\\ap_profilers\\github\\ofir_iluz'
     git_profiler = GitHubProfiler(ofir_meta_file)
-    git_profiler.do_profiling()
+    scores_result = git_profiler.do_profiling()
+    pprint.pprint(scores_result)

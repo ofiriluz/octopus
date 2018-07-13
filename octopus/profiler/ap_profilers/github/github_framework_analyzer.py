@@ -235,7 +235,6 @@ class GithubFrameworkAnalyzer:
                 for req in framework_reqs:
                     if req['type'] in self.__req_callbacks.keys():
                         current_score = current_score * self.__req_callbacks[req['type']](repo, req)
-                print(current_score)
                 if current_score >= DEFAULT_MIN_FW_SCORE:
                     frameworks.append(framework_json)
 
@@ -259,7 +258,5 @@ class GithubFrameworkAnalyzer:
         framework_scores = {}
         for framework in frameworks:
             framework_scores[framework['name']] = self.__get_repo_framework_score(repo, framework)
-
-        pprint.pprint(framework_scores)
 
         return framework_scores
