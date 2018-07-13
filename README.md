@@ -1,7 +1,13 @@
 Octopus
 =======
 
-Ongoing Tasks:
+Design
+-------
+<img src="docs/Octopus Design.png"
+     alt="Markdown Monster icon" />
+
+Ongoing Tasks
+--------------
 - ### Ofir ###
     - **task_manager** - Done development, tested [16.6.2018]
     - **infra.logger** - Done development, tested [16.6.2018]
@@ -78,6 +84,3 @@ Ongoing Tasks:
             - contribution to foreign repos score
             - celeberity score
         - All of the info will be saved to the DB
-    **TODO** - free search (for when not knowing the exact twitter name
-- ### Both ###
-    - Merge isan's access points with the task manager and write a definition file for the access points

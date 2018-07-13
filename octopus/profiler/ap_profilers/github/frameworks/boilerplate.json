@@ -7,9 +7,11 @@
             "type": "structure_rules",
             "tree_rules": 
             [
-                "./README.md", 
-                "./LICENSE.md", 
-                "./CHANGELOG.md"
+                "README.md", 
+                "LICENSE.md", 
+                "CHANGELOG.md",
+                "VERSION",
+                ".gitignore"
             ]
         }
     ]
