@@ -4,7 +4,7 @@ from github import Github
 from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
 from octopus.access_points.utils.util import Util
 from octopus.access_points.github_ap.types_cake import Input
-from octopus.access_points.github_ap.scripts.cloner import clone_repo
+from octopus.access_points.github_ap.scripts.cloner import clone_repo,get_branches,get_all_branches
 
 
 
@@ -134,7 +134,7 @@ class GithubAPI(object):
                 'open_issues' : repo.open_issues,
                 # url get all the languages that are used by the repo
                 # key = language name , value = size in bytes
-                'lanuages' : repo.languages_url,
+                'languages' : repo.languages_url,
                 # the last commit=update date in the repo, each commit will recieve new date
                 'pushed_at' : repo.pushed_at,
                 # created at initially
@@ -150,7 +150,10 @@ class GithubAPI(object):
                 # commits url
                 'commits_url' : repo.commits_url,
                 # default_branch (master)
-                'default_branch': repo.default_branch
+                'default_branch': repo.default_branch,
+                # the actuall programming languages type->size
+                # to be filled later in the process
+                'languages_dict' : None
             })
         return repositoroes
 
@@ -165,6 +168,9 @@ class GithubAPI(object):
         self.input.generate_target()
 
     def run(self):
+        # store the input file
+        self.__handle__input__file__()
+
         users = self.search(self.input.user_name())
         print('search returned #{} users.'.format(len(users)))
         for u in users:
@@ -177,8 +183,12 @@ class GithubAPI(object):
             print('[+] Starting fetch process for {}'.format(login))
             header['profile'] = self.get_user_profile(login)
 
+            # store profile meta data
+            self.__handle__user__profile__(header['profile'])
+
             # get user repos metadata
             body['repositories']  = self.get_repos(u)
+            #TODO:: create a meta file for all repos with general info like amout of repos and names repositories_meta.json
 
             for repo in body['repositories']:
                 print('[+] handling {} repository'.format(repo['name']))
@@ -215,9 +225,42 @@ class GithubAPI(object):
         meta_file = self.input.repo_meta(repo['name'],create=True)
         repo['pushed_at'] = str(repo['pushed_at'])
         repo['created_at'] = str(repo['created_at'])
+
+        # fetch the language dictionary from repo['languages'] url
+        repo = self.__handle__repo__language__(repo)
+
         with open(meta_file, 'w') as outfile:
             json.dump(repo, outfile,  indent= 4)
 
+    def __handle__repo__language__(self,repo):
+        url = repo['languages']
+        response = requests.get(url)
+        if url is not None and response.status_code == 200:
+            repo['languages_dict'] = response.json()
+            return repo
+        else:
+            print('[-] failed to fetch languages for {}'.format(repo['name']))
+            return None
+
+    def __handle__user__profile__(self,profile):
+
+        meta_file = self.input.profile_meta_path()
+
+        with open(meta_file, 'w') as outfile:
+            json.dump(profile, outfile,  indent= 4)
+
+    def __handle__input__file__(self):
+
+        meta_file = self.input.input_meta_path()
+
+        with open(meta_file, 'w') as outfile:
+            json.dump(self.input.input, outfile,  indent= 4)
+
+    def get_branches_list(self,repo, path_test):
+        path = path_test
+        #path = self.input.clone_dir(repo['name'])
+        res = get_all_branches(path)
+        print(res)
 
     #TODO:: finish THE FULL PROCESS OF GETTING RAW DATA IS THIS FUNCTION
     def execute_fetching_process(self,username,repo_size_limit, mode = 'full'):
@@ -241,6 +284,7 @@ class GithubAPI(object):
                     body['commits'] = self.get_commits_metadata(login,repo.name)
                 elif self.current_mode == 'full':
                     return
+
 
 
 
@@ -330,6 +374,12 @@ def test_input():
     # run
     api.run()
 
+def test_branches():
+    api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
+    api.get_branches_list(None,'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/hello_world_ws/repositories/repositories/PlanWayManagerWebsite/PlanWayManagerWebsite')
+
+
 if __name__ == "__main__":
-    test_input()
+    test_branches()
+    #test_input()
 

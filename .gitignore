@@ -8,6 +8,7 @@ database
 # sensetive keys access points file 
 octopus/access_points/auth_keys.py
 src/access_points/auth_keys.py
+octopus/access_points/github_ap/scripts/all_junk
 
 #visual studio code 
 .vscode
