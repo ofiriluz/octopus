@@ -18,7 +18,7 @@ class ProfileQuestionTests(unittest.TestCase):
     def add_profile_question(self, query, host):
         # Create a profile question
         mutation = '''
-            mutation profileQuestionInsertion {
+            mutations profileQuestionInsertion {
                 insertProfileQuestion(query: "%s", queryHints:[], queryHost: "%s") {
                     question {
                         id

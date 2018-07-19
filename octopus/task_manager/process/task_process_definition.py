@@ -1,17 +1,28 @@
 import re
+from octopus.task_manager.base_task_definition import BaseTaskDefinition
 
 # Supported types to convertors
 SUPPORTED_TYPES = {'int': int, 'string': str, 'bool': bool}
+TASK_DEFINITION_KEYS = ['task_execution_script', 'task_shell_executor', 'task_extra_params', 'task_output_pipe']
 
-class TaskDefinition:
-    def __init__(self, task_definition_id, task_execution_script, task_shell_executor, task_output_pipe, task_extra_params=None):
-        self.__task_definition_id = task_definition_id
-        self.__task_execution_script = task_execution_script
-        self.__task_shell_executor = task_shell_executor
-        self.__task_extra_params = task_extra_params
-        self.__task_output_pipe = self.__parse_output_pipe(task_output_pipe)
-        if not self.__task_output_pipe:
-            raise Exception('Invalid task pipe')
+class TaskProcessDefinition(BaseTaskDefinition):
+    def __init__(self, task_definition_id):
+        super().__init__(task_definition_id, "Process")
+        self.__task_execution_script = None
+        self.__task_shell_executor = None
+        self.__task_extra_params = None
+        self.__task_output_pipe = None
+
+    def init_task_definition(self, task_definition_params):
+        # Assert all params in the params dict
+        if all(item in task_definition_params.keys() for item in TASK_DEFINITION_KEYS):
+            # Save the args
+            self.__task_execution_script = task_definition_params['task_execution_script']
+            self.__task_shell_executor = task_definition_params['task_shell_executor']
+            self.__task_extra_params = task_definition_params['task_extra_params']
+            self.__task_output_pipe = self.__parse_output_pipe(task_definition_params['task_output_pipe'])
+            if not self.__task_output_pipe:
+                raise Exception('Invalid task pipe')
 
     def __validate_type(self, value, param_type):
         # Supported types are string, int, bool
@@ -81,9 +92,6 @@ class TaskDefinition:
                 'pipe_params': params_dict
             }
         return None
-
-    def get_task_definition_id(self):
-        return self.__task_definition_id
 
     def get_task_execution_script(self):
         return self.__task_execution_script

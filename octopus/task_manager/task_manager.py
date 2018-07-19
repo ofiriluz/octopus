@@ -1,6 +1,6 @@
 from threading import Lock, Event, Thread
-from .task_definition import TaskDefinition
-from .task_executor import TaskExecutor
+from .process import TaskProcessDefinition, TaskProcessExecutor
+from .thread import TaskThreadDefinition, TaskThreadExecutor
 from octopus.infra.logger import LoggerManager, Logger, DEBUG, INFO
 import time
 import json
@@ -8,8 +8,7 @@ import tempfile
 import uuid
 import os
 
-REQUIRED_TASK_DEFINITION_KEYS = ['task_definition_id', 'task_execution_script', 'task_shell_executor', 'task_output_pipe']
-OPTIONAL_TASK_DEFINITION_KEYS = ['task_extra_params']
+REQUIRED_TASK_DEFINITION_KEYS = ['task_definition_id', 'task_definition_type', 'task_definition_params']
 DEFAULT_MAX_RUNNING_TASKS = 5
 DEFAULT_POOL_TIMEOUT = 10
 DEFAULT_LOG_PATH = os.path.join(tempfile.gettempdir(), 'tmplogs')
@@ -35,6 +34,10 @@ class TaskManager:
         self.__cleaner_thread = None
         self.__logger_manager = LoggerManager(log_path)
         self.__logger = self.__logger_manager.open_logger('TaskManager', DEFAULT_LOG_LEVEL)
+        self.__tasks_creator_map = {
+            'Process': [TaskProcessDefinition, TaskProcessExecutor],
+            'Thread': [TaskThreadDefinition, TaskThreadExecutor]
+        }
 
     def __init_task_manager(self):
         # Reset all the needed and allowed data structures
@@ -53,7 +56,7 @@ class TaskManager:
         executor_logger = self.__logger_manager.open_logger(task['task_id'], DEFAULT_LOG_LEVEL)
 
         # Create the task executor
-        task_executor = TaskExecutor(task, task_defintion, executor_logger)
+        task_executor = self.__tasks_creator_map[task_defintion.get_task_definition_type()][1](task, task_defintion, executor_logger)
 
         # Check if its ready to be executed
         if task_executor.is_ready_to_execute():
@@ -100,6 +103,8 @@ class TaskManager:
             for index, task_executor in enumerate(self.__task_executors):
                 if not task_executor.is_running():
                     indices_to_remove.append(index)
+                    self.__logger.info('Task Finished: ' + task_executor.get_task()['task_id'])
+                    self.__logger.info('Task Result: ' + task_executor.get_task_result())
                     # Save the task result in the history
                     self.__tasks_history[task_executor.get_task()['task_id']] = {
                         'task_id': task_executor.get_task()['task_id'],
@@ -142,13 +147,13 @@ class TaskManager:
         while self.__has_more_executors_running():
             time.sleep(0.5)
                 
-    def add_task(self, task_definition_id, task_execution_params_list, task_extra_params, task_callback=None):
+    def add_task(self, task_definition_id, task_params, task_callback=None):
         # Lock the tasks mutex
         with self.__tasks_mutex:
             # Get the task definition
             task_def = self.__retrieve_task_definition(task_definition_id)
             # Assert that execution params are specificly a list 
-            if task_def is not None and type(task_execution_params_list) is list:
+            if task_def is not None:
                 # Create and add the task
                 # Generate a task id
                 task_id = str(uuid.uuid4())
@@ -158,8 +163,7 @@ class TaskManager:
                 task = {
                     "task_id": task_id,
                     "task_definition_id": task_definition_id,
-                    "task_execution_params": task_execution_params_list,
-                    "task_extra_params": task_extra_params,
+                    "task_params": task_params,
                     "task_callback": task_callback
                 }
                 # Save the task 
@@ -242,10 +246,15 @@ class TaskManager:
             for task_info in json_config['task_definitions']:
                 # Assert keys existance
                 if all(name in task_info.keys() for name in REQUIRED_TASK_DEFINITION_KEYS):
-                    # Create a Task def object
-                    task_def = TaskDefinition(**task_info)
-                    self.__logger.info('Adding task definition ' + task_def.get_task_definition_id())
-                    self.__task_definitions[task_info["task_definition_id"]] = task_def 
+                    task_def_type = task_info['task_definition_type']
+                    if task_def_type in self.__tasks_creator_map.keys():
+                        # Create a Task def object
+                        task_def = self.__tasks_creator_map[task_def_type][0](task_info['task_definition_id'])
+                        # Init the task params
+                        task_def.init_task_definition(task_info['task_definition_params'])
+                        # Save it on the tasks def map
+                        self.__logger.info('Adding task definition ' + task_def.get_task_definition_id())
+                        self.__task_definitions[task_info["task_definition_id"]] = task_def 
         return True
 
     def is_task_manager_running(self):

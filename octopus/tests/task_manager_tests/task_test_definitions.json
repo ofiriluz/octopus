@@ -3,29 +3,45 @@
     [
         {
             "task_definition_id": "PythonScriptA",
-            "task_execution_script": "octopus/tests/task_manager_tests/task_script_a.py",
-            "task_shell_executor": "python",
-            "task_extra_params": 
-            [
-                {
-                    "name": "input_string",
-                    "type": "string"
-                }
-            ],
-            "task_output_pipe": "console[start={{input_string}}]"
+            "task_definition_type": "Process",
+            "task_definition_params":
+            {
+                "task_execution_script": "octopus/tests/task_manager_tests/task_script_a.py",
+                "task_shell_executor": "python",
+                "task_extra_params": 
+                [
+                    {
+                        "name": "input_string",
+                        "type": "string"
+                    }
+                ],
+                "task_output_pipe": "console[start={{input_string}}]"
+            }
         },
         {
             "task_definition_id": "BashScriptB",
-            "task_execution_script": "octopus/tests/task_manager_tests/task_script_b.sh",
-            "task_shell_executor": "C:\\Program Files\\Git\\git-bash.exe",
-            "task_extra_params": 
-            [
-                {
-                    "name": "output_path",
-                    "type": "string"
-                }
-            ],
-            "task_output_pipe": "file[path={{output_path}}]"
-        }
+            "task_definition_type": "Process",
+            "task_definition_params":
+            {
+                "task_execution_script": "octopus/tests/task_manager_tests/task_script_b.sh",
+                "task_shell_executor": "C:\\Program Files\\Git\\git-bash.exe",
+                "task_extra_params": 
+                [
+                    {
+                        "name": "output_path",
+                        "type": "string"
+                    }
+                ],
+                "task_output_pipe": "file[path={{output_path}}]"
+            }
+        },
+        {
+            "task_definition_id": "ThreadExecutionC",
+            "task_definition_type": "Thread",
+            "task_definition_params": 
+            {
+                "task_thread_runner_id": "C"
+            }
+        }   
     ]
 }
