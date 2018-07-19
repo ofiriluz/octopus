@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 import sys
 import os
 from git import Git
+import git
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -19,23 +20,40 @@ def clone_repo(remote,target,is_bear):
     else:
         subprocess.call(['git', 'clone', remote, target])
 
+
+def __parse__branches__(branches):
+
+    parsed = branches.decode('utf-8').split('\n')
+    for branch in parsed:
+        print(branch)
+    print('####################')
+    return parsed
+
+def get_all_branches(path):
+    try:
+        cmd = ['git', '-C', path, 'branch', '-a']
+        out = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+        return __parse__branches__(out)
+    except Exception as e:
+        print(e)
+        return None
+
 def get_branches(path):
     os.chdir(path)
+
+    ## end new
     branches = []
     try:
         g = Git()
         branches = g.branch()
-        #branches = subprocess.check_output(['git', 'branch','-a'])
+
         print('branches object {}'.format(branches.replace('g','')))
         names = branches.split(' ')
         print(names)
-        for branch in branches:
-            print('###########')
-            print(branch)
+
     except Exception as e:
         print(e)
 
-    print('mkay?')
 
 if __name__ == "__main__":
     '''

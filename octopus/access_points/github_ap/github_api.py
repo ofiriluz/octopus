@@ -3,20 +3,15 @@ import json
 from github import Github
 from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
 from octopus.access_points.utils.util import Util
+from octopus.access_points.github_ap.types_cake import Input
+from octopus.access_points.github_ap.scripts.cloner import clone_repo,get_branches,get_all_branches
 
 
 
-class BranchInspector(object):
-    def __init__(self,token):
-
-        self.g = Github(token
-
-    def get_all_branches_bare(self,repo):
-        pass
 class GithubAPI(object):
 
     def __init__(self,token):
-
+        self.input = {}
         self.g = Github(token)
 
     # input: search query (i.e a user name)
@@ -26,6 +21,7 @@ class GithubAPI(object):
         return users
     # get all commits metadata
     # https://api.github.com/repos/ofiriluz/octopus/commits
+    # it returnes some branches, checked enigma-core and found master and develop commits there but not other branches.
     def get_commits_metadata(self, profile_name, repo_name):
 
         url = 'https://api.github.com/repos/'+ profile_name + '/' + repo_name + '/commits'
@@ -60,6 +56,7 @@ class GithubAPI(object):
     def get_user_profile(self,username, url_profile ='https://api.github.com/users/'):
         url = url_profile + username
         response = requests.get(url)
+
         if response.status_code == 200:
 
             json_format = json.loads(response.text)
@@ -69,6 +66,7 @@ class GithubAPI(object):
         else:
 
             return None
+
     # build user profile metadata
     def __build_user_profile(self,raw_profile):
         return {
@@ -104,6 +102,8 @@ class GithubAPI(object):
         repositoroes = []
         for repo in repos:
             repositoroes.append({
+                # repo url
+                'url' : repo.html_url,
                 # Sokoban
                 'name': repo.name,
                 # Isan-Rivkin/Sokoban
@@ -134,7 +134,7 @@ class GithubAPI(object):
                 'open_issues' : repo.open_issues,
                 # url get all the languages that are used by the repo
                 # key = language name , value = size in bytes
-                'lanuages' : repo.languages_url,
+                'languages' : repo.languages_url,
                 # the last commit=update date in the repo, each commit will recieve new date
                 'pushed_at' : repo.pushed_at,
                 # created at initially
@@ -150,12 +150,122 @@ class GithubAPI(object):
                 # commits url
                 'commits_url' : repo.commits_url,
                 # default_branch (master)
-                'default_branch': repo.default_branch
+                'default_branch': repo.default_branch,
+                # the actuall programming languages type->size
+                # to be filled later in the process
+                'languages_dict' : None
             })
         return repositoroes
+
+    # build the request
+    # input: dictionary input from the client
+    # - store the input
+    # - create the source dir with the id at the target dir
+    # - set the api states
+
+    def build(self,input):
+        self.input = Input(input)
+        self.input.generate_target()
+
+    def run(self):
+        # store the input file
+        self.__handle__input__file__()
+
+        users = self.search(self.input.user_name())
+        print('search returned #{} users.'.format(len(users)))
+        for u in users:
+            full = {}
+            header = {}
+            body = {}
+
+            # user profile name
+            login = u.login
+            print('[+] Starting fetch process for {}'.format(login))
+            header['profile'] = self.get_user_profile(login)
+
+            # store profile meta data
+            self.__handle__user__profile__(header['profile'])
+
+            # get user repos metadata
+            body['repositories']  = self.get_repos(u)
+            #TODO:: create a meta file for all repos with general info like amout of repos and names repositories_meta.json
+
+            for repo in body['repositories']:
+                print('[+] handling {} repository'.format(repo['name']))
+                self.__handle__repo__(repo)
+
+
+    # git clone repo
+    # clone branches
+    def __handle__repo__(self,repo):
+        print('[+] Starting repo process for {}'.format(repo['name']))
+
+        # repo too big
+        if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
+            return None
+
+        if self.input.is_full_mode():
+
+            # store meta-data
+            self.__handle__repo__meta__(repo)
+
+            # git clone repo
+            print('[+] cloning repository {}'.format(repo['name']))
+            clone_repo(
+                repo['url'],
+                self.input.clone_dir(repo['name'],create = True),
+                is_bear = False)
+
+        elif self.input.is_light_mode():
+            pass
+        return self
+
+
+    def __handle__repo__meta__(self,repo):
+        meta_file = self.input.repo_meta(repo['name'],create=True)
+        repo['pushed_at'] = str(repo['pushed_at'])
+        repo['created_at'] = str(repo['created_at'])
+
+        # fetch the language dictionary from repo['languages'] url
+        repo = self.__handle__repo__language__(repo)
+
+        with open(meta_file, 'w') as outfile:
+            json.dump(repo, outfile,  indent= 4)
+
+    def __handle__repo__language__(self,repo):
+        url = repo['languages']
+        response = requests.get(url)
+        if url is not None and response.status_code == 200:
+            repo['languages_dict'] = response.json()
+            return repo
+        else:
+            print('[-] failed to fetch languages for {}'.format(repo['name']))
+            return None
+
+    def __handle__user__profile__(self,profile):
+
+        meta_file = self.input.profile_meta_path()
+
+        with open(meta_file, 'w') as outfile:
+            json.dump(profile, outfile,  indent= 4)
+
+    def __handle__input__file__(self):
+
+        meta_file = self.input.input_meta_path()
+
+        with open(meta_file, 'w') as outfile:
+            json.dump(self.input.input, outfile,  indent= 4)
+
+    def get_branches_list(self,repo, path_test):
+        path = path_test
+        #path = self.input.clone_dir(repo['name'])
+        res = get_all_branches(path)
+        print(res)
+
     #TODO:: finish THE FULL PROCESS OF GETTING RAW DATA IS THIS FUNCTION
-    def execute_fetching_process(self,username,repo_size_limit):
+    def execute_fetching_process(self,username,repo_size_limit, mode = 'full'):
         users = self.search(username)
+        print('search returned #{} users.'.format(len(users)))
         for u in users:
 
             header = {}
@@ -170,14 +280,17 @@ class GithubAPI(object):
             body['repositories'] = repositories
             # get commits meta-data
             for repo in repositories:
-                body['commits'] = self.get_commits_metadata(login,repo.name)
+                if self.current_mode == 'light':
+                    body['commits'] = self.get_commits_metadata(login,repo.name)
+                elif self.current_mode == 'full':
+                    return
 
 
 
 
 ###https://github.com/PyGithub/PyGithub
 # or using an access token
-g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
+#g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
 
 def test1():
     # Then play with your Github objects:
@@ -236,10 +349,37 @@ def test_get_commits_metadata(repo_name, profile_name):
         print(commit)
         print('-----------------------------')
 
-if __name__ == "__main__":
+def test_mix():
     name = test1()
     profile = test_get_user_profile(name)
     test_get_all_user_repos_meta(name)
 
     # print(profile)
     # commits = test_get_commits_metadata('octopus',name)
+
+def test_input():
+    input = {}
+    input['id'] = 'hello_world_ws'
+    input['mode'] = 'full'
+    input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
+    input['repo_size_limit'] = 0
+    input['branches_num'] = 0
+    input['branches_names'] = ['all']
+    input['user_name'] = 'yardenmol'
+    input['branches_num'] = 0
+    input['branches_names'] = ['all']
+    api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
+    # prepeare the api
+    api.build(input)
+    # run
+    api.run()
+
+def test_branches():
+    api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
+    api.get_branches_list(None,'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/hello_world_ws/repositories/repositories/PlanWayManagerWebsite/PlanWayManagerWebsite')
+
+
+if __name__ == "__main__":
+    test_branches()
+    #test_input()
+
