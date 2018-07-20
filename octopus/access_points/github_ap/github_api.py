@@ -5,7 +5,7 @@ from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
 from octopus.access_points.utils.util import Util
 from octopus.access_points.github_ap.types_cake import Input
 from octopus.access_points.github_ap.scripts.cloner import clone_repo,get_branches,get_all_branches
-
+from octopus.access_points.github_ap.scripts.commits_dif import versions,checkout_to
 
 
 class GithubAPI(object):
@@ -13,11 +13,21 @@ class GithubAPI(object):
     def __init__(self,token):
         self.input = {}
         self.g = Github(token)
+        self.with_https = False
+
+    def __with__https(self,url):
+        if self.with_https:
+            return url
+        url = url.replace("https", "http")
+        print('new url {}'.format(url))
+        return url
 
     # input: search query (i.e a user name)
     # output: a list of user objects
     def search(self,query):
+        print('get HERE @#%$#^#%@$')
         users = [self.g.get_user(user.login) for user in self.g.search_users(query)]
+        print('AND HERE #@$#%Y^UTRYTEWRTRYGRYETR')
         return users
     # get all commits metadata
     # https://api.github.com/repos/ofiriluz/octopus/commits
@@ -25,6 +35,7 @@ class GithubAPI(object):
     def get_commits_metadata(self, profile_name, repo_name):
 
         url = 'https://api.github.com/repos/'+ profile_name + '/' + repo_name + '/commits'
+        url = self.__with__https(url)
         response = requests.get(url)
         if response.status_code == 200:
             return [self.__build_commit_metadata(c) for c in response.json()]
@@ -52,9 +63,10 @@ class GithubAPI(object):
     def get_repos(self, user):
         return self.__build_repositories(user.get_repos())
     # get user profile metadata https://api.github.com/users/Isan-Rivkin
-    # !!! IMPORTANT !!! this function expects an existing Github name it does not perform seach
+    # !!! IMPORTANT !!! this function expects an existing Github name it does not perform search
     def get_user_profile(self,username, url_profile ='https://api.github.com/users/'):
         url = url_profile + username
+        url = self.__with__https(url)
         response = requests.get(url)
 
         if response.status_code == 200:
@@ -191,35 +203,80 @@ class GithubAPI(object):
             #TODO:: create a meta file for all repos with general info like amout of repos and names repositories_meta.json
 
             for repo in body['repositories']:
-                print('[+] handling {} repository'.format(repo['name']))
-                self.__handle__repo__(repo)
+                self.__handle__repo__(repo, login)
 
 
     # git clone repo
     # clone branches
-    def __handle__repo__(self,repo):
+    def __handle__repo__(self,repo, profile_name):
         print('[+] Starting repo process for {}'.format(repo['name']))
 
         # repo too big
         if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
             return None
 
+        #TODO::1 refactor the code to use filters instead of small bits of params with if else.
+        #TODO::2 allow a sequential mode where it is possible to clone repo and then filter if it's bad and delete
+        #TODO:: this will help in case where the whole repo's are too big.
+        '''
+        - 
+        - running the access point in a full mode
+        '''
         if self.input.is_full_mode():
 
-            # store meta-data
+            # store meta-data for each repo
             self.__handle__repo__meta__(repo)
 
             # git clone repo
             print('[+] cloning repository {}'.format(repo['name']))
+            clone_dir = self.input.clone_dir(repo['name'],create = True)
+            print('clone dir moeon {}'.format(clone_dir))
             clone_repo(
                 repo['url'],
-                self.input.clone_dir(repo['name'],create = True),
+                clone_dir ,
                 is_bear = False)
+
+            # TODO:: add to repo_name_meta.json the branches list
+            # - get branch name
+            # - handle commits logic
+            # - for each branch execute the following:
+            # - if branch is_interesting(filter):
+            #   - git checkout branch
+            # - for each checkout branch:
+            #   - analyze and dump commits into branch_name_commits.json
+
+            # branches = self.get_branches_list( clone_dir)
+            # # TODO:: store into file commits_meta inside /repo_name/commits/commits_meta.json
+            # #commits_meta = self.get_commits_metadata(profile_name, input['name'])
+            #
+            # for branch in branches:
+            #
+            #     self.__handle__branches__(repo['name'],clone_dir,branch)
 
         elif self.input.is_light_mode():
             pass
         return self
 
+    def __handle__branches__(self, repo_name,repo_path, branch_name):
+
+        if self.__is__interesting__branch(repo_path,branch_name):
+
+            print('[+] Handling branch {} for repo {}'.format(branch_name,repo_name))
+
+            # checkout the branch
+            checkout_to(repo_path,branch_name)
+            # calls a script inside commits_diff.py to analyze commits
+            commits_stats = versions(repo_path,branch_name)
+            # save the commits in the target dir /repo_name/commits/branch_name_commits.json
+            commits_dir = self.input.commits_dir(repo_name, create = True)
+            target_file = os.path.join(commits_dir,branch_name+'_commits.json')
+
+            with open(target_file, 'w') as outfile:
+                json.dump(commits_stats, outfile, indent=4)
+
+    def __is__interesting__branch(self, repo_path, branch_name):
+        # TODO:: This method should use a filter that was input by the requester. in self.input['branch_filter']
+        return True
 
     def __handle__repo__meta__(self,repo):
         meta_file = self.input.repo_meta(repo['name'],create=True)
@@ -234,6 +291,7 @@ class GithubAPI(object):
 
     def __handle__repo__language__(self,repo):
         url = repo['languages']
+        self.__with__https(url)
         response = requests.get(url)
         if url is not None and response.status_code == 200:
             repo['languages_dict'] = response.json()
@@ -256,11 +314,9 @@ class GithubAPI(object):
         with open(meta_file, 'w') as outfile:
             json.dump(self.input.input, outfile,  indent= 4)
 
-    def get_branches_list(self,repo, path_test):
-        path = path_test
-        #path = self.input.clone_dir(repo['name'])
+    def get_branches_list(self, path):
         res = get_all_branches(path)
-        print(res)
+        return res
 
     #TODO:: finish THE FULL PROCESS OF GETTING RAW DATA IS THIS FUNCTION
     def execute_fetching_process(self,username,repo_size_limit, mode = 'full'):
@@ -379,7 +435,15 @@ def test_branches():
     api.get_branches_list(None,'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/hello_world_ws/repositories/repositories/PlanWayManagerWebsite/PlanWayManagerWebsite')
 
 
+def test_commits_stats():
+    repo ='/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/hello_world_ws/repositories/repositories/PlanWayManagerWebsite/PlanWayManagerWebsite'
+    commits_stats = versions(repo, 'master')
+    # yield
+    l = [s for s in commits_stats]
+    print(l)
+
 if __name__ == "__main__":
-    test_branches()
-    #test_input()
+    #test_branches()
+    test_input()
+    #test_commits_stats()
 

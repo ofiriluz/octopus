@@ -94,8 +94,10 @@ class Input(object):
         return result_dir
 
     # path/id/repositories/repositories/{repo_name}/commits
-    def commits_dir(self,repo_name):
+    def commits_dir(self,repo_name, create = False):
         result_dir = os.path.join(self.repo_by_name_high_dir(repo_name), 'commits')
+        if create:
+            os.makedirs(result_dir)
         return result_dir
 
     # path/id/profile_meta.json
@@ -136,6 +138,7 @@ class Input(object):
         # repository meta.json
         repos = self.repos_high_meta()
         self.__touch__(repos)
+
 
     def __touch__(self,filename):
         os.makedirs(os.path.dirname(filename), exist_ok=True)

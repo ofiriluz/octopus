@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import pprint
 import json
 import sys
+import subprocess
 
 ## Module Constants
 DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
@@ -105,6 +106,14 @@ def diff_type(diff):
     if diff.new_file: return 'D' # deleting a file
     return 'M' # modiyfing a file
 
+# checkout to another branch
+def checkout_to(path,branch_name):
+    print('path to target => {}'.format(path))
+    os.chdir(path)
+    print('current dir {} '.format(os.getcwd()))
+    return subprocess.call(['git', 'checkout',branch_name])
+
+
 def test_compare_commits(a,b):
     if a['timestamp'] != b['timestamp']:
         return False
@@ -117,6 +126,7 @@ def test_compare_commits(a,b):
 
 
     return True
+
 
 if __name__ == "__main__":
     '''

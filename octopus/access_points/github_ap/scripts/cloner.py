@@ -1,4 +1,5 @@
 import subprocess
+import re
 from argparse import ArgumentParser
 import sys
 import os
@@ -20,15 +21,48 @@ def clone_repo(remote,target,is_bear):
     else:
         subprocess.call(['git', 'clone', remote, target])
 
+def __get__HEAD__(branches):
+
+    for branch in branches:
+        idx = branch.find('HEAD')
+        name_idx = branch.rfind('/')
+        branch = branch[name_idx + 1:]
+        not_head = -1
+        if idx != not_head:
+            return branch
+
+    # no HEAD
+    return None
+
+def __parse__branch__(branch):
+    if len(branch) < 1:
+        return ''
+    idx = branch.find('HEAD')
+    name_idx = branch.rfind('/')
+    branch = branch[name_idx+1:]
+    not_head = -1
+    regex = re.compile('[^a-zA-Z]')
+    branch = regex.sub('', branch)
+    return branch
 
 def __parse__branches__(branches):
-
     parsed = branches.decode('utf-8').split('\n')
-    for branch in parsed:
-        print(branch)
-    print('####################')
-    return parsed
 
+    head = __parse__branch__(__get__HEAD__(parsed))
+
+    parsed = [__parse__branch__(b) for b in parsed]
+
+    parsed = [b.strip() for b in parsed]
+    parsed = [b for b in parsed if b]
+    parsed.append(head)
+    parsed = set(parsed)
+    parsed = [__to__object__(b,head) for b in parsed]
+    return list(parsed)
+
+def __to__object__(branch_name,head):
+    if branch_name == head:
+        return {'is_head': True, 'name' : branch_name}
+    return {'is_head': False, 'name' : branch_name}
 def get_all_branches(path):
     try:
         cmd = ['git', '-C', path, 'branch', '-a']
