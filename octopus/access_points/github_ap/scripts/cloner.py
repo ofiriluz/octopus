@@ -41,7 +41,7 @@ def __parse__branch__(branch):
     name_idx = branch.rfind('/')
     branch = branch[name_idx+1:]
     not_head = -1
-    regex = re.compile('[^a-zA-Z]')
+    regex = re.compile('[^\w\\-\\.]')
     branch = regex.sub('', branch)
     return branch
 
