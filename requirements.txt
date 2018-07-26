@@ -5,3 +5,5 @@ numpy
 PyGithub==1.39
 gitpython==2.1.10
 argparse==1.4.0
+shutil==11.10
+distutils==29.1
