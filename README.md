@@ -9,7 +9,7 @@ Design
 ### Filesystem of a github access_point ###
 ============
 
-<img src="docs/c_github_fs.png"
+<img src="docs/ac_github_fs.png"
     alt = "fs"/>
 
 Ongoing Tasks
