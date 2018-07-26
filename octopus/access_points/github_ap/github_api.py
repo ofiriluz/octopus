@@ -421,7 +421,7 @@ def test_input():
     input = {}
     input['id'] = 'isan_ws'
     input['mode'] = 'full'
-    input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
+    input['target_dir'] = 'D:\TESTS_OCTO'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
     input['branches_names'] = ['all']

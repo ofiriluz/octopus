@@ -10,17 +10,17 @@
     # 
 
 import pymongo
-from .db_controller import BaseDBController
-from .db_generator import BaseDBGenerator
+from ..access_controller import BaseAccessController
+from ..access_generator import BaseAccessGenerator
 
 
-class MongoController(BaseDBController):
+class MongoController(BaseAccessController):
     def __init__(self, connection_info, db_name, db_username=None, db_password=None):
-        super().__init__(connection_info)
-
         self.__db_username = db_username
         self.__db_password = db_password
         self.__db_name = db_name
+        self.__connection_host = connection_info[0]
+        self.__connection_port = connection_info[1]
         self.__mongo_connection = None
 
     def start_controller(self):
@@ -28,8 +28,8 @@ class MongoController(BaseDBController):
             return False
 
         # Create a mongo connection
-        self.__mongo_connection = pymongo.MongoClient(host=self.get_controller_host(), 
-                                                      port=self.get_controller_port(),
+        self.__mongo_connection = pymongo.MongoClient(host=self.__connection_host, 
+                                                      port=self.__connection_port,
                                                       username=self.__db_username,
                                                       password=self.__db_password)
 
@@ -53,9 +53,9 @@ class MongoController(BaseDBController):
         return self.__mongo_connection[self.__db_name]
         
 
-class MongoGenerator(BaseDBGenerator):
+class MongoGenerator(BaseAccessGenerator):
     def __init__(self):
         super()
 
-    def generate_db_controller(self, connection_info, **kwargs):
-        return MongoController(connection_info, **kwargs)
+    def generate_access_controller(self, **kwargs):
+        return MongoController(**kwargs)

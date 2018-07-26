@@ -2,6 +2,7 @@ from threading import Thread, Event, Lock
 from octopus.task_manager.base_task_executor import BaseTaskExecutor
 from .task_thread_runner import TaskThreadRunner
 import datetime
+import traceback
 
 class TaskThreadExecutor(BaseTaskExecutor):
     def __init__(self, task, task_definition, logger):
@@ -39,11 +40,12 @@ class TaskThreadExecutor(BaseTaskExecutor):
                 
                 # Callback with the result of the process
                 if self.get_task()['task_callback'] and callable(self.get_task()['task_callback']): 
-                    self.get_task()['task_callback'](self.__task_result)
+                    self.get_task()['task_callback'](self.get_task()['task_id'], self.__task_result)
             else:
                 self.__task_start_time = self.__task_end_time = datetime.datetime.now()
                 self.__task_result = 'Error: Invalid task runner'
         except:
+            traceback.print_exc()
             self.__task_start_time = self.__task_end_time = datetime.datetime.now()
             self.__task_result = 'Error: Runner exception'
         finally:

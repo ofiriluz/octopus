@@ -1,0 +1,15 @@
+{
+    "task_definitions": 
+    [
+        {
+            "task_definition_id": "github_access_point",
+            "task_definition_type": "Thread",
+            "task_definition_params": {}
+        },
+        {
+            "task_definition_id": "github_profiler",
+            "task_definition_type": "Thread",
+            "task_definition_params": {}
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+Processor:
+1. Receives as an input a query (username)
+    processor.profile(query) 
+2. Creates tasks for each access point with the username and run it
+    for access_point in registered_access_points:
+        query = prepare_query(access_point)
+        task = create_task(access_point, query)
+        run_async_task(task)
+4. Each access point receives its fitting data accessor for example:
+    accessors = get_access_point_accessors(task.access_point) // {"FSAccessor": X, "DBAccessor": Y, "GitAPIAccessor": Z}
+    add_to_task_manager(task, accessors)
+5. Depending on the mode of the ap either create a follow up query or save and profile the results
+    while True:
+        analysis = analyze_ap_results(results)
+        if analysis.query:
+            requery()
+        accessors['DBAccessor'].store_results(results)
+    final_results = combine_ap_results()
+6. Once the task is done, receive the results and store them on using the DBAccessor
+    accessors['DBAccessor'].store_results(final_results)
+7. Store the query aswell
+    query_accessor.store_query(query)
+8. Profile the results from the access point:
+    accessors = get_access_point_accessors(final_results.access_point) // {"FSAccessor": X, "DBAccessor": Y, "GitAPIAccessor": Z}
+    profiler = get_profiler(final_results.access_point)
+    task = create_task(profiler, final_results)
+    run_async_task(task)
+9. On profiling end store and return the profile results
+    accessors['DBAccessor'].store_results(profiler_results)
+    yield profiler_results
+
+Every accessor uses graphql to execute its queries
+For example GithubAPIAccessor works with the GithubAPIController 
+Each mongo type works with the mongocontroller and so on
+
+Github:
+1. Receives [FSAccessor, GithubAPIAccessor, MongoAcccessor]
+2. Calls GithubAPIAccessor to download info for the query
+3. Calls FSAccessor to get the jsons for the downloaded user
+4. Stores the metadata using the mongo accesssor on the AccessPoint DB (or updates)
+5. Return the results
+6. Analysis is done to understand if more ap results is needed and repeat

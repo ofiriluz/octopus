@@ -132,7 +132,7 @@ class TaskProcessExecutor(BaseTaskExecutor):
 
                     # Callback with the result of the process
                     if self.get_task()['task_callback'] and callable(self.get_task()['task_callback']): 
-                        self.get_task()['task_callback'](self.__task_result)
+                        self.get_task()['task_callback'](self.get_task()['task_id'], self.__task_result)
                 else:
                     self.__task_start_time = self.__task_end_time = datetime.datetime.now()
                     self.__task_result = 'Error: Script path does not exist'

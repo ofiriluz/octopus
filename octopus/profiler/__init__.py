@@ -1,1 +1,1 @@
-#!/usr/bin/python
+from .profiler import Profiler
