@@ -6,7 +6,15 @@ Design
 <img src="docs/Octopus Design.png"
      alt="Markdown Monster icon" />
 
+### Filesystem of a github access_point ###
+============
+
+<img src="docs/ac_github_fs.png"
+    alt = "fs"/>
+
 Ongoing Tasks
+
+
 --------------
 - ### Ofir ###
     - **task_manager** - Done development, tested [16.6.2018]

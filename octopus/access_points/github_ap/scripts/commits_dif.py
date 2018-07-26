@@ -23,43 +23,45 @@ def versions(path, branch='master'):
     repo = git.Repo(path)
 
     # Iterate through every commit for the given branch in the repository
+    try:
+        for commit in repo.iter_commits(branch):
 
-    for commit in repo.iter_commits(branch):
+            # Determine the parent of the commit to diff against.
+            # If no parent, this is the first commit, so use empty tree.
+            # Then create a mapping of path to diff for each file changed.
+            parent = commit.parents[0] if commit.parents else EMPTY_TREE_SHA
+            diffs  = {
+                diff.a_path: diff for diff in commit.diff(parent)
+            }
 
-        # Determine the parent of the commit to diff against.
-        # If no parent, this is the first commit, so use empty tree.
-        # Then create a mapping of path to diff for each file changed.
-        parent = commit.parents[0] if commit.parents else EMPTY_TREE_SHA
-        diffs  = {
-            diff.a_path: diff for diff in commit.diff(parent)
-        }
+            # The stats on the commit is a summary of all the changes for this
+            # commit, we'll iterate through it to get the information we need.
+            for objpath, stats in commit.stats.files.items():
 
-        # The stats on the commit is a summary of all the changes for this
-        # commit, we'll iterate through it to get the information we need.
-        for objpath, stats in commit.stats.files.items():
+                # Select the diff for the path in the stats
+                diff = diffs.get(objpath)
 
-            # Select the diff for the path in the stats
-            diff = diffs.get(objpath)
+                # If the path is not in the dictionary, it's because it was
+                # renamed, so search through the b_paths for the current name.
+                if not diff:
+                    for diff in diffs.values():
+                        if diff.b_path == path and diff.renamed:
+                            break
 
-            # If the path is not in the dictionary, it's because it was
-            # renamed, so search through the b_paths for the current name.
-            if not diff:
-                for diff in diffs.values():
-                    if diff.b_path == path and diff.renamed:
-                        break
+                # Update the stats with the additional information
+                stats.update({
+                    'object': os.path.join(path, objpath),
+                    'commit': commit.hexsha,
+                    'author': commit.author.email,
+                    'timestamp': commit.authored_datetime.strftime(DATE_TIME_FORMAT),
+                    'size': diff_size(diff),
+                    'type': diff_type(diff),
+                })
 
-            # Update the stats with the additional information
-            stats.update({
-                'object': os.path.join(path, objpath),
-                'commit': commit.hexsha,
-                'author': commit.author.email,
-                'timestamp': commit.authored_datetime.strftime(DATE_TIME_FORMAT),
-                'size': diff_size(diff),
-                'type': diff_type(diff),
-            })
-
-            yield stats
-
+                yield stats
+    except Exception as e:
+        print('[-] error parsing branch {}'.format(branch))
+        return None
 
 # initial
 # def diff_size(diff):
@@ -111,7 +113,7 @@ def checkout_to(path,branch_name):
     print('path to target => {}'.format(path))
     os.chdir(path)
     print('current dir {} '.format(os.getcwd()))
-    return subprocess.call(['git', 'checkout',branch_name])
+    return subprocess.call(['git', 'checkout',branch_name['name']])
 
 
 def test_compare_commits(a,b):

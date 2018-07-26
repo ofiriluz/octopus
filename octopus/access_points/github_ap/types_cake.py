@@ -96,7 +96,7 @@ class Input(object):
     # path/id/repositories/repositories/{repo_name}/commits
     def commits_dir(self,repo_name, create = False):
         result_dir = os.path.join(self.repo_by_name_high_dir(repo_name), 'commits')
-        if create:
+        if create and not os.path.exists(result_dir):
             os.makedirs(result_dir)
         return result_dir
 

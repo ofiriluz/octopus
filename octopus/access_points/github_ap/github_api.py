@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from github import Github
 from octopus.access_points.auth_keys import GITHUB_PERSONAL_ACCOESS_TOKEN
 from octopus.access_points.utils.util import Util
@@ -25,9 +26,7 @@ class GithubAPI(object):
     # input: search query (i.e a user name)
     # output: a list of user objects
     def search(self,query):
-        print('get HERE @#%$#^#%@$')
         users = [self.g.get_user(user.login) for user in self.g.search_users(query)]
-        print('AND HERE #@$#%Y^UTRYTEWRTRYGRYETR')
         return users
     # get all commits metadata
     # https://api.github.com/repos/ofiriluz/octopus/commits
@@ -245,32 +244,33 @@ class GithubAPI(object):
             # - for each checkout branch:
             #   - analyze and dump commits into branch_name_commits.json
 
-            # branches = self.get_branches_list( clone_dir)
-            # # TODO:: store into file commits_meta inside /repo_name/commits/commits_meta.json
-            # #commits_meta = self.get_commits_metadata(profile_name, input['name'])
-            #
-            # for branch in branches:
-            #
-            #     self.__handle__branches__(repo['name'],clone_dir,branch)
+            branches = self.get_branches_list( clone_dir)
+            # TODO:: store into file commits_meta inside /repo_name/commits/commits_meta.json
+            #commits_meta = self.get_commits_metadata(profile_name, input['name'])
+
+            if branches != None:
+                for branch in branches:
+                    if  branch != None:
+                        self.__handle__branches__(repo['name'],clone_dir,branch)
 
         elif self.input.is_light_mode():
             pass
         return self
 
-    def __handle__branches__(self, repo_name,repo_path, branch_name):
+    def __handle__branches__(self, repo_name,repo_path, branch_obj):
 
-        if self.__is__interesting__branch(repo_path,branch_name):
+        if self.__is__interesting__branch(repo_path,branch_obj):
 
-            print('[+] Handling branch {} for repo {}'.format(branch_name,repo_name))
+            print('[+] Handling branch {} for repo {}'.format(branch_obj,repo_name))
 
             # checkout the branch
-            checkout_to(repo_path,branch_name)
+            checkout_to(repo_path,branch_obj)
             # calls a script inside commits_diff.py to analyze commits
-            commits_stats = versions(repo_path,branch_name)
+            commits_stats = versions(repo_path,branch_obj['name'])
             # save the commits in the target dir /repo_name/commits/branch_name_commits.json
             commits_dir = self.input.commits_dir(repo_name, create = True)
-            target_file = os.path.join(commits_dir,branch_name+'_commits.json')
-
+            target_file = os.path.join(commits_dir,branch_obj['name']+'_commits.json')
+            commits_stats = [commit for commit in commits_stats]
             with open(target_file, 'w') as outfile:
                 json.dump(commits_stats, outfile, indent=4)
 
@@ -285,6 +285,10 @@ class GithubAPI(object):
 
         # fetch the language dictionary from repo['languages'] url
         repo = self.__handle__repo__language__(repo)
+
+        # the parent_owner field is an object incase there's a parent and not JSON seriallizable.
+        if repo['owner']['parent_owner'] != None:
+            repo['owner']['parent_owner'] = repo['owner']['parent_owner'].full_name
 
         with open(meta_file, 'w') as outfile:
             json.dump(repo, outfile,  indent= 4)
@@ -415,13 +419,13 @@ def test_mix():
 
 def test_input():
     input = {}
-    input['id'] = 'hello_world_ws'
+    input['id'] = 'isan_ws'
     input['mode'] = 'full'
     input['target_dir'] = 'D:\TESTS_OCTO'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
     input['branches_names'] = ['all']
-    input['user_name'] = 'yardenmol'
+    input['user_name'] = 'isan_rivkin'
     input['branches_num'] = 0
     input['branches_names'] = ['all']
     api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
@@ -442,7 +446,14 @@ def test_commits_stats():
     l = [s for s in commits_stats]
     print(l)
 
+def test_rate_limit():
+    g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
+    url = 'https://api.github.com/rate_limit'
+    response = requests.get(url)
+    print(response)
+
 if __name__ == "__main__":
+    #test_rate_limit()
     #test_branches()
     test_input()
     #test_commits_stats()
