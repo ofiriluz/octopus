@@ -1,13 +1,13 @@
 import os
 import json
 import pprint
-from octopus.profiler.ap_profilers import AccessPointProfiler
-from octopus.profiler.ap_profilers.github import GithubContributionScorer, GithubFrameworkAnalyzer
+from octopus.profiler import Profiler
+from octopus.profiler.github import GithubContributionScorer, GithubFrameworkAnalyzer
 
 
-class GitHubProfiler(AccessPointProfiler):
-    def __init__(self,user_workspace_path):
-        self.__user_workspace_path = user_workspace_path
+class GithubProfiler(Profiler):
+    def __init__(self):
+        self.__user_workspace_path = None
         self.__user_metadata = None
         self.__user_repos_metadata = []
         self.__user_profiler_results = {}
@@ -39,7 +39,7 @@ class GitHubProfiler(AccessPointProfiler):
         self.__user_repos_metadata = []
         self.__user_profiler_results = {}
 
-    def do_profiling(self):
+    def do_profiling(self, logger, query, controllers):
         # Clear old profiling results
         self.__init_profiler()
 
@@ -60,6 +60,6 @@ class GitHubProfiler(AccessPointProfiler):
 
 if __name__ == '__main__':
     ofir_meta_file = 'D:\\Octopus\\octopus\\profiler\\ap_profilers\\github\\ofir_iluz'
-    git_profiler = GitHubProfiler(ofir_meta_file)
+    git_profiler = GithubProfiler(ofir_meta_file)
     scores_result = git_profiler.do_profiling()
     pprint.pprint(scores_result)

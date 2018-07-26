@@ -38,10 +38,7 @@
         {
             "task_definition_id": "ThreadExecutionC",
             "task_definition_type": "Thread",
-            "task_definition_params": 
-            {
-                "task_thread_runner_id": "C"
-            }
+            "task_definition_params": {}
         }   
     ]
 }
