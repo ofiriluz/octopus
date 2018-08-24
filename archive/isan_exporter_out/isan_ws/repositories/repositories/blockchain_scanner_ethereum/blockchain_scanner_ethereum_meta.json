@@ -1,0 +1,32 @@
+{
+    "pushed_at": "2018-06-11 21:28:16",
+    "languages_dict": {
+        "HTML": 22994,
+        "TypeScript": 84787,
+        "JavaScript": 106083,
+        "CSS": 2281
+    },
+    "size": 40122,
+    "full_name": "Isan-Rivkin/blockchain_scanner_ethereum",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/blockchain_scanner_ethereum/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/blockchain_scanner_ethereum/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/blockchain_scanner_ethereum.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 1,
+    "default_branch": "master",
+    "forkes_count": 2,
+    "url": "https://github.com/Isan-Rivkin/blockchain_scanner_ethereum",
+    "has_issues": true,
+    "created_at": "2018-02-05 12:21:27",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/blockchain_scanner_ethereum/issues{/number}",
+    "name": "blockchain_scanner_ethereum"
+}

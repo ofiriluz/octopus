@@ -1,0 +1,167 @@
+[
+    {
+        "insertions": 36,
+        "size": 599,
+        "timestamp": "2018-05-21T16:43:07+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/README.md",
+        "type": "A",
+        "deletions": 0,
+        "commit": "853808b1005f1e0423fe1f6911265c76f527b7a4",
+        "lines": 36
+    },
+    {
+        "insertions": 43,
+        "size": 1981,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Makefile",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 43
+    },
+    {
+        "insertions": 31,
+        "size": 736,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/x86_64-unknown-linux-sgx.json",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 31
+    },
+    {
+        "insertions": 25,
+        "size": 492,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Xargo.toml",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 25
+    },
+    {
+        "insertions": 119,
+        "size": 4133,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/src/lib.rs",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 119
+    },
+    {
+        "insertions": 62,
+        "size": 2111,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/app/app.h",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 62
+    },
+    {
+        "insertions": 1,
+        "size": 3,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/lib/readme.txt",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 1
+    },
+    {
+        "insertions": 39,
+        "size": 2455,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Enclave_private.pem",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 39
+    },
+    {
+        "insertions": 189,
+        "size": 6601,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/Makefile",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 189
+    },
+    {
+        "insertions": 12,
+        "size": 382,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Enclave.config.xml",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 12
+    },
+    {
+        "insertions": 1,
+        "size": 3,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/bin/readme.txt",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 1
+    },
+    {
+        "insertions": 271,
+        "size": 8515,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/app/app.c",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 271
+    },
+    {
+        "insertions": 52,
+        "size": 2066,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Enclave.edl",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 52
+    },
+    {
+        "insertions": 9,
+        "size": 123,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Enclave.lds",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 9
+    },
+    {
+        "insertions": 17,
+        "size": 399,
+        "timestamp": "2018-05-21T16:36:21+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/sgx_sealing_example/sgx_sealing_example/enclave/Cargo.toml",
+        "type": "A",
+        "deletions": 0,
+        "commit": "ab1db8d3e2f9776651796b878ee1b92086c3e2b2",
+        "lines": 17
+    }
+]

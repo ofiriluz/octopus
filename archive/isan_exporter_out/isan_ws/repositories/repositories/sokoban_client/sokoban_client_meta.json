@@ -1,0 +1,32 @@
+{
+    "pushed_at": "2017-07-09 16:43:15",
+    "languages_dict": {
+        "HTML": 3737423,
+        "CSS": 16045,
+        "JavaScript": 857,
+        "Java": 268627
+    },
+    "size": 2473,
+    "full_name": "Isan-Rivkin/sokoban_client",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/sokoban_client/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/sokoban_client/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/sokoban_client.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/sokoban_client",
+    "has_issues": true,
+    "created_at": "2017-04-01 16:05:07",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/sokoban_client/issues{/number}",
+    "name": "sokoban_client"
+}

@@ -1,0 +1,30 @@
+{
+    "pushed_at": "2018-05-27 12:10:22",
+    "languages_dict": {
+        "Makefile": 8161,
+        "Rust": 18699
+    },
+    "size": 7945,
+    "full_name": "Isan-Rivkin/sgx_rust_example",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/sgx_rust_example/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/sgx_rust_example/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/sgx_rust_example.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 2,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/sgx_rust_example",
+    "has_issues": true,
+    "created_at": "2018-05-21 13:44:37",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/sgx_rust_example/issues{/number}",
+    "name": "sgx_rust_example"
+}

@@ -1,0 +1,29 @@
+{
+    "pushed_at": "2017-07-09 10:42:28",
+    "languages_dict": {
+        "Java": 7856
+    },
+    "size": 4,
+    "full_name": "Isan-Rivkin/search_algorithms_bfs_dijkstra",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/search_algorithms_bfs_dijkstra/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/search_algorithms_bfs_dijkstra/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/search_algorithms_bfs_dijkstra.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/search_algorithms_bfs_dijkstra",
+    "has_issues": true,
+    "created_at": "2017-07-09 10:41:07",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/search_algorithms_bfs_dijkstra/issues{/number}",
+    "name": "search_algorithms_bfs_dijkstra"
+}

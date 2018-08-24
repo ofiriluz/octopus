@@ -94,7 +94,7 @@ class Exporter(object):
         dest = os.path.join(dest,'commits')
         os.makedirs(dest)
         self.__copy__dir__(os.path.join(src,'commits'),dest)
-        #TODO :: FINISH THE PROCESS OF COPYNG ALL THE COMMITS CONTENT - SOME WEIRD BUG BUT THE CODE ABOVE SDHOULD WORK 
+        #TODO :: FINISH THE PROCESS OF COPYNG ALL THE COMMITS CONTENT - SOME WEIRD BUG BUT THE CODE ABOVE SDHOULD WORK
         return True
 
     def __get__target__name__(self):
@@ -126,8 +126,8 @@ class Exporter(object):
 if __name__ == '__main__':
 
     target = {
-        'src':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/yardenmol_ws',
-        'target':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/exporter_out'
+        'src':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws',
+        'target':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_exporter_out'
     }
     exporter = Exporter(target)
     exporter.export_meta()

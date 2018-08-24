@@ -1,0 +1,46 @@
+[
+    {
+        "insertions": 46,
+        "size": 952,
+        "timestamp": "2018-08-14T23:54:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/meta_me/meta_me/linux_commands",
+        "type": "M",
+        "deletions": 2,
+        "commit": "5896caede76cce5f1a68382f7fe6902defe61c21",
+        "lines": 48
+    },
+    {
+        "insertions": 13,
+        "size": 297,
+        "timestamp": "2018-08-14T22:31:50+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/meta_me/meta_me/python_commands",
+        "type": "A",
+        "deletions": 0,
+        "commit": "988f22a55df5d7b0526803e98395f40868540c4a",
+        "lines": 13
+    },
+    {
+        "insertions": 6,
+        "size": 205,
+        "timestamp": "2018-08-14T22:28:39+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/meta_me/meta_me/linux_commands",
+        "type": "A",
+        "deletions": 0,
+        "commit": "160cf1251915a63043cd9ed3fa11048af289a201",
+        "lines": 6
+    },
+    {
+        "insertions": 2,
+        "size": 67,
+        "timestamp": "2018-08-14T22:26:15+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/meta_me/meta_me/README.md",
+        "type": "A",
+        "deletions": 0,
+        "commit": "fadec64334f2b417506454af61366c6f658d7455",
+        "lines": 2
+    }
+]

@@ -1,0 +1,32 @@
+{
+    "pushed_at": "2017-11-20 16:38:53",
+    "languages_dict": {
+        "HTML": 7637,
+        "CSS": 137,
+        "JavaScript": 18481,
+        "Python": 2100
+    },
+    "size": 8327,
+    "full_name": "Isan-Rivkin/BittrexNodeJS",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/BittrexNodeJS/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/BittrexNodeJS/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/BittrexNodeJS.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/BittrexNodeJS",
+    "has_issues": true,
+    "created_at": "2017-11-02 15:51:02",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/BittrexNodeJS/issues{/number}",
+    "name": "BittrexNodeJS"
+}

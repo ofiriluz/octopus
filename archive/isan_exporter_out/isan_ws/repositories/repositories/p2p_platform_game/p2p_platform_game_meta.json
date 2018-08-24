@@ -1,0 +1,31 @@
+{
+    "pushed_at": "2017-09-06 10:57:20",
+    "languages_dict": {
+        "Makefile": 23254,
+        "C": 1448,
+        "C++": 32424
+    },
+    "size": 1532,
+    "full_name": "Isan-Rivkin/p2p_platform_game",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/p2p_platform_game/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/p2p_platform_game/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/p2p_platform_game.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/p2p_platform_game",
+    "has_issues": true,
+    "created_at": "2017-08-24 09:20:16",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/p2p_platform_game/issues{/number}",
+    "name": "p2p_platform_game"
+}

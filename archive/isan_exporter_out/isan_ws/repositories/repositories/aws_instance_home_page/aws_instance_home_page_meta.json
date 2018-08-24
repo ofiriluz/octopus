@@ -1,0 +1,31 @@
+{
+    "pushed_at": "2018-08-20 16:48:56",
+    "languages_dict": {
+        "HTML": 5008,
+        "CSS": 146,
+        "JavaScript": 1492
+    },
+    "size": 23,
+    "full_name": "Isan-Rivkin/aws_instance_home_page",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/aws_instance_home_page/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/aws_instance_home_page/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/aws_instance_home_page.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/aws_instance_home_page",
+    "has_issues": true,
+    "created_at": "2018-08-15 10:49:31",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/aws_instance_home_page/issues{/number}",
+    "name": "aws_instance_home_page"
+}

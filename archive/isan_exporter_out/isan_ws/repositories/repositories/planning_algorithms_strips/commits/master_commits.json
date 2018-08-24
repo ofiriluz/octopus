@@ -1,0 +1,134 @@
+[
+    {
+        "insertions": 1,
+        "size": 6,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/.gitignore",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 1
+    },
+    {
+        "insertions": 46,
+        "size": 918,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannerP/Predicate.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 46
+    },
+    {
+        "insertions": 12,
+        "size": 200,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannerP/Action.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 12
+    },
+    {
+        "insertions": 6,
+        "size": 301,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/.classpath",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 6
+    },
+    {
+        "insertions": 13,
+        "size": 161,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannerP/Planner.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 13
+    },
+    {
+        "insertions": 105,
+        "size": 2157,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannerP/Clause.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 105
+    },
+    {
+        "insertions": 17,
+        "size": 392,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/.project",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 17
+    },
+    {
+        "insertions": 71,
+        "size": 1393,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannerP/Strips.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 71
+    },
+    {
+        "insertions": 11,
+        "size": 598,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/.settings/org.eclipse.jdt.core.prefs",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 11
+    },
+    {
+        "insertions": 14,
+        "size": 316,
+        "timestamp": "2017-07-09T13:44:34+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/MyPlannerLibrary/src/plannableP/Plannable.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6aef31da4b8f38150d2e66812f1104766f79bf25",
+        "lines": 14
+    },
+    {
+        "insertions": 2,
+        "size": 44,
+        "timestamp": "2017-07-09T13:43:14+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/README.md",
+        "type": "A",
+        "deletions": 0,
+        "commit": "3e016be99b09c4a849486abcd08e656b67137e71",
+        "lines": 2
+    },
+    {
+        "insertions": 22,
+        "size": 272,
+        "timestamp": "2017-07-09T13:43:14+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/planning_algorithms_strips/planning_algorithms_strips/.gitignore",
+        "type": "A",
+        "deletions": 0,
+        "commit": "3e016be99b09c4a849486abcd08e656b67137e71",
+        "lines": 22
+    }
+]

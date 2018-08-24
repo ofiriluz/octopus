@@ -1,0 +1,27 @@
+{
+    "pushed_at": "2018-08-14 20:54:31",
+    "languages_dict": {},
+    "size": 3,
+    "full_name": "Isan-Rivkin/meta_me",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/meta_me/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/meta_me/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/meta_me.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/meta_me",
+    "has_issues": true,
+    "created_at": "2018-08-14 19:26:14",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/meta_me/issues{/number}",
+    "name": "meta_me"
+}

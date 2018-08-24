@@ -1,0 +1,29 @@
+{
+    "pushed_at": "2018-01-16 09:24:31",
+    "languages_dict": {
+        "Java": 20311
+    },
+    "size": 15,
+    "full_name": "Isan-Rivkin/DavidStar",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/DavidStar/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/DavidStar/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/DavidStar.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/DavidStar",
+    "has_issues": true,
+    "created_at": "2017-11-27 21:40:22",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/DavidStar/issues{/number}",
+    "name": "DavidStar"
+}

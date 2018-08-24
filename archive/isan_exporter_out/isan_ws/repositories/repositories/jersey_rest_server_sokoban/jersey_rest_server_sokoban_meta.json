@@ -1,0 +1,32 @@
+{
+    "pushed_at": "2017-07-09 16:45:06",
+    "languages_dict": {
+        "HTML": 642502,
+        "CSS": 13416,
+        "JavaScript": 857,
+        "Java": 30991
+    },
+    "size": 76,
+    "full_name": "Isan-Rivkin/jersey_rest_server_sokoban",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/jersey_rest_server_sokoban/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/jersey_rest_server_sokoban/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/jersey_rest_server_sokoban.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/jersey_rest_server_sokoban",
+    "has_issues": true,
+    "created_at": "2017-07-09 10:36:18",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/jersey_rest_server_sokoban/issues{/number}",
+    "name": "jersey_rest_server_sokoban"
+}

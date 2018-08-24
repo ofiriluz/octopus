@@ -1,0 +1,30 @@
+{
+    "pushed_at": "2017-07-09 11:02:16",
+    "languages_dict": {
+        "CSS": 2538,
+        "Java": 87746
+    },
+    "size": 34,
+    "full_name": "Isan-Rivkin/TaskManagerJava",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/TaskManagerJava/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/TaskManagerJava/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/TaskManagerJava.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/TaskManagerJava",
+    "has_issues": true,
+    "created_at": "2017-07-09 11:01:01",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/TaskManagerJava/issues{/number}",
+    "name": "TaskManagerJava"
+}

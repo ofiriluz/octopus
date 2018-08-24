@@ -1,0 +1,156 @@
+[
+    {
+        "insertions": 17,
+        "size": 387,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/.project",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 17
+    },
+    {
+        "insertions": 6,
+        "size": 301,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/.classpath",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 6
+    },
+    {
+        "insertions": 1,
+        "size": 6,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/.gitignore",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 1
+    },
+    {
+        "insertions": 107,
+        "size": 2049,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searcher/Dijkstra.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 107
+    },
+    {
+        "insertions": 12,
+        "size": 209,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searcher/Searcher.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 12
+    },
+    {
+        "insertions": 38,
+        "size": 717,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searchable/CommonSearcher.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 38
+    },
+    {
+        "insertions": 11,
+        "size": 598,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/.settings/org.eclipse.jdt.core.prefs",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 11
+    },
+    {
+        "insertions": 38,
+        "size": 697,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searchable/Solution.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 38
+    },
+    {
+        "insertions": 11,
+        "size": 237,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searchable/Searchable.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 11
+    },
+    {
+        "insertions": 41,
+        "size": 555,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searchable/Action.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 41
+    },
+    {
+        "insertions": 103,
+        "size": 1393,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searchable/State.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 103
+    },
+    {
+        "insertions": 103,
+        "size": 1999,
+        "timestamp": "2017-07-09T13:42:30+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/MySearchLib/src/searcher/BFS.java",
+        "type": "A",
+        "deletions": 0,
+        "commit": "2f9f33598dc06ca9f2a4fde52f1732de63aae9b9",
+        "lines": 103
+    },
+    {
+        "insertions": 2,
+        "size": 68,
+        "timestamp": "2017-07-09T13:41:07+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/README.md",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6db23f9e522dc44901eb4e6665fb4c6df4f109a4",
+        "lines": 2
+    },
+    {
+        "insertions": 22,
+        "size": 272,
+        "timestamp": "2017-07-09T13:41:07+0300",
+        "author": "isanrivkin@gmail.com",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/search_algorithms_bfs_dijkstra/search_algorithms_bfs_dijkstra/.gitignore",
+        "type": "A",
+        "deletions": 0,
+        "commit": "6db23f9e522dc44901eb4e6665fb4c6df4f109a4",
+        "lines": 22
+    }
+]

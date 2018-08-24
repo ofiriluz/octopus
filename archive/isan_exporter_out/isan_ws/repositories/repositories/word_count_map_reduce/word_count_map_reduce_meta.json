@@ -1,0 +1,29 @@
+{
+    "pushed_at": "2017-10-08 08:22:05",
+    "languages_dict": {
+        "Java": 7097
+    },
+    "size": 12,
+    "full_name": "Isan-Rivkin/word_count_map_reduce",
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/word_count_map_reduce/commits{/sha}",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/word_count_map_reduce/languages",
+    "owner": {
+        "profile_url": "https://api.github.com/users/Isan-Rivkin",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "current_owner": "Isan-Rivkin",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "type": "User",
+        "parent_owner": null
+    },
+    "clone_url": "https://github.com/Isan-Rivkin/word_count_map_reduce.git",
+    "open_issues": 0,
+    "is_fork": false,
+    "watchers_count": 0,
+    "default_branch": "master",
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/word_count_map_reduce",
+    "has_issues": true,
+    "created_at": "2017-10-08 08:17:01",
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/word_count_map_reduce/issues{/number}",
+    "name": "word_count_map_reduce"
+}
