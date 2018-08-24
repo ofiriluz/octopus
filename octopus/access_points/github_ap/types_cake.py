@@ -11,6 +11,7 @@ class Input(object):
         - target_dir
         - repo_size_limit : {0, any num}
         - repos_list : ['all']
+        - repos_ignore : ['some_repo_to_ignore']
         - repos_num : {0, any num}
         - branches_num : {0,any num},
         - branches_names : ['all', 'master', 'develop',...]

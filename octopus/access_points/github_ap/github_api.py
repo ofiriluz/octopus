@@ -210,9 +210,14 @@ class GithubAPI(object):
     def __handle__repo__(self,repo, profile_name):
         print('[+] Starting repo process for {}'.format(repo['name']))
 
-        # repo too big
-        if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
+        if not self.__is__interesting_repository(repo):
             return None
+        # delete -> included in the function above
+        # repo too big
+        # if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
+        #     return None
+
+        # repo is in the repos_ignore
 
         #TODO::1 refactor the code to use filters instead of small bits of params with if else.
         #TODO::2 allow a sequential mode where it is possible to clone repo and then filter if it's bad and delete
@@ -276,6 +281,23 @@ class GithubAPI(object):
 
     def __is__interesting__branch(self, repo_path, branch_name):
         # TODO:: This method should use a filter that was input by the requester. in self.input['branch_filter']
+        return True
+
+    def __is__interesting_repository(self,repo):
+
+        #TODO :: this method should filter a repository
+        # repo too big
+        if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
+            return False
+        # repo is in the repos_ignore
+        if repo['name'] in self.input.input['repos_ignore']:
+            return False
+
+        # only specific repos requestd - set explicitly in repos_list
+        if self.input.input['repos_list'][0] != 'all':
+            if not repo['name'] in self.input.input['repos_list']:
+                return False
+
         return True
 
     def __handle__repo__meta__(self,repo):
@@ -419,12 +441,13 @@ def test_mix():
 
 def test_input():
     input = {}
-    input['id'] = 'isan_ws'
+    input['id'] = 'isan_shit_ws'
     input['mode'] = 'full'
     input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
-    input['branches_names'] = ['all']
+    input['repos_list'] = ['enigma-core']
+    input['repos_ignore'] = ['']    
     input['user_name'] = 'isan_rivkin'
     input['branches_num'] = 0
     input['branches_names'] = ['all']

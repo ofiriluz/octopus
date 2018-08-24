@@ -1,0 +1,57 @@
+[
+    {
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_shit_ws/repositories/repositories/enigma-core/enigma-core/worker/src/lib.rs",
+        "author": "fredfortier@gmail.com",
+        "deletions": 3,
+        "size": -115,
+        "timestamp": "2018-06-21T13:48:07-0700",
+        "lines": 3,
+        "insertions": 0,
+        "type": "M",
+        "commit": "b509cb168e2d6264388191ef601c0722e8e430b4"
+    },
+    {
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_shit_ws/repositories/repositories/enigma-core/enigma-core/.gitignore",
+        "author": "fredfortier@gmail.com",
+        "deletions": 0,
+        "size": 20,
+        "timestamp": "2018-06-21T13:48:07-0700",
+        "lines": 3,
+        "insertions": 3,
+        "type": "M",
+        "commit": "b509cb168e2d6264388191ef601c0722e8e430b4"
+    },
+    {
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_shit_ws/repositories/repositories/enigma-core/enigma-core/enigma-core/enclave/src/lib.rs",
+        "author": "fredfortier@gmail.com",
+        "deletions": 0,
+        "size": -88,
+        "timestamp": "2018-06-18T15:34:35-0700",
+        "lines": 135,
+        "insertions": 135,
+        "type": "R",
+        "commit": "ab5c898ed2dd03c06c327339805cc1a47e444e6c"
+    },
+    {
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_shit_ws/repositories/repositories/enigma-core/enigma-core/enigma-principal/app/build.rs",
+        "author": "fredfortier@gmail.com",
+        "deletions": 0,
+        "size": 0,
+        "timestamp": "2018-06-18T15:34:35-0700",
+        "lines": 41,
+        "insertions": 41,
+        "type": "R",
+        "commit": "ab5c898ed2dd03c06c327339805cc1a47e444e6c"
+    },
+    {
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_shit_ws/repositories/repositories/enigma-core/enigma-core/enigma-core/app/src/main.rs",
+        "author": "fredfortier@gmail.com",
+        "deletions": 0,
+        "size": 304,
+        "timestamp": "2018-06-18T15:34:35-0700",
+        "lines": 84,
+        "insertions": 84,
+        "type": "R",
+        "commit": "ab5c898ed2dd03c06c327339805cc1a47e444e6c"
+    }
+]

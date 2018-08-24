@@ -1,0 +1,32 @@
+{
+    "clone_url": "https://github.com/Isan-Rivkin/enigma-core.git",
+    "name": "enigma-core",
+    "languages_dict": {
+        "Dockerfile": 473,
+        "Makefile": 10794,
+        "Rust": 244425,
+        "Python": 870
+    },
+    "open_issues": 0,
+    "default_branch": "master",
+    "has_issues": false,
+    "issues_url": "https://api.github.com/repos/Isan-Rivkin/enigma-core/issues{/number}",
+    "is_fork": true,
+    "pushed_at": "2018-08-23 13:04:13",
+    "owner": {
+        "parent_owner": "enigmampc/enigma-core",
+        "organizations_url": "https://api.github.com/users/Isan-Rivkin/orgs",
+        "repos_url": "https://api.github.com/users/Isan-Rivkin/repos",
+        "type": "User",
+        "current_owner": "Isan-Rivkin",
+        "profile_url": "https://api.github.com/users/Isan-Rivkin"
+    },
+    "forkes_count": 0,
+    "url": "https://github.com/Isan-Rivkin/enigma-core",
+    "languages": "https://api.github.com/repos/Isan-Rivkin/enigma-core/languages",
+    "full_name": "Isan-Rivkin/enigma-core",
+    "size": 3533,
+    "watchers_count": 0,
+    "commits_url": "https://api.github.com/repos/Isan-Rivkin/enigma-core/commits{/sha}",
+    "created_at": "2018-08-24 11:01:52"
+}
