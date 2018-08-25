@@ -35,7 +35,6 @@ Processor:
 from octopus.task_manager import TaskManager
 from octopus.data_access.access_controller_pool import AccessControllerPool
 from octopus.data_access.controllers.fs_controller import FSGenerator
-from octopus.data_access.controllers.github_controller import GithubGenerator
 from octopus.data_access.controllers.mongo_controller import MongoGenerator
 from octopus.access_points.github_ap.github_access_point import GithubAccessPoint
 from octopus.profiler.github import GithubProfiler
@@ -49,8 +48,7 @@ from octopus.infra.logger import LoggerManager, Logger, DEBUG, INFO
 
 GENERATORS = {
     'mongo': MongoGenerator(),
-    'fs': FSGenerator(),
-    'github': GithubGenerator()
+    'fs': FSGenerator()
 }
 
 DEFAULT_LOG_PATH = os.path.join(tempfile.gettempdir(), 'tmplogs')
@@ -66,7 +64,7 @@ class OctopusProcessor:
         self.__access_point_map = {
             'github': {
                 'access_point': GithubAccessPoint,
-                'controllers': ['mongo', 'fs', 'github'],
+                'controllers': ['mongo', 'fs'],
                 'profiler': GithubProfiler
             }
         }
@@ -159,6 +157,7 @@ class OctopusProcessor:
 
         # Open the connection pool if not opened yet, also set the task manager config
         if not self.__controllers_pool.is_connection_pool_open():
+            print(os.getcwd())
             self.__task_manager.set_task_definition_config('octopus/processor/octopus_task_definitions.json')
             self.__controllers_pool.open_connection_pool(GENERATORS)
             self.__task_manager.start_task_manager()
@@ -200,7 +199,6 @@ class OctopusProcessor:
             
 
 if __name__ == '__main__':
-    print('hello')
     processor = OctopusProcessor()
     result = processor.process_query('isan_rivkin')
     pprint.pprint(result)

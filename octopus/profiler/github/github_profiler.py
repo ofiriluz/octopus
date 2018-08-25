@@ -3,7 +3,7 @@ import json
 import pprint
 from octopus.profiler import Profiler
 from octopus.profiler.github import GithubContributionScorer, GithubFrameworkAnalyzer
-
+from octopus.data_access.accessors.filesystem.github_fs_accessor import GithubFSAccessor
 
 class GithubProfiler(Profiler):
     def __init__(self):
@@ -13,26 +13,7 @@ class GithubProfiler(Profiler):
         self.__user_profiler_results = {}
         self.__contribution_scorer = GithubContributionScorer()
         self.__framework_analyzer = GithubFrameworkAnalyzer()
-
-    def __read_user_workspace(self):
-        # Assert user workspace path
-        if os.path.exists(os.path.join(self.__user_workspace_path, 'meta.json')):
-            # Read the user metadata
-            with open(os.path.join(self.__user_workspace_path, 'meta.json')) as metafile:
-                self.__user_metadata = json.load(metafile)
-
-            # Read all the repos metadata
-            repos_path = os.path.join(self.__user_workspace_path, 'repos')
-            repos_dirs = [os.path.join(repos_path, subdir) for subdir in os.listdir(repos_path)
-                                                           if os.path.isdir(os.path.join(repos_path, subdir))] 
-
-            # Iterate over all the repos
-            for repo_dir in repos_dirs:
-                # Read the metadata of the repo
-                repo_meta_path = os.path.join(repo_dir, 'meta.json')
-                if os.path.exists(repo_meta_path):
-                    with open(repo_meta_path) as repo_metafile:
-                        self.__user_repos_metadata.append(json.load(repo_metafile))
+        self.__github_accessor = None
 
     def __init_profiler(self):
         self.__user_metadata = None
@@ -40,20 +21,27 @@ class GithubProfiler(Profiler):
         self.__user_profiler_results = {}
 
     def do_profiling(self, logger, query, controllers):
+        # Set the workspace path from the given query
+        if not 'workspace_path' in query.keys():
+            return {}
+        self.__github_accessor = GithubFSAccessor(query['workspace_path'])
         # Clear old profiling results
         self.__init_profiler()
 
         # Read all the information 
-        self.__read_user_workspace()
+        self.__user_metadata = self.__github_accessor.read_user_metadata()
+        self.__user_repos_metadata = self.__github_accessor.read_user_repos_metadata()
+
+        # Do the frame scoring
+        # repos_fw_scores = []
+        for repo in self.__user_repos_metadata:
+            # Read the repo branch commits and add them 
+            repo['branches'] = self.__github_accessor.read_repo_commits(repo['repo_local_path'])
+            # repo_frameworks_scores = self.__framework_analyzer.analyze_repo_frameworks(repo)
+            # repos_fw_scores.append(repo_frameworks_scores)
 
         # Perform simple contribution score, revolves around 0.0-1.0
         contribution_score = self.__contribution_scorer.get_contribution_score(self.__user_metadata, self.__user_repos_metadata)
-
-        # Do the frame scoring
-        repos_fw_scores = []
-        for repo in self.__user_repos_metadata:
-            repo_frameworks_scores = self.__framework_analyzer.analyze_repo_frameworks(repo)
-            repos_fw_scores.append(repo_frameworks_scores)
 
         # For now the profiling score is only the contribution, more to come
         return {'contribution_score': contribution_score, 'framework_scores': repos_fw_scores}

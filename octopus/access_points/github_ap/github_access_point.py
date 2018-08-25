@@ -7,7 +7,7 @@ class GithubAccessPoint(AccessPoint):
 
     def resolve_query(self, logger, query, controllers):
         logger.info('Hello World')
-        return {}
+        return {'workspace_path': '/home/playground/Desktop/octopus/octopus/archive/isan_exporter_out/isan_ws'}
 
 
 

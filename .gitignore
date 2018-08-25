@@ -4,7 +4,7 @@ venv
 __pycache__
 tmp_file.json
 database
-
+*.pyc
 # sensetive keys access points file 
 octopus/access_points/auth_keys.py
 src/access_points/auth_keys.py

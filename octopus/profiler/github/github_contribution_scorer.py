@@ -41,7 +41,7 @@ class GithubContributionScorer:
             comments_len = len(issue['comments'])
             user_comments_len = 0
             for comment in issue['comments']:
-                if comment['author'] == user_meta['user']:
+                if comment['author'] == user_meta['name']:
                     user_comments_len = user_comments_len + 1
             administrative_contribution_score = administrative_contribution_score + user_comments_len/comments_len
 
@@ -63,6 +63,17 @@ class GithubContributionScorer:
         # Max 400 files changeable
         # SUM() / MAX_FILES_CHANGEABLE()
 
+
+        # "insertions": 3,
+        # "size": 28,
+        # "timestamp": "2018-08-20T16:48:39+0000",
+        # "author": "ubuntu@ip-172-31-37-173.eu-west-3.compute.internal",
+        # "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws/repositories/repositories/aws_instance_home_page/aws_instance_home_page/public/my_page.html",
+        # "type": "M",
+        # "deletions": 3,
+        # "commit": "f3d728a0731d769277bcae27c494471391c5fe63",
+        # "lines": 6
+
         rolling_scores = []
         for commit in branch['commits']:
             changes = commit['file_changes']
@@ -72,7 +83,7 @@ class GithubContributionScorer:
             for change in changes:
                 # Read file line amount after commit
                 lines = change['file_line_count']
-                change_amount = change['file_changed_lines_count']
+                change_amount = change['lines']
                 change_perc = change_amount / lines
                 changes_perc = changes_perc + change_perc
             commit_perc_score = changes_perc / commit['post_commit']['file_amount']
@@ -90,9 +101,9 @@ class GithubContributionScorer:
         # This will give us an indication if the branch is important or in use 
 
         # First look at the branch last commit vs master last commit of the user
-        # Sorted recent to oldest
-        last_branch_cmmmit = branch['commits'][0]
-        last_master_commit = master_branch['commits'][0]
+        # Sorted oldest to recent
+        last_branch_cmmmit = branch['commits'][-1]
+        last_master_commit = master_branch['commits'][-1]
         last_branch_commit_time = datetime.datetime.strptime(last_branch_cmmmit['commit_time'], '%d.%m.%Y')
         last_master_commit_time = datetime.datetime.strptime(last_master_commit['commit_time'], '%d.%m.%Y')
         repo_creation_time = datetime.datetime.strptime(repo['creation_time'], '%d.%m.%Y')

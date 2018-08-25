@@ -104,7 +104,7 @@ class TaskManager:
                 if not task_executor.is_running():
                     indices_to_remove.append(index)
                     self.__logger.info('Task Finished: ' + task_executor.get_task()['task_id'])
-                    self.__logger.info('Task Result: ' + task_executor.get_task_result())
+                    self.__logger.info('Task Result: ' + str(task_executor.get_task_result()))
                     # Save the task result in the history
                     self.__tasks_history[task_executor.get_task()['task_id']] = {
                         'task_id': task_executor.get_task()['task_id'],

@@ -8,7 +8,32 @@ import shutil
 class FSEngine:
     def __init__(self, base_path):
         self.__base_path = base_path
-    
+
+    def filename(self, file, strip_ext=False):
+        filename = os.path.basename(file)
+        if strip_ext:
+            filename = os.path.splitext(filename)[0]
+        return filename
+
+    def list_files_with_ext(self, folder_path, exts):
+        files = []
+        full_path = os.path.join(self.__base_path, folder_path)
+        if os.path.exists(full_path):
+            for file in os.listdir(full_path):
+                for ext in exts:
+                    if file.endswith(ext):
+                        files.append(os.path.join(folder_path, file))
+                        break
+        return files      
+
+    def get_dir_entries(self, path):
+        fs_path = os.path.join(self.__base_path, path)
+        return [os.path.join(path, subdir) for subdir in os.listdir(fs_path)
+                            if os.path.isdir(os.path.join(fs_path, subdir))] 
+
+    def exists(self, path):
+        return os.path.exists(os.path.join(self.__base_path, path))
+
     def get_base_path(self):
         return self.__base_path
 
@@ -52,6 +77,7 @@ class FSController(BaseAccessController):
         self.__base_path = base_path
         self.__create_base_path = create_base_path
         self.__delete_at_end = delete_at_end
+        self.__fs_engine = None
 
     def start_controller(self):
         if self.is_controller_running():
@@ -79,7 +105,7 @@ class FSController(BaseAccessController):
     def is_controller_running(self):
         return self.__fs_engine != None
     
-    def get_underlying_engine(self):
+    def engine(self):
         return self.__fs_engine
         
 class FSGenerator(BaseAccessGenerator):
