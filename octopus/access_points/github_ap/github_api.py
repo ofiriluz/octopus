@@ -22,6 +22,7 @@ class GithubAPI(object):
         self.input = {}
         self.g = Github(token)
         self.with_https = False
+        self.aggregated = {}
 
     def __with__https(self,url):
         if self.with_https:
@@ -259,14 +260,11 @@ class GithubAPI(object):
     # git clone repo
     # clone branches
     def __handle__repo__(self,repo, profile_name):
-        print('[+] Starting repo process for {}'.format(repo['name']))
 
         if not self.__is__interesting_repository(repo):
             return None
-        # delete -> included in the function above
-        # repo too big
-        # if repo['size'] != 0 and self.input.repo_size_limit() > repo['size']:
-        #     return None
+
+        print('[+] Starting repo process for {}'.format(repo['name']))
 
         # repo is in the repos_ignore
 
@@ -305,10 +303,16 @@ class GithubAPI(object):
             # TODO:: store into file commits_meta inside /repo_name/commits/commits_meta.json
             #commits_meta = self.get_commits_metadata(profile_name, input['name'])
 
+            self.aggregated[repo['name']] = {
+                'branches' : []
+            }
+
             if branches != None:
                 for branch in branches:
                     if  branch != None:
                         self.__handle__branches__(repo['name'],clone_dir,branch)
+                        self.aggregated[repo['name']]['branches'].append(branch)
+            print('BRANCHES = {}'.format(self.aggregated[repo['name']]['branches']))
 
         elif self.input.is_light_mode():
             pass
@@ -501,7 +505,7 @@ def run_full_process():
     input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
-    input['repos_list'] = ['enigma-core','surface']
+    input['repos_list'] = ['enigma-core']
     input['repos_ignore'] = ['']
     input['user_name'] = 'enigmampc'
     input['branches_num'] = 0

@@ -1,0 +1,7 @@
+1) connect emails in commits dir to the user requested
+   - found some script /github_ap/scripts/github_email.sh but its really bad 
+2) on master or other say at commit X branch B was cloned
+ - started in github_api.py saving the branches in aggregated dict data members. 
+
+3) add to meta branches_names,branch create date(?) 
+ 
