@@ -1,0 +1,46 @@
+[
+    {
+        "lines": 3,
+        "size": -115,
+        "author": "fredfortier@gmail.com",
+        "timestamp": "2018-06-21T13:48:07-0700",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_shit_ws/repositories/repositories/enigma-core/enigma-core/worker/src/lib.rs",
+        "insertions": 0,
+        "deletions": 3,
+        "commit": "b509cb168e2d6264388191ef601c0722e8e430b4",
+        "type": "M"
+    },
+    {
+        "lines": 3,
+        "size": 20,
+        "author": "fredfortier@gmail.com",
+        "timestamp": "2018-06-21T13:48:07-0700",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_shit_ws/repositories/repositories/enigma-core/enigma-core/.gitignore",
+        "insertions": 3,
+        "deletions": 0,
+        "commit": "b509cb168e2d6264388191ef601c0722e8e430b4",
+        "type": "M"
+    },
+    {
+        "lines": 110,
+        "size": 123,
+        "author": "fredfortier@gmail.com",
+        "timestamp": "2018-06-18T15:34:35-0700",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_shit_ws/repositories/repositories/enigma-core/enigma-core/enclave/src/cryptography_t/assymetric.rs",
+        "insertions": 0,
+        "deletions": 110,
+        "commit": "ab5c898ed2dd03c06c327339805cc1a47e444e6c",
+        "type": "A"
+    },
+    {
+        "lines": 28,
+        "size": 123,
+        "author": "fredfortier@gmail.com",
+        "timestamp": "2018-06-18T15:34:35-0700",
+        "object": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_shit_ws/repositories/repositories/enigma-core/enigma-core/enclave/Xargo.toml",
+        "insertions": 0,
+        "deletions": 28,
+        "commit": "ab5c898ed2dd03c06c327339805cc1a47e444e6c",
+        "type": "A"
+    }
+]

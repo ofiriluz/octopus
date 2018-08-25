@@ -126,8 +126,8 @@ class Exporter(object):
 if __name__ == '__main__':
 
     target = {
-        'src':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_ws',
-        'target':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/isan_exporter_out'
+        'src':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_shit_ws',
+        'target':'/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk/enigma_exporter_out'
     }
     exporter = Exporter(target)
     exporter.export_meta()

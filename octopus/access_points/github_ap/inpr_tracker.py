@@ -158,8 +158,7 @@ class InprTracker(object):
     def __get_raw_inprs(self,callback = None):
         nprs = []
         search_type = self.god['search_type']
-
-        if search_type == 'G' or  search_type == 'S': #G= (1,0) or S = (x,0)
+        if search_type == 'G' or search_type == 'S': #G= (1,0) or S = (x,0)
             # handle while ok search
             ok = True
             id_counter = self.god['search_range'][0]

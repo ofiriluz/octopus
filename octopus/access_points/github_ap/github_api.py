@@ -188,7 +188,7 @@ class GithubAPI(object):
     def inpr_options(self,repo, with_comments = True, from_start = True, range = None):
 
         u = repo['issues_url']
-        u.replace('{/number}', '/')
+        u = u.replace('{/number}', '/')
         id_start = None
         if from_start:
             id_start = 1
@@ -501,7 +501,7 @@ def run_full_process():
     input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
-    input['repos_list'] = ['enigma-core']
+    input['repos_list'] = ['enigma-core','surface']
     input['repos_ignore'] = ['']
     input['user_name'] = 'enigmampc'
     input['branches_num'] = 0

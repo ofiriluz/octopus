@@ -1,0 +1,238 @@
+{
+    "pr": [
+        {
+            "title": "Server upgrade",
+            "created_at": null,
+            "author": "Isan-Rivkin",
+            "comments": [
+                {
+                    "created_at": "2018-08-21T08:34:44Z",
+                    "author": "elichai",
+                    "body": "This issue was moved to enigmampc/enigma-core-internal#2"
+                }
+            ],
+            "state": "closed",
+            "comments_num": 1,
+            "closed_by": "Isan-Rivkin",
+            "type": "pr",
+            "body": "- Changed the surface listener to a different thread. \r\n- Removed the enclave object as a dependency in the Server. \r\n- Updated tests and main.rs "
+        },
+        {
+            "title": "EVM, Server and Attestation service merge ",
+            "created_at": null,
+            "author": "Isan-Rivkin",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "Isan-Rivkin",
+            "type": "pr",
+            "body": "### **Merging 3 main components:** \r\n\r\n- Server: The surface listener is now running in a back thread \r\n- Server: unit-test updated for testing the server \r\n- EVM: Evm types improvements \r\n- Attestation Service: migrated the surface logic of the attestation service request into rust. "
+        },
+        {
+            "title": "Replacing the existing encryption key to DH derived one",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "Until now the encryption key (which is temporary hard coded as stated in the release statement) was just a sha256 of `EnigmaMPC`.\r\nI replaced this with a DH Key being derived from the enclave key and the client's key (both still temporary hard coded).\r\n\r\nThe JS encryption was changed accordingly: https://github.com/enigmampc/enigma-contract/commit/ed4b1cecc549845107fd33b88cb40d398b9e245e\r\nhttps://github.com/enigmampc/enigma-contract/commit/55fc0716e8a514d04824a180fb5b48177c0da2b7\r\nSurface's Tests were changed too: https://github.com/enigmampc/surface/pull/2"
+        },
+        {
+            "title": "Passing an ethereum address instead of a public key",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [
+                {
+                    "created_at": "2018-07-11T08:44:55Z",
+                    "author": "Isan-Rivkin",
+                    "body": "Looks good "
+                }
+            ],
+            "state": "closed",
+            "comments_num": 1,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "Replacing both the public key inside the report and the public key being returned from the enclave with an Ethereum Address.\r\nThis can't be merge before coordinating with the Dapp JS @fredfortier "
+        },
+        {
+            "title": "Quote structs and decoding",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [
+                {
+                    "created_at": "2018-07-15T16:14:56Z",
+                    "author": "elichai",
+                    "body": "This will require installing these packages in the dockers `pkg-config, libssl-dev` because of using bindings to openssl: https://crates.io/crates/openssl"
+                },
+                {
+                    "created_at": "2018-07-15T16:21:23Z",
+                    "author": "Isan-Rivkin",
+                    "body": "utACK, should be merged as soon as it's added to the docker (pkg-config, libssl-dev) network IMO (@lacabra) "
+                },
+                {
+                    "created_at": "2018-07-16T09:40:16Z",
+                    "author": "lacabra",
+                    "body": "@elichai, @Isan-Rivkin I confirm that core's docker base image `baiduxlab/sgx-rust:1.0.0` already includes these two packages in the following versions:\r\n* `pkg-config`: 0.29.1 (latest)\r\n* `libssl-dev`:  1.0.2g-1ubuntu4.12 (upgradable to 1.0.2g-1ubuntu4.13)\r\n\r\nThus, I think that both existing versions should be fine (let me know otherwise), and this can be merged."
+                },
+                {
+                    "created_at": "2018-07-16T09:52:18Z",
+                    "author": "elichai",
+                    "body": "@lacabra you're right. I will check the parent dockerfile next time :)\r\n"
+                },
+                {
+                    "created_at": "2018-07-16T11:43:53Z",
+                    "author": "lacabra",
+                    "body": "@elichai alternatively I boot the core container and list the installed packages to check what package versions if any it already has."
+                }
+            ],
+            "state": "closed",
+            "comments_num": 5,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "Structs for the quote in `isv_enclave_quote` and functions to decode and parse it into attributes.\r\n\r\nWill add functions for quote verification."
+        },
+        {
+            "title": "Implemented principal node in Rust ",
+            "created_at": null,
+            "author": "Isan-Rivkin",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "I finished implementing the principal node.\r\nFeatures: \r\n- unit-tests \r\n- system tests \r\n- CI integration \r\n- CLI interface with params \r\n- web3 utils library added into enigma-tool-u including general utils and enigma-contract struct. "
+        },
+        {
+            "title": "Fixing Simulation mode",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [
+                {
+                    "created_at": "2018-07-29T13:30:41Z",
+                    "author": "elichai",
+                    "body": "P.S. The quote here isn't all AAA's.\r\nIt's a realy quote. **BUT** it's already decrypted, meaning there's no need to send it to the IAS.\r\nYou can just decode it as is."
+                }
+            ],
+            "state": "closed",
+            "comments_num": 1,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": ""
+        },
+        {
+            "title": "Check the quote before submitting",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "Checking the quote to make sure it doesn't just contain A's"
+        },
+        {
+            "title": "Merging new version 0.1.2 into master",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": ""
+        },
+        {
+            "title": "Merge bug fix with in failure crate ",
+            "created_at": null,
+            "author": "Isan-Rivkin",
+            "comments": [
+                {
+                    "created_at": "2018-08-02T08:39:44Z",
+                    "author": "Isan-Rivkin",
+                    "body": "tAck"
+                }
+            ],
+            "state": "closed",
+            "comments_num": 1,
+            "closed_by": "Isan-Rivkin",
+            "type": "pr",
+            "body": "This is a temporary solution that uses fixed modules of \r\n\r\n> failure\r\n\r\n and \r\n\r\n> failure_derive\r\n\r\n.\r\n**Next Step:** Update the compiler version we use in the Docker to the most updated (not nightly) supported version. "
+        },
+        {
+            "title": "BLD: Trying to fix the CI",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [
+                {
+                    "created_at": "2018-08-19T16:53:51Z",
+                    "author": "elichai",
+                    "body": "CI is now Fixed.\r\nWe need to either fixate dependencies versions, or try to move to stable."
+                }
+            ],
+            "state": "closed",
+            "comments_num": 1,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": ""
+        },
+        {
+            "title": "Merging new version 0.1.3 into master",
+            "created_at": null,
+            "author": "elichai",
+            "comments": [],
+            "state": "closed",
+            "comments_num": 0,
+            "closed_by": "elichai",
+            "type": "pr",
+            "body": "Couple of bug fixes"
+        }
+    ],
+    "issue": [
+        {
+            "title": "`bin` binary gets created at compile time, instead of `bin` folder",
+            "created_at": null,
+            "author": "lacabra",
+            "comments": [
+                {
+                    "created_at": "2018-06-21T18:37:54Z",
+                    "author": "Isan-Rivkin",
+                    "body": "Will look into, thanks"
+                },
+                {
+                    "created_at": "2018-06-27T13:52:19Z",
+                    "author": "elichai",
+                    "body": "Fixed.\r\nhttps://github.com/enigmampc/enigma-core/commit/b92f5996f76b934391973a6531dd894745b99821"
+                }
+            ],
+            "state": "closed",
+            "comments_num": 2,
+            "closed_by": "elichai",
+            "type": "issue",
+            "body": "Seems to be something related to `init_enclave` function"
+        },
+        {
+            "title": "License issue",
+            "created_at": null,
+            "author": "dingelish",
+            "comments": [
+                {
+                    "created_at": "2018-07-05T18:46:44Z",
+                    "author": "lacabra",
+                    "body": "Hi Yu!\r\n\r\nThanks for your very friendly note about licensing. I have added BSD license to this repo (cb9ce51f803064e4bf3b6cf39af41a06180801a5), and copied over the license from your repo that details the corresponding licenses from all the subcomponents.\r\n\r\nI have also added an acknowledgements section with a mention to your project (3f280df87b524d4ab1c1cf98fa6ef5112c5196f3). Again, thanks for pointing this out.\r\n\r\nI'm closing this issue as resolved, but please let me know if you have any outstanding concerns, or you would like to suggest any additional edits. \r\n\r\nThank you,\r\nVictor"
+                },
+                {
+                    "created_at": "2018-07-05T18:48:37Z",
+                    "author": "dingelish",
+                    "body": "Thank you so much! Really appreciate your help!"
+                }
+            ],
+            "state": "closed",
+            "comments_num": 2,
+            "closed_by": "lacabra",
+            "type": "issue",
+            "body": "Greetings!\r\n\r\nAuthor of [rust-sgx-sdk](https://github.com/baidu/rust-sgx-sdk) here. Good to see that you guys are doing fantastic jobs using our SDK and hope you guys are doing well!\r\n\r\nOf course you guys are free to use the SDK and do whatever you want. Would you please add something regards to the License we use? and some acknowledgement in your Readme would be pretty much awesome! \r\n\r\nOf course, if you guys have recommendations or any ideas about this SDK, please feel free to contact me at [rustsgx@gmail.com](mailto:rustsgx@gmail.com). Thanks!\r\n\r\nBest,\r\nYu"
+        }
+    ]
+}
