@@ -7,7 +7,14 @@ from octopus.access_points.utils.util import Util
 from octopus.access_points.github_ap.types_cake import Input
 from octopus.access_points.github_ap.scripts.cloner import clone_repo,get_branches,get_all_branches
 from octopus.access_points.github_ap.scripts.commits_dif import versions,checkout_to
-
+from octopus.access_points.github_ap.inpr_tracker import InprTracker, Inpr
+class Requester(object):
+    def __init__(self):
+        pass
+    def test_request(self):
+        headers = {'Authorization': 'token ' + GITHUB_PERSONAL_ACCOESS_TOKEN}
+        login = requests.get('https://api.github.com/repos/enigmampc/enigma-core/issues/4', headers=headers)
+        print(login.json())
 
 class GithubAPI(object):
 
@@ -177,13 +184,54 @@ class GithubAPI(object):
     def build(self,input):
         self.input = Input(input)
         self.input.generate_target()
+    # build inprs options
+    def inpr_options(self,repo, with_comments = True, from_start = True, range = None):
+
+        u = repo['issues_url']
+        u.replace('{/number}', '/')
+        id_start = None
+        if from_start:
+            id_start = 1
+
+        options = {
+            'pull_url': None,
+            'issues_url': u,
+            'repo_name': '',
+            'profile_name': '',
+            'with_events': False,
+            'with_comments': with_comments,
+            'id_range': range,
+            'id_start': id_start,
+            'id_explicit': None
+        }
+        return options
+    # get inprs for a repo
+    def get_repo_inprs(self,options):
+        tracker = InprTracker(options, GITHUB_PERSONAL_ACCOESS_TOKEN)
+        inprs = tracker.run_inpr_and_export()
+        return tracker,inprs
+    # store the inprs to a file
+    def dump_inprs(self,inpr_tracker, path ,inprs):
+        inpr_tracker.dump_result(path, inprs)
+
+    def __handle__inprs__repo(self,repo):
+        if self.input.input['inprs'] == False:
+            return
+        with_comments = self.input.input['inprs_with_comments']
+        from_start = self.input.input['inprs_from_start']
+        range = self.input.input['inprs_range']
+        options = self.inpr_options( repo, with_comments, from_start, range)
+        tracker, inprs = self.get_repo_inprs(options)
+        path = self.input.repo_inpr(repo['name'])
+        self.dump_inprs(tracker,path, inprs)
 
     def run(self):
         # store the input file
         self.__handle__input__file__()
 
         users = self.search(self.input.user_name())
-        print('search returned #{} users.'.format(len(users)))
+        print('search returned #{} users {}.'.format(len(users),users))
+
         for u in users:
             full = {}
             header = {}
@@ -191,6 +239,9 @@ class GithubAPI(object):
 
             # user profile name
             login = u.login
+            # TODO:: patch fix, for some reason the search always returns my name as well regardless of the query.
+            if login == 'Isan-Rivkin' and self.input.user_name() != login:
+                break
             print('[+] Starting fetch process for {}'.format(login))
             header['profile'] = self.get_user_profile(login)
 
@@ -230,7 +281,8 @@ class GithubAPI(object):
 
             # store meta-data for each repo
             self.__handle__repo__meta__(repo)
-
+            # store the issues and pull requests = inprs
+            self.__handle__inprs__repo(repo)
             # git clone repo
             print('[+] cloning repository {}'.format(repo['name']))
             clone_dir = self.input.clone_dir(repo['name'],create = True)
@@ -444,16 +496,21 @@ This is the full process of fetching user and repos + storing on the fs
 '''
 def run_full_process():
     input = {}
-    input['id'] = 'isan_shit_ws'
+    input['id'] = 'enigma_shit_ws'
     input['mode'] = 'full'
     input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
     input['repos_list'] = ['enigma-core']
     input['repos_ignore'] = ['']
-    input['user_name'] = 'isan_rivkin'
+    input['user_name'] = 'enigmampc'
     input['branches_num'] = 0
     input['branches_names'] = ['all']
+    input['inprs'] = True
+    input['inprs_from_start'] = True
+    input['inprs_with_comments'] = True
+    input['inprs_range'] = None
+
     api = GithubAPI(GITHUB_PERSONAL_ACCOESS_TOKEN)
     # prepeare the api
     api.build(input)
@@ -485,7 +542,8 @@ def test_search_organization_profile():
 if __name__ == "__main__":
     #test_rate_limit()
     #test_branches()
-    #run_full_process()
+    run_full_process()
     #test_commits_stats()
-    test_search_organization_profile()
+    #test_search_organization_profile()
+
 
