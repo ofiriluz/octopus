@@ -439,7 +439,7 @@ def test_mix():
     # print(profile)
     # commits = test_get_commits_metadata('octopus',name)
 
-def test_input():
+def run_full_process():
     input = {}
     input['id'] = 'isan_shit_ws'
     input['mode'] = 'full'
@@ -447,7 +447,7 @@ def test_input():
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
     input['repos_list'] = ['enigma-core']
-    input['repos_ignore'] = ['']    
+    input['repos_ignore'] = ['']
     input['user_name'] = 'isan_rivkin'
     input['branches_num'] = 0
     input['branches_names'] = ['all']
@@ -478,6 +478,6 @@ def test_rate_limit():
 if __name__ == "__main__":
     #test_rate_limit()
     #test_branches()
-    test_input()
+    run_full_process()
     #test_commits_stats()
 
