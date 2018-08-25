@@ -15,6 +15,10 @@ class Input(object):
         - repos_num : {0, any num}
         - branches_num : {0,any num},
         - branches_names : ['all', 'master', 'develop',...]
+        - inprs = True
+        - inprs_from_Start = True
+        - inprs_with_comments = True
+        - inprs_range = True
     '''
     def __init__(self, input):
 
@@ -112,6 +116,10 @@ class Input(object):
     # path/id/repositories/repositories_meta.json
     def repos_high_meta(self):
         return os.path.join(self.repos_high_dir(), 'repositories_meta.json')
+    # path/id/repositores/repsitories/{repo_name}/inprs.json
+    # returns the dir only
+    def repo_inpr(self,repo_name):
+        return os.path.join(self.repo_by_name_high_dir(repo_name, create=False), 'inprs.json')
 
     #  path/id/repositories/repositories/{name}/{name}_meta.json
     def repo_meta(self,repo_name, create = False):

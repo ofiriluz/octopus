@@ -1,0 +1,56 @@
+{
+    "issue": [
+        {
+            "type": "issue",
+            "created_at": null,
+            "title": "License issue",
+            "author": "dingelish",
+            "comments": [
+                {
+                    "created_at": "2018-07-05T18:46:44Z",
+                    "author": "lacabra",
+                    "body": "Hi Yu!\r\n\r\nThanks for your very friendly note about licensing. I have added BSD license to this repo (cb9ce51f803064e4bf3b6cf39af41a06180801a5), and copied over the license from your repo that details the corresponding licenses from all the subcomponents.\r\n\r\nI have also added an acknowledgements section with a mention to your project (3f280df87b524d4ab1c1cf98fa6ef5112c5196f3). Again, thanks for pointing this out.\r\n\r\nI'm closing this issue as resolved, but please let me know if you have any outstanding concerns, or you would like to suggest any additional edits. \r\n\r\nThank you,\r\nVictor"
+                },
+                {
+                    "created_at": "2018-07-05T18:48:37Z",
+                    "author": "dingelish",
+                    "body": "Thank you so much! Really appreciate your help!"
+                }
+            ],
+            "closed_by": "lacabra",
+            "state": "closed",
+            "body": "Greetings!\r\n\r\nAuthor of [rust-sgx-sdk](https://github.com/baidu/rust-sgx-sdk) here. Good to see that you guys are doing fantastic jobs using our SDK and hope you guys are doing well!\r\n\r\nOf course you guys are free to use the SDK and do whatever you want. Would you please add something regards to the License we use? and some acknowledgement in your Readme would be pretty much awesome! \r\n\r\nOf course, if you guys have recommendations or any ideas about this SDK, please feel free to contact me at [rustsgx@gmail.com](mailto:rustsgx@gmail.com). Thanks!\r\n\r\nBest,\r\nYu",
+            "comments_num": 2
+        }
+    ],
+    "pr": [
+        {
+            "type": "pr",
+            "created_at": null,
+            "title": "Server upgrade",
+            "author": "Isan-Rivkin",
+            "comments": [
+                {
+                    "created_at": "2018-08-21T08:34:44Z",
+                    "author": "elichai",
+                    "body": "This issue was moved to enigmampc/enigma-core-internal#2"
+                }
+            ],
+            "closed_by": "Isan-Rivkin",
+            "state": "closed",
+            "body": "- Changed the surface listener to a different thread. \r\n- Removed the enclave object as a dependency in the Server. \r\n- Updated tests and main.rs ",
+            "comments_num": 1
+        },
+        {
+            "type": "pr",
+            "created_at": null,
+            "title": "EVM, Server and Attestation service merge ",
+            "author": "Isan-Rivkin",
+            "comments": [],
+            "closed_by": "Isan-Rivkin",
+            "state": "closed",
+            "body": "### **Merging 3 main components:** \r\n\r\n- Server: The surface listener is now running in a back thread \r\n- Server: unit-test updated for testing the server \r\n- EVM: Evm types improvements \r\n- Attestation Service: migrated the surface logic of the attestation service request into rust. ",
+            "comments_num": 0
+        }
+    ]
+}
