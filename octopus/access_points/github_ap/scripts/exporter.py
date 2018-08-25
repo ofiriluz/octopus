@@ -90,6 +90,8 @@ class Exporter(object):
         src = os.path.join(repos_dirs['src'])
         dest = os.path.join(repos_dirs['target'])
         self.__copy__file(src, dest, FILE_NAME=repos_dirs['name']+'_meta.json')
+        # copt inprs.json
+        self.__copy__file(src, dest, FILE_NAME='inprs.json')
         # copy r/commits folder
         dest = os.path.join(dest,'commits')
         os.makedirs(dest)
