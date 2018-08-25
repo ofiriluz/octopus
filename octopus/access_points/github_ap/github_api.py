@@ -374,12 +374,13 @@ class GithubAPI(object):
 # or using an access token
 #g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
 
-def test1():
+def test1(query_search = 'isan_rivkin'):
+    g = Github(GITHUB_PERSONAL_ACCOESS_TOKEN)
     # Then play with your Github objects:
     # for repo in g.get_user().get_repos():
     #     print(repo.name)
 
-    users = g.search_users('ofir iluz')
+    users = g.search_users(query_search)
     for u in users:
         print(u.login)
         return u.login
@@ -438,7 +439,9 @@ def test_mix():
 
     # print(profile)
     # commits = test_get_commits_metadata('octopus',name)
-
+'''
+This is the full process of fetching user and repos + storing on the fs 
+'''
 def run_full_process():
     input = {}
     input['id'] = 'isan_shit_ws'
@@ -475,9 +478,14 @@ def test_rate_limit():
     response = requests.get(url)
     print(response)
 
+def test_search_organization_profile():
+    name = test1('enigmampc')
+    profile = test_get_user_profile(name)
+
 if __name__ == "__main__":
     #test_rate_limit()
     #test_branches()
-    run_full_process()
+    #run_full_process()
     #test_commits_stats()
+    test_search_organization_profile()
 
