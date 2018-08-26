@@ -53,6 +53,7 @@ def versions(path, branch='master'):
                     'object': os.path.join(path, objpath),
                     'commit': commit.hexsha,
                     'author': commit.author.email,
+                    'name' : commit.author.name,
                     'timestamp': commit.authored_datetime.strftime(DATE_TIME_FORMAT),
                     'size': diff_size(diff),
                     'type': diff_type(diff),
