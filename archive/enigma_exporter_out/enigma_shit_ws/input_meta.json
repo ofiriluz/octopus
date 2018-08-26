@@ -1,22 +1,22 @@
 {
-    "inprs_from_start": true,
-    "repo_size_limit": 0,
-    "inprs_range": null,
-    "target_dir": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk",
-    "mode": "full",
-    "inprs_with_comments": true,
-    "inprs": true,
-    "user_name": "enigmampc",
-    "id": "enigma_shit_ws",
+    "repos_ignore": [
+        ""
+    ],
     "branches_names": [
         "all"
     ],
+    "inprs_from_start": true,
+    "mode": "full",
+    "branches_num": 0,
     "repos_list": [
         "enigma-core",
         "surface"
     ],
-    "branches_num": 0,
-    "repos_ignore": [
-        ""
-    ]
+    "inprs_range": null,
+    "inprs": true,
+    "target_dir": "/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk",
+    "user_name": "enigmampc",
+    "id": "enigma_shit_ws",
+    "inprs_with_comments": true,
+    "repo_size_limit": 0
 }

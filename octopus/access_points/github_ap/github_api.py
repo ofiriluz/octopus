@@ -505,7 +505,7 @@ def run_full_process():
     input['target_dir'] = '/home/wildermind/PycharmProjects/octopus/octopus/access_points/github_ap/scripts/all_junk'
     input['repo_size_limit'] = 0
     input['branches_num'] = 0
-    input['repos_list'] = ['enigma-core']
+    input['repos_list'] = ['enigma-core','surface']
     input['repos_ignore'] = ['']
     input['user_name'] = 'enigmampc'
     input['branches_num'] = 0
