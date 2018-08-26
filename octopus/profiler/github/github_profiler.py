@@ -31,17 +31,27 @@ class GithubProfiler(Profiler):
         # Read all the information 
         self.__user_metadata = self.__github_accessor.read_user_metadata()
         self.__user_repos_metadata = self.__github_accessor.read_user_repos_metadata()
+        self.__github_accessor.acquire_additional_repos_info(self.__user_repos_metadata)
+
+        # Temp
+        # self.__user_metadata['name'] = query['user']
+        # self.__user_metadata['email'] = query['email']
 
         # Do the frame scoring
-        # repos_fw_scores = []
-        for repo in self.__user_repos_metadata:
-            # Read the repo branch commits and add them 
-            repo['branches'] = self.__github_accessor.read_repo_commits(repo['repo_local_path'])
+        repos_fw_scores = []
+        # for repo in self.__user_repos_metadata:
+            # # Read the repo branch commits and add them 
+            # repo['branches'] = self.__github_accessor.read_repo_commits(repo['repo_local_path'])
+            # # Read the repo pull reqs and issues
+            # inpr = self.__github_accessor.read_repo_inpr(repo['repo_local_path'])
+            # repo['issues'] = inpr['issue']
+            # repo['pullreqs'] = inpr['pr']
+
             # repo_frameworks_scores = self.__framework_analyzer.analyze_repo_frameworks(repo)
             # repos_fw_scores.append(repo_frameworks_scores)
 
         # Perform simple contribution score, revolves around 0.0-1.0
-        contribution_score = self.__contribution_scorer.get_contribution_score(self.__user_metadata, self.__user_repos_metadata)
+        contribution_score = self.__contribution_scorer.get_contribution_score(query, self.__user_repos_metadata)
 
         # For now the profiling score is only the contribution, more to come
         return {'contribution_score': contribution_score, 'framework_scores': repos_fw_scores}
