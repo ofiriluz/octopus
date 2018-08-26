@@ -13,8 +13,8 @@ class GithubContributionScorer:
             },
             'branch':
             {
-                'rolling': 0.3,
-                'importance': 0.3,
+                'rolling': 0.4,
+                'importance': 0.2,
                 'commits': 0.4
             },
             'commit': 
@@ -27,30 +27,33 @@ class GithubContributionScorer:
     def __get_master_branch(self, repo):
         return next((branch for branch in repo['branches'] if branch['name'] == 'master'))
 
-    def __calculate_repo_administrative_contribution(self, repo, user_meta):
+    def __calculate_repo_administrative_contribution(self, repo, query):
         # Calculate administrative activity score
         # Look at the repo issues and pull requests to see activity of the user
         # Basic score:  (SUM([CommentsOnPost()]/[SumCommentOnPost()])/
         #               ([Count(Issues)] + [Count(PullReqs)])
         administrative_contribution_score = 0.0
-        posts_len = len(repo['issues']) + len(repo['pullreqs'])
+        posts = repo['issues'] + repo['pullreqs']
+        posts_len = len(posts)
         if posts_len == 0:
             return administrative_contribution_score
 
-        for issue in zip(repo['issues'], repo['pullreqs']):
-            comments_len = len(issue['comments'])
+        for post in posts:
+            comments_len = len(post['comments'])
+            if comments_len == 0:
+                continue
             user_comments_len = 0
-            for comment in issue['comments']:
-                if comment['author'] == user_meta['name']:
+            for comment in post['comments']:
+                if comment['author'] == query['name']:
                     user_comments_len = user_comments_len + 1
-            administrative_contribution_score = administrative_contribution_score + user_comments_len/comments_len
+            administrative_contribution_score += user_comments_len/comments_len
 
         # Normalize the sum between 0 and 1
         administrative_contribution_score = (1/posts_len)*(administrative_contribution_score-posts_len)+1
 
         return administrative_contribution_score
 
-    def __calculate_rolling_branch_score(self, branch):
+    def __calculate_rolling_branch_score(self, branch, query):
         # - Rolling codebase contribution:
         #    For each commit see the percentage changed per whole project
         #      Project it on all the commits to see the overall codebase contribution
@@ -76,18 +79,21 @@ class GithubContributionScorer:
 
         rolling_scores = []
         for commit in branch['commits']:
-            changes = commit['file_changes']
-            
-            # The more changes across files, the better contribution
-            changes_perc = 0.0
-            for change in changes:
-                # Read file line amount after commit
-                lines = change['file_line_count']
-                change_amount = change['lines']
-                change_perc = change_amount / lines
-                changes_perc = changes_perc + change_perc
-            commit_perc_score = changes_perc / commit['post_commit']['file_amount']
-            rolling_scores.append(commit_perc_score)
+            # Check if this the queried user commit
+            if commit['author'] == query['name'] or commit['email'] == query['email']]: 
+                changes = commit['file_changes']
+                
+                # The more changes across files, the better contribution
+                changes_perc = 0.0
+                for change in changes:
+                    if change['lines'] != 0 and change['file_line_count'] != 0:
+                        # Read file line amount after commit
+                        lines = change['file_line_count']
+                        change_amount = change['lines']
+                        change_perc = change_amount / lines
+                        changes_perc = changes_perc + change_perc
+                commit_perc_score = changes_perc / commit['post_commit']['file_amount']
+                rolling_scores.append(commit_perc_score)
         # Calculate the average deltas, this will give us the commitments to the branch overtime
         # Can be plotted later on
         drolling_scores = numpy.diff(rolling_scores)
@@ -119,16 +125,17 @@ class GithubContributionScorer:
         # Try and find commits which are merge related on the given branch
         # This will give us an indication of branch activity over the period
         # The activity will be dropped down depending on the date diff, to lower the importance of this branch
-        merge_dates = []
-        for commit in master_branch['commits']:
-            if commit['is_merge_commit']:
-                # Found a merged commit from the branch, save the merge date
-                merge_dates.append(datetime.datetime.strptime(commit['commit_time'], '%d.%m.%Y'))
-        # Calculate the date diffs, and average them, this will give us average diff on master merge
-        # Which means how active the branch was within the master branch
-        merge_diffs = numpy.diff(merge_dates)
-        merge_median = numpy.median(merge_diffs)
-        return merge_median * norm_date_diff
+        # merge_dates = []
+        # for commit in master_branch['commits']:
+        #     if commit['is_merge_commit']:
+        #         # Found a merged commit from the branch, save the merge date
+        #         merge_dates.append(datetime.datetime.strptime(commit['commit_time'], '%d.%m.%Y'))
+        # # Calculate the date diffs, and average them, this will give us average diff on master merge
+        # # Which means how active the branch was within the master branch
+        # merge_diffs = numpy.diff(merge_dates)
+        # merge_median = numpy.median(merge_diffs)
+        # return merge_median * norm_date_diff
+        return norm_date_diff
 
     def __calculate_commit_contribution(self, commit, branch, repo):
         # - For each commit produce:
@@ -140,21 +147,22 @@ class GithubContributionScorer:
         #         (Commit Size / Branch Size)*Wc1 + (DiffsLen)*Wc2 
         commit_size = commit['post_commit']['branch_size'] - commit['pre_commit']['branch_size']
         branch_size = commit['post_commit']['branch_size']
-        line_diffs = sum([file_change['file_changed_lines_count'] for file_change in commit['file_changes']])
+        line_diffs = sum([file_change['line'] for file_change in commit['file_changes']])
         overall_lines = sum([file_change['file_line_count'] for file_change in commit['file_changes']])
         commit_contribution = (commit_size / branch_size) * self.__weights['commit']['sizes'] + (line_diffs / overall_lines) * self.__weights['commit']['changes']
         return commit_contribution
 
-    def __calculate_branch_contribution(self, branch, repo):
+    def __calculate_branch_contribution(self, branch, repo, query):
         # Calculates rolling score overtime on the branch commits according to perc changes
-        rolling_score = self.__calculate_rolling_branch_score(branch)
+        rolling_score = self.__calculate_rolling_branch_score(branch, query)
 
         # Calculates the factor of the branch to the master branch
         branch_importance_factor = self.__calculate_branch_importance(repo, branch, self.__get_master_branch(repo))
 
         commits_score = 0.0
         for commit in branch['commits']:
-            commits_score = commits_score + self.__calculate_commit_contribution(commit, branch, repo)
+            if commit['author'] == query['name'] or commit['email'] == query['email']]:
+                commits_score = commits_score + self.__calculate_commit_contribution(commit, branch, repo)
         
         # Normalize score between 0 and 1 according to commit amount
         # Can be normalized like this cuz max score is 1 for each commit
@@ -163,12 +171,13 @@ class GithubContributionScorer:
         return rolling_score * self.__weights['branch']['rolling'] \
          + branch_importance_factor * self.__weights['branch']['importance'] + commits_score * self.__weights['branch']['commits']
 
-    def __calculate_repo_contribution(self, repo, user_meta):
-        administrative_score = self.__calculate_repo_administrative_contribution(repo, user_meta)
-        is_forked = repo['is_forked']
+    def __calculate_repo_contribution(self, repo, query):
+        administrative_score = self.__calculate_repo_administrative_contribution(repo, query)
+        # administrative_score = 0.0
+        is_forked = repo['is_fork']
         branches_score = 0.0
         for branch in repo['branches']:
-            branches_score = branches_score + self.__calculate_branch_contribution(branch, repo)
+            branches_score = branches_score + self.__calculate_branch_contribution(branch, repo, query)
 
         # Normalize score between 0 and 1 according to len of repos
         # Since max is K repos its fine to normalize it by branch size
@@ -180,11 +189,11 @@ class GithubContributionScorer:
 
         return repo_score
 
-    def get_contribution_score(self, user_meta, user_repos):
+    def get_contribution_score(self, query, user_repos):
         # Go over every repo and calculate repo score
         contribution_scores = []
         for repo in user_repos:
-            contribution_scores.append(self.__calculate_repo_contribution(repo, user_meta))
+            contribution_scores.append(self.__calculate_repo_contribution(repo, query))
         
         # Normalize it
         contribution_score = numpy.linalg.norm(contribution_scores)

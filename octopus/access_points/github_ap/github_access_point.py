@@ -7,7 +7,9 @@ class GithubAccessPoint(AccessPoint):
 
     def resolve_query(self, logger, query, controllers):
         logger.info('Hello World')
-        return {'workspace_path': '/home/playground/Desktop/octopus/octopus/archive/isan_exporter_out/isan_ws'}
+        return {'user': 'Isan-Rivkin',
+                'email': 'isanrivkin@gmail.com', 
+                'workspace_path': '/home/playground/Desktop/octopus/octopus/archive/enigma_exporter_out/enigma_shit_ws'}
 
 
 
