@@ -158,7 +158,7 @@ class OctopusProcessor:
         # Open the connection pool if not opened yet, also set the task manager config
         if not self.__controllers_pool.is_connection_pool_open():
             print(os.getcwd())
-            self.__task_manager.set_task_definition_config('octopus/processor/octopus_task_definitions.json')
+            self.__task_manager.set_task_definition_config('octopus/configs/octopus_task_definitions.json')
             self.__controllers_pool.open_connection_pool(GENERATORS)
             self.__task_manager.start_task_manager()
 
@@ -200,5 +200,5 @@ class OctopusProcessor:
 
 if __name__ == '__main__':
     processor = OctopusProcessor()
-    result = processor.process_query('isan_rivkin')
+    result = processor.process_query('Isan-Rivkin')
     pprint.pprint(result)

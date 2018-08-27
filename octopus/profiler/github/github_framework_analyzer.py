@@ -213,7 +213,7 @@ class GithubFrameworkAnalyzer:
         #   We run over all the known frameworks and check if any of the ueser's repos meet the requirements
 
         # List all the frameworks files
-        TEMP_PATH = 'octopus\\profiler\\ap_profilers\\github\\frameworks'
+        TEMP_PATH = 'octopus/configs/github/frameworks'
         framework_files = [os.path.join(TEMP_PATH, subdir) for subdir in os.listdir(TEMP_PATH)
                                                            if os.path.isfile(os.path.join(TEMP_PATH, subdir))] 
 
